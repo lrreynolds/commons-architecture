@@ -18,7 +18,7 @@
 }
 body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);}
 .wrap{max-width:920px;margin:auto;padding:28px 18px;}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px;}
 h1{font-size:20px;margin:0;}
 button{
   border:none;border-radius:10px;padding:10px 14px;
@@ -34,11 +34,12 @@ button{
 }
 .row{
   display:flex;justify-content:space-between;align-items:center;
+  gap:12px;
   padding:12px 0;border-bottom:1px solid var(--line);
 }
 .row:last-child{border-bottom:none;}
 .meta{font-size:13px;color:var(--muted);}
-.actions{display:flex;gap:8px;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
 input{
   padding:10px;border-radius:10px;border:1px solid var(--line);width:100%;
 }
@@ -47,6 +48,17 @@ input{
   display:none;align-items:center;justify-content:center;
 }
 .modalCard{background:#fff;padding:20px;border-radius:14px;width:320px;}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:3px 8px;
+  border-radius:999px;
+  font-size:12px;
+  color:var(--muted);
+  border:1px solid var(--line);
+  background:rgba(31,111,74,.06);
+  margin-left:8px;
+}
 </style>
 </head>
 
@@ -55,7 +67,10 @@ input{
 
   <div class="topbar">
     <h1>Your test servers</h1>
-    <button class="primary" onclick="openModal()">Create test server</button>
+    <div style="display:flex;gap:10px;">
+      <button class="secondary" onclick="window.location.href='flow-diagram.html'">Back</button>
+      <button class="primary" onclick="openModal()">Create test server</button>
+    </div>
   </div>
 
   <div class="card" id="instanceList"></div>
@@ -65,7 +80,7 @@ input{
 <!-- CREATE MODAL -->
 <div class="modal" id="modal">
   <div class="modalCard">
-    <h3>Create test server</h3>
+    <h3 style="margin:0 0 10px;">Create test server</h3>
     <div class="meta">Name</div>
     <input id="name" placeholder="PeakX test" />
     <div class="meta" style="margin-top:10px;">Subdomain</div>
@@ -81,64 +96,124 @@ input{
 <script>
 const list = document.getElementById("instanceList");
 
+// Pinned “real” instance (no localStorage needed)
+const PINNED = {
+  name: "PeakX",
+  domain: "peakx.social",
+  status: "Live",
+  openHref: "instance-dashboard.html"
+};
+
 function load(){
   const data = JSON.parse(localStorage.getItem("instances") || "[]");
   list.innerHTML = "";
 
+  // 1) Always show pinned PeakX row first
+  list.appendChild(renderRow({
+    name: PINNED.name,
+    sub: PINNED.domain,
+    status: PINNED.status,
+    badge: "Pinned",
+    onOpen: () => { window.location.href = PINNED.openHref; },
+    onDelete: null
+  }));
+
+  // 2) Then show any mock-created instances
   if(!data.length){
-    list.innerHTML = "<div class='meta'>No test servers yet.</div>";
+    const empty = document.createElement("div");
+    empty.className = "meta";
+    empty.style.marginTop = "10px";
+    empty.textContent = "No other test servers yet.";
+    list.appendChild(empty);
     return;
   }
 
   data.forEach((i,idx)=>{
-    const row = document.createElement("div");
-    row.className="row";
-
-    row.innerHTML = `
-      <div>
-        <b>${i.name}</b>
-        <div class="meta">${i.slug}.commonshub.social · ${i.status}</div>
-      </div>
-      <div class="actions">
-        <button class="secondary" onclick="openInstance(${idx})">Open</button>
-        <button class="secondary" onclick="deleteInstance(${idx})">Delete</button>
-      </div>
-    `;
-    list.appendChild(row);
+    list.appendChild(renderRow({
+      name: i.name,
+      sub: `${i.slug}.commonshub.social`,
+      status: i.status || "Live",
+      badge: "Mock",
+      onOpen: () => openInstance(idx),
+      onDelete: () => deleteInstance(idx)
+    }));
   });
 }
 
+function renderRow({name, sub, status, badge, onOpen, onDelete}){
+  const row = document.createElement("div");
+  row.className="row";
+
+  const left = document.createElement("div");
+  left.innerHTML = `<b>${escapeHtml(name)}</b>${badge ? `<span class="badge">${escapeHtml(badge)}</span>` : ""}
+                   <div class="meta">${escapeHtml(sub)} · ${escapeHtml(status)}</div>`;
+
+  const actions = document.createElement("div");
+  actions.className = "actions";
+
+  const openBtn = document.createElement("button");
+  openBtn.className = "secondary";
+  openBtn.textContent = "Open";
+  openBtn.addEventListener("click", onOpen);
+  actions.appendChild(openBtn);
+
+  if (onDelete){
+    const delBtn = document.createElement("button");
+    delBtn.className = "secondary";
+    delBtn.textContent = "Delete";
+    delBtn.addEventListener("click", onDelete);
+    actions.appendChild(delBtn);
+  }
+
+  row.appendChild(left);
+  row.appendChild(actions);
+  return row;
+}
+
 function createInstance(){
-  const name = nameInput.value;
-  const slug = slugInput.value;
+  const nameInput = document.getElementById("name");
+  const slugInput = document.getElementById("slug");
+
+  const name = (nameInput.value || "").trim();
+  const slug = (slugInput.value || "").trim();
+
+  if(!name || !slug) return;
 
   const data = JSON.parse(localStorage.getItem("instances") || "[]");
-
-  data.push({
-    name,
-    slug,
-    status:"Live"
-  });
-
+  data.push({ name, slug, status:"Live" });
   localStorage.setItem("instances", JSON.stringify(data));
+
+  nameInput.value = "";
+  slugInput.value = "";
+
   closeModal();
   load();
 }
 
 function deleteInstance(i){
-  const data = JSON.parse(localStorage.getItem("instances"));
+  const data = JSON.parse(localStorage.getItem("instances") || "[]");
   data.splice(i,1);
   localStorage.setItem("instances", JSON.stringify(data));
   load();
 }
 
 function openInstance(i){
-  localStorage.setItem("active_instance", i);
-  window.location.href = "dashboard.html";
+  // For now: everything opens the same “manual setup links” dashboard.
+  // Later: you can store active index + render domain-specific links.
+  window.location.href = "instance-dashboard.html";
 }
 
-function openModal(){ modal.style.display="flex"; }
-function closeModal(){ modal.style.display="none"; }
+function openModal(){ document.getElementById("modal").style.display="flex"; }
+function closeModal(){ document.getElementById("modal").style.display="none"; }
+
+function escapeHtml(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#39;");
+}
 
 load();
 </script>
