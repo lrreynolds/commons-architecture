@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Commonshub — Test Instances</title>
+
+<style>
+:root{
+  --bg:#f4f7f5;
+  --card:#ffffff;
+  --text:#102018;
+  --muted:#5b6f63;
+  --line:#d9e2dc;
+  --accent:#1f6f4a;
+  --radius:16px;
+  --font: ui-sans-serif, system-ui;
+}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);}
+.wrap{max-width:920px;margin:auto;padding:28px 18px;}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+h1{font-size:20px;margin:0;}
+button{
+  border:none;border-radius:10px;padding:10px 14px;
+  font-weight:600;cursor:pointer;
+}
+.primary{background:var(--accent);color:#fff;}
+.secondary{background:#fff;border:1px solid var(--line);}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:18px;
+}
+.row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-bottom:1px solid var(--line);
+}
+.row:last-child{border-bottom:none;}
+.meta{font-size:13px;color:var(--muted);}
+.actions{display:flex;gap:8px;}
+input{
+  padding:10px;border-radius:10px;border:1px solid var(--line);width:100%;
+}
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.25);
+  display:none;align-items:center;justify-content:center;
+}
+.modalCard{background:#fff;padding:20px;border-radius:14px;width:320px;}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <h1>Your test servers</h1>
+    <button class="primary" onclick="openModal()">Create test server</button>
+  </div>
+
+  <div class="card" id="instanceList"></div>
+
+</div>
+
+<!-- CREATE MODAL -->
+<div class="modal" id="modal">
+  <div class="modalCard">
+    <h3>Create test server</h3>
+    <div class="meta">Name</div>
+    <input id="name" placeholder="PeakX test" />
+    <div class="meta" style="margin-top:10px;">Subdomain</div>
+    <input id="slug" placeholder="peakx-test" />
+
+    <div style="display:flex;gap:10px;margin-top:14px;">
+      <button class="primary" onclick="createInstance()">Create</button>
+      <button class="secondary" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const list = document.getElementById("instanceList");
+
+function load(){
+  const data = JSON.parse(localStorage.getItem("instances") || "[]");
+  list.innerHTML = "";
+
+  if(!data.length){
+    list.innerHTML = "<div class='meta'>No test servers yet.</div>";
+    return;
+  }
+
+  data.forEach((i,idx)=>{
+    const row = document.createElement("div");
+    row.className="row";
+
+    row.innerHTML = `
+      <div>
+        <b>${i.name}</b>
+        <div class="meta">${i.slug}.commonshub.social · ${i.status}</div>
+      </div>
+      <div class="actions">
+        <button class="secondary" onclick="openInstance(${idx})">Open</button>
+        <button class="secondary" onclick="deleteInstance(${idx})">Delete</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function createInstance(){
+  const name = nameInput.value;
+  const slug = slugInput.value;
+
+  const data = JSON.parse(localStorage.getItem("instances") || "[]");
+
+  data.push({
+    name,
+    slug,
+    status:"Live"
+  });
+
+  localStorage.setItem("instances", JSON.stringify(data));
+  closeModal();
+  load();
+}
+
+function deleteInstance(i){
+  const data = JSON.parse(localStorage.getItem("instances"));
+  data.splice(i,1);
+  localStorage.setItem("instances", JSON.stringify(data));
+  load();
+}
+
+function openInstance(i){
+  localStorage.setItem("active_instance", i);
+  window.location.href = "dashboard.html";
+}
+
+function openModal(){ modal.style.display="flex"; }
+function closeModal(){ modal.style.display="none"; }
+
+load();
+</script>
+</body>
+</html>
