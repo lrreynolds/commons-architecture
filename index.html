@@ -138,18 +138,14 @@
       border-radius: 8px;
       color: var(--text);
     }
-    /* ===== Diagram readability + no clipping ===== */
-
-/* If your boxes are .card/.panel/.node/.box, keep all selectors below.
-   Delete the ones you don't use. */
-.card, .panel, .node, .box {
+/* ===== Readability helpers (SAFE: does not touch SVG classes) ===== */
+.card, .panel, .node {
   height: auto !important;
   min-height: 0 !important;
-  overflow: visible !important;   /* key: stop clipping */
+  overflow: visible !important;
 }
 
-/* Make sure text wraps instead of overflowing */
-.card *, .panel *, .node *, .box * {
+.card *, .panel *, .node * {
   white-space: normal !important;
   word-break: break-word;
   overflow-wrap: anywhere;
@@ -157,14 +153,12 @@
   line-height: 1.35;
 }
 
-/* If you have a “small/meta” style that’s too tiny */
 .muted, .meta, .subcopy, .caption {
   font-size: 13px;
   line-height: 1.35;
 }
 
-/* Headings a touch clearer */
-.card h3, .panel h3, .node h3, .box h3 {
+.card h3, .panel h3, .node h3 {
   line-height: 1.2;
   margin-bottom: 6px;
 }
@@ -248,7 +242,7 @@
             <text x="422" y="314" class="svgMuted" font-size="12">Returns: instance domain + admin owner account</text>
             <text x="422" y="332" class="svgMuted" font-size="12">Emits: status updates (Provisioning → Live)</text>
 
-            <rect x="402" y="372" width="298" height="128" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <rect x="402" y="372" width="298" height="148" rx="16" class="box" filter="url(#softShadow)"></rect>
             <text x="422" y="402" class="svgLabel" font-size="14" font-weight="800">C) Dashboard state + checklist generation</text>
             <text x="422" y="426" class="svgMuted" font-size="12">Launch checklist is derived from Blueprint</text>
             <text x="422" y="444" class="svgMuted" font-size="12">Each item = (deep link) + (copy) + (status)</text>
@@ -277,12 +271,13 @@
             <text x="786" y="348" class="svgMuted" font-size="12">Outputs: new heuristics + guardrails</text>
             <text x="786" y="366" class="svgMuted" font-size="12">Produces “rule diffs” for ideator</text>
 
-            <rect x="766" y="416" width="294" height="120" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
+            <rect x="766" y="416" width="294" height="132" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
             <text x="786" y="446" class="svgLabel" font-size="14" font-weight="800">Ideator Behavior Ruleset</text>
             <text x="786" y="470" class="svgMuted" font-size="12">Versioned prompts / policy / defaults</text>
             <text x="786" y="488" class="svgMuted" font-size="12">“Ask less, decide more” tuning</text>
             <text x="786" y="506" class="svgMuted" font-size="12">Keeps Commonshub principles consistent</text>
-            <text x="786" y="524" class="svgMuted" font-size="12">Feeds next creator session</text>
+            <text x="786" y="524" class="svgMuted" font-size="12">Rules are versioned + auditable</text>
+            <text x="786" y="542" class="svgMuted" font-size="12">Feeds next creator session</text>
 
             <rect x="766" y="574" width="294" height="88" rx="16" class="box" filter="url(#softShadow)"></rect>
             <text x="786" y="604" class="svgLabel" font-size="14" font-weight="800">Outcome Signals (optional)</text>
