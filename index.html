@@ -1,0 +1,321 @@
+<!-- flow-diagram.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Commonshub — AI Blueprint → Provisioning → Launch (with Feedback Loop)</title>
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#102018;
+      --muted:#50665a;
+      --line:#d8e1db;
+      --accent:#215f43;
+      --accentSoft: rgba(33,95,67,.10);
+      --shadow: 0 18px 50px rgba(16,32,24,.12);
+      --radius:18px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+              "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(1000px 520px at 20% 0%, rgba(31,111,74,.14) 0%, rgba(31,111,74,0) 62%),
+        radial-gradient(900px 520px at 80% 10%, rgba(15,81,50,.10) 0%, rgba(15,81,50,0) 62%),
+        var(--bg);
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:22px 16px 40px;
+    }
+    .stage{
+      background: rgba(255,255,255,.75);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      background: rgba(255,255,255,.8);
+    }
+    .title b{ display:block; font-size:16px; }
+    .title span{ display:block; font-size:12px; color:var(--muted); margin-top:2px; line-height:1.35; }
+    .chip{
+      font-size:12px;
+      color:var(--muted);
+      background: rgba(33,95,67,.08);
+      border:1px solid rgba(33,95,67,.18);
+      padding:6px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+      align-self:center;
+    }
+    .content{ padding:16px; }
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:14px;
+    }
+    .legend{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      align-items:center;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;background:var(--accent);
+      box-shadow:0 0 0 3px var(--accentSoft);
+      display:inline-block; vertical-align:middle; margin-right:6px;
+    }
+    .note{
+      margin-top:10px;
+      padding:10px;
+      border-radius:12px;
+      background: rgba(33,95,67,.06);
+      border:1px solid rgba(33,95,67,.18);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+    .note b{ color:var(--text); }
+    svg{ width:100%; height:auto; display:block; }
+    .svgLabel{
+      font-family: var(--font);
+      fill: #102018;
+    }
+    .svgMuted{
+      fill: #50665a;
+    }
+    .pill{
+      fill: rgba(33,95,67,.08);
+      stroke: rgba(33,95,67,.20);
+    }
+    .box{
+      fill: #ffffff;
+      stroke: #d8e1db;
+    }
+    .boxStrong{
+      fill: #ffffff;
+      stroke: rgba(33,95,67,.35);
+    }
+    .arrow{
+      stroke: rgba(16,32,24,.55);
+      stroke-width:2;
+      fill:none;
+      marker-end:url(#arrowhead);
+    }
+    .arrowSoft{
+      stroke: rgba(33,95,67,.55);
+      stroke-width:2;
+      fill:none;
+      marker-end:url(#arrowheadGreen);
+    }
+    .dash{
+      stroke-dasharray: 6 6;
+    }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: rgba(16,32,24,.06);
+      border: 1px solid rgba(16,32,24,.10);
+      padding: 2px 6px;
+      border-radius: 8px;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="stage">
+      <div class="topbar">
+        <div class="title">
+          <b>Commonshub onboarding model — AI Blueprint → Provision → Launch</b>
+          <span>One-page diagram for infra/plumbing alignment (V) + product iteration. Includes the feedback loop (transcript → evaluator → new rules).</span>
+        </div>
+        <div class="chip">MVP-oriented · calm · creator-first</div>
+      </div>
+
+      <div class="content">
+        <div class="card">
+          <!-- FLOW DIAGRAM (SVG) -->
+          <svg viewBox="0 0 1100 690" role="img" aria-label="Flow diagram: landing to AI ideation to blueprint JSON to provisioning to dashboard launch sequence, plus feedback loop transcript to evaluator to rules to ideator.">
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+                <path d="M0,0 L10,4 L0,8 Z" fill="rgba(16,32,24,.55)"></path>
+              </marker>
+              <marker id="arrowheadGreen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+                <path d="M0,0 L10,4 L0,8 Z" fill="rgba(33,95,67,.70)"></path>
+              </marker>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="rgba(16,32,24,.12)"/>
+              </filter>
+            </defs>
+
+            <!-- Columns headers -->
+            <rect x="24"  y="18" width="328" height="42" rx="14" class="pill"></rect>
+            <text x="188" y="44" text-anchor="middle" class="svgLabel" font-size="14" font-weight="800">Creator-facing journey</text>
+
+            <rect x="386" y="18" width="330" height="42" rx="14" class="pill"></rect>
+            <text x="551" y="44" text-anchor="middle" class="svgLabel" font-size="14" font-weight="800">System outputs & automation</text>
+
+            <rect x="750" y="18" width="326" height="42" rx="14" class="pill"></rect>
+            <text x="913" y="44" text-anchor="middle" class="svgLabel" font-size="14" font-weight="800">Feedback loop (model tuning)</text>
+
+            <!-- Left column boxes -->
+            <rect x="40" y="88" width="296" height="84" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <text x="60" y="118" class="svgLabel" font-size="14" font-weight="800">1) Landing page</text>
+            <text x="60" y="142" class="svgMuted" font-size="12">“Try a recommended setup”</text>
+            <text x="60" y="160" class="svgMuted" font-size="12">Low-friction entry</text>
+
+            <rect x="40" y="198" width="296" height="108" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
+            <text x="60" y="228" class="svgLabel" font-size="14" font-weight="800">2) AI Ideation Flow (creator prompts)</text>
+            <text x="60" y="252" class="svgMuted" font-size="12">Guided questions → defaults → approvals</text>
+            <text x="60" y="270" class="svgMuted" font-size="12">Produces plan + copy + configuration choices</text>
+            <text x="60" y="288" class="svgMuted" font-size="12">Also captures full transcript</text>
+
+            <rect x="40" y="332" width="296" height="92" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <text x="60" y="362" class="svgLabel" font-size="14" font-weight="800">3) Blueprint Preview</text>
+            <text x="60" y="386" class="svgMuted" font-size="12">Human-readable summary</text>
+            <text x="60" y="404" class="svgMuted" font-size="12">Button: “Commit & create my community”</text>
+
+            <rect x="40" y="450" width="296" height="92" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <text x="60" y="480" class="svgLabel" font-size="14" font-weight="800">4) Provisioning status (short)</text>
+            <text x="60" y="504" class="svgMuted" font-size="12">Creating instance → DNS/SSL → Live</text>
+            <text x="60" y="522" class="svgMuted" font-size="12">Then: “Go to dashboard”</text>
+
+            <rect x="40" y="568" width="296" height="104" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
+            <text x="60" y="598" class="svgLabel" font-size="14" font-weight="800">5) Dashboard Launch Checklist</text>
+            <text x="60" y="622" class="svgMuted" font-size="12">Deep links + copy tools into Mastodon</text>
+            <text x="60" y="640" class="svgMuted" font-size="12">Invite link + collaborator messaging drafts</text>
+            <text x="60" y="658" class="svgMuted" font-size="12">Funding stays optional / later</text>
+
+            <!-- Middle column boxes -->
+            <rect x="402" y="98" width="298" height="96" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <text x="422" y="128" class="svgLabel" font-size="14" font-weight="800">A) Persist outputs</text>
+            <text x="422" y="152" class="svgMuted" font-size="12">Blueprint JSON (authoritative inputs)</text>
+            <text x="422" y="170" class="svgMuted" font-size="12">Transcript (full interaction log)</text>
+
+            <rect x="402" y="224" width="298" height="118" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
+            <text x="422" y="254" class="svgLabel" font-size="14" font-weight="800">B) Provisioning Orchestrator (V)</text>
+            <text x="422" y="278" class="svgMuted" font-size="12">Consumes Blueprint JSON → spins up instance</text>
+            <text x="422" y="296" class="svgMuted" font-size="12">Seeds defaults at provision time when possible</text>
+            <text x="422" y="314" class="svgMuted" font-size="12">Returns: instance domain + admin owner account</text>
+            <text x="422" y="332" class="svgMuted" font-size="12">Emits: status updates (Provisioning → Live)</text>
+
+            <rect x="402" y="372" width="298" height="128" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <text x="422" y="402" class="svgLabel" font-size="14" font-weight="800">C) Dashboard state + checklist generation</text>
+            <text x="422" y="426" class="svgMuted" font-size="12">Launch checklist is derived from Blueprint</text>
+            <text x="422" y="444" class="svgMuted" font-size="12">Each item = (deep link) + (copy) + (status)</text>
+            <text x="422" y="462" class="svgMuted" font-size="12">Mastodon links: sign-in, admin, edit about/rules</text>
+            <text x="422" y="480" class="svgMuted" font-size="12">Invite + announcement + pinned post drafts</text>
+
+            <rect x="402" y="532" width="298" height="140" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <text x="422" y="562" class="svgLabel" font-size="14" font-weight="800">D) Optional funding module (later)</text>
+            <text x="422" y="586" class="svgMuted" font-size="12">Stripe connect → enable funding</text>
+            <text x="422" y="604" class="svgMuted" font-size="12">Surfaces: funding page + announcement/pinned drafts</text>
+            <text x="422" y="622" class="svgMuted" font-size="12">No paywalls in MVP; participation always free</text>
+            <text x="422" y="640" class="svgMuted" font-size="12">If creator changes options → regenerate drafts</text>
+            <text x="422" y="658" class="svgMuted" font-size="12">(future) automation if safe</text>
+
+            <!-- Right column boxes (feedback loop) -->
+            <rect x="766" y="118" width="294" height="104" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
+            <text x="786" y="148" class="svgLabel" font-size="14" font-weight="800">Feedback Store</text>
+            <text x="786" y="172" class="svgMuted" font-size="12">Keep: transcript + blueprint + outcomes</text>
+            <text x="786" y="190" class="svgMuted" font-size="12">Tag: “worked / didn’t / edits made”</text>
+            <text x="786" y="208" class="svgMuted" font-size="12">(later) event logs + retention signals</text>
+
+            <rect x="766" y="258" width="294" height="120" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <text x="786" y="288" class="svgLabel" font-size="14" font-weight="800">Evaluator / Trainer Model</text>
+            <text x="786" y="312" class="svgMuted" font-size="12">Reads transcript + final choices</text>
+            <text x="786" y="330" class="svgMuted" font-size="12">Finds: confusion, drift, missing questions</text>
+            <text x="786" y="348" class="svgMuted" font-size="12">Outputs: new heuristics + guardrails</text>
+            <text x="786" y="366" class="svgMuted" font-size="12">Produces “rule diffs” for ideator</text>
+
+            <rect x="766" y="416" width="294" height="120" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
+            <text x="786" y="446" class="svgLabel" font-size="14" font-weight="800">Ideator Behavior Ruleset</text>
+            <text x="786" y="470" class="svgMuted" font-size="12">Versioned prompts / policy / defaults</text>
+            <text x="786" y="488" class="svgMuted" font-size="12">“Ask less, decide more” tuning</text>
+            <text x="786" y="506" class="svgMuted" font-size="12">Keeps Commonshub principles consistent</text>
+            <text x="786" y="524" class="svgMuted" font-size="12">Feeds next creator session</text>
+
+            <rect x="766" y="574" width="294" height="88" rx="16" class="box" filter="url(#softShadow)"></rect>
+            <text x="786" y="604" class="svgLabel" font-size="14" font-weight="800">Outcome Signals (optional)</text>
+            <text x="786" y="628" class="svgMuted" font-size="12">Did they launch? Invite? Enable funding later?</text>
+            <text x="786" y="646" class="svgMuted" font-size="12">Used only to improve defaults (non-extractive)</text>
+
+            <!-- Arrows: left column -->
+            <path class="arrow" d="M188 172 L188 198"></path>
+            <path class="arrow" d="M188 306 L188 332"></path>
+            <path class="arrow" d="M188 424 L188 450"></path>
+            <path class="arrow" d="M188 542 L188 568"></path>
+
+            <!-- Arrows: across to middle -->
+            <path class="arrowSoft" d="M336 240 L402 146"></path>
+            <text x="360" y="182" class="svgMuted" font-size="11">save JSON + transcript</text>
+
+            <path class="arrowSoft" d="M336 378 L402 282"></path>
+            <text x="360" y="300" class="svgMuted" font-size="11">commit triggers provisioning</text>
+
+            <path class="arrowSoft" d="M336 496 L402 282"></path>
+            <text x="360" y="452" class="svgMuted" font-size="11">status updates</text>
+
+            <path class="arrowSoft" d="M336 620 L402 436"></path>
+            <text x="360" y="560" class="svgMuted" font-size="11">checklist from blueprint</text>
+
+            <!-- Arrows: middle to right (feedback loop) -->
+            <path class="arrowSoft dash" d="M700 146 L766 170"></path>
+            <text x="708" y="160" class="svgMuted" font-size="11">store both</text>
+
+            <path class="arrowSoft dash" d="M913 222 L913 258"></path>
+            <path class="arrowSoft dash" d="M913 378 L913 416"></path>
+            <path class="arrowSoft dash" d="M913 536 L913 198"></path>
+            <text x="930" y="248" class="svgMuted" font-size="11">batch evaluate</text>
+            <text x="930" y="410" class="svgMuted" font-size="11">emit rule diffs</text>
+            <text x="930" y="548" class="svgMuted" font-size="11">outcomes feed back</text>
+
+            <!-- Arrow: middle funding → feedback store (optional) -->
+            <path class="arrowSoft dash" d="M700 606 L766 606"></path>
+            <text x="708" y="596" class="svgMuted" font-size="11">changes → regenerate drafts</text>
+
+            <!-- Small callouts -->
+            <rect x="60" y="268" width="250" height="30" rx="12" class="pill"></rect>
+            <text x="72" y="288" class="svgMuted" font-size="12">Ideator produces: copy + config + drafts</text>
+
+            <rect x="422" y="458" width="250" height="30" rx="12" class="pill"></rect>
+            <text x="434" y="478" class="svgMuted" font-size="12">Deep links respect Mastodon boundaries</text>
+
+            <rect x="786" y="496" width="250" height="30" rx="12" class="pill"></rect>
+            <text x="798" y="516" class="svgMuted" font-size="12">Rules are versioned + auditable</text>
+          </svg>
+
+          <div class="legend">
+            <span><span class="dot"></span><b>Key idea:</b> Blueprint JSON is the <i>authoritative input</i>, transcript is the <i>training signal</i>.</span>
+            <span>Infra (V): focuses on <span class="kbd">Provisioning Orchestrator</span> consuming JSON + emitting status.</span>
+          </div>
+
+          <div class="note">
+            <b>Feedback loop intent (MVP-safe):</b> Save <i>the full ideation transcript</i> alongside the Blueprint JSON. Periodically run an evaluator/trainer that produces
+            versioned “rule diffs” (prompts/defaults/guardrails) to improve the ideator’s next runs — without adding friction to the creator flow.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
