@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Commonshub — Instance Dashboard (peakx.social)</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body class="flow">
+  <div class="wrap" style="grid-template-columns:1fr; max-width:980px;">
+    <main class="stage" style="width:100%;">
+      <div class="topbar">
+        <div class="left">
+          <div class="logoMark"></div>
+          <div class="meta">
+            <b>Instance dashboard</b>
+            <span>peakx.social · manual setup links</span>
+          </div>
+        </div>
+
+        <a class="secondary" href="instances.html" style="width:auto;">
+          Back to instances
+        </a>
+      </div>
+
+      <div class="content">
+        <div class="center" style="max-width:820px;">
+
+          <section class="card">
+            <h2 style="margin:0 0 6px;">peakx.social</h2>
+            <div class="muted">
+              Use this page to log in and jump directly to key Mastodon admin/config screens.
+            </div>
+
+            <div class="note" style="margin-top:14px;">
+              <b>Important:</b> If you’re not logged in, Mastodon will prompt you. After login, use the buttons below.
+            </div>
+
+            <div class="footerBar" style="margin-top:14px; gap:12px;">
+              <a class="primary"
+                 href="https://peakx.social/auth/sign_in"
+                 target="_blank" rel="noopener"
+                 style="flex:1; justify-content:center;">
+                Log in to Mastodon
+              </a>
+
+              <a class="secondary"
+                 href="https://peakx.social/@lou"
+                 target="_blank" rel="noopener"
+                 style="flex:1; width:auto; justify-content:center;">
+                View owner profile
+              </a>
+            </div>
+          </section>
+
+          <section class="card" style="margin-top:14px;">
+            <h3 style="margin:0 0 6px;">Admin setup links</h3>
+            <div class="muted">Opens in a new tab.</div>
+
+            <div class="list" style="margin-top:12px;">
+              <div class="item">
+                <b>Invites</b>
+                <div class="muted">Generate invite links</div>
+                <div class="footerBar" style="margin-top:10px;">
+                  <a class="secondary" href="https://peakx.social/admin/invites" target="_blank" rel="noopener" style="width:auto;">
+                    Open Invites
+                  </a>
+                </div>
+              </div>
+
+              <div class="item">
+                <b>Registrations</b>
+                <div class="muted">Signup / approval settings</div>
+                <div class="footerBar" style="margin-top:10px;">
+                  <a class="secondary" href="https://peakx.social/admin/settings/registrations" target="_blank" rel="noopener" style="width:auto;">
+                    Open Registrations
+                  </a>
+                </div>
+              </div>
+
+              <div class="item">
+                <b>Branding</b>
+                <div class="muted">Logo / thumbnail / server appearance</div>
+                <div class="footerBar" style="margin-top:10px;">
+                  <a class="secondary" href="https://peakx.social/admin/settings/branding" target="_blank" rel="noopener" style="width:auto;">
+                    Open Branding
+                  </a>
+                </div>
+              </div>
+
+              <div class="item">
+                <b>About</b>
+                <div class="muted">Server description + rules copy</div>
+                <div class="footerBar" style="margin-top:10px;">
+                  <a class="secondary" href="https://peakx.social/admin/settings/about" target="_blank" rel="noopener" style="width:auto;">
+                    Open About
+                  </a>
+                </div>
+              </div>
+
+              <div class="item">
+                <b>Discovery</b>
+                <div class="muted">Explore / discoverability settings</div>
+                <div class="footerBar" style="margin-top:10px;">
+                  <a class="secondary" href="https://peakx.social/admin/settings/discovery" target="_blank" rel="noopener" style="width:auto;">
+                    Open Discovery
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card" style="margin-top:14px;">
+            <h3 style="margin:0 0 6px;">Owner account shortcut</h3>
+            <div class="muted">Useful for profile basics (display name, bio, avatar).</div>
+
+            <div class="footerBar" style="margin-top:12px;">
+              <a class="secondary"
+                 href="https://peakx.social/settings/profile"
+                 target="_blank" rel="noopener"
+                 style="width:auto;">
+                Edit profile
+              </a>
+            </div>
+          </section>
+
+          <div class="muted" style="margin-top:16px; font-size:13px;">
+            In the real product, these links are generated from the instance domain returned by provisioning.
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
