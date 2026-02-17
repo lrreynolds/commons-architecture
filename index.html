@@ -138,6 +138,36 @@
       border-radius: 8px;
       color: var(--text);
     }
+    /* ===== Diagram readability + no clipping ===== */
+
+/* If your boxes are .card/.panel/.node/.box, keep all selectors below.
+   Delete the ones you don't use. */
+.card, .panel, .node, .box {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;   /* key: stop clipping */
+}
+
+/* Make sure text wraps instead of overflowing */
+.card *, .panel *, .node *, .box * {
+  white-space: normal !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  line-height: 1.35;
+}
+
+/* If you have a “small/meta” style that’s too tiny */
+.muted, .meta, .subcopy, .caption {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+/* Headings a touch clearer */
+.card h3, .panel h3, .node h3, .box h3 {
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
   </style>
 </head>
 <body>
