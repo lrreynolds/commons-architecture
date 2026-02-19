@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Commonshub — Dashboard</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body class="dashboard">
+
+  <div class="wrap">
+ 
+
+    <main class="stage">
+      <div class="topbar">
+        <div class="left">
+          <div class="logoMark"></div>
+          <div class="meta">
+            <b>Commons Dashboard</b>
+            <span>Stewardship + hosting</span>
+          </div>
+        </div>
+
+        <div class="chip">Owner view</div>
+
+        <a class="secondary" href="#" data-reset="all" style="width:auto;">
+          Start over
+        </a>
+      </div>
+
+      <div class="content">
+        <div class="center">
+
+          <div class="header">
+            <div>
+              <h2>Your community is live</h2>
+              <p id="headerSubcopy">
+                Your server is running. Next, we’ll help you make it feel “real” before you invite anyone.
+              </p>
+            </div>
+          </div>
+
+          <!-- ========================= -->
+          <!-- PRE-SETUP (wizard not done) -->
+          <!-- ========================= -->
+          <div id="preSetup">
+            <section id="status" style="scroll-margin-top:90px;">
+              <div class="card">
+                <h3>Community status</h3>
+                <div class="muted">Role: Community owner</div>
+
+                <div class="list" style="margin-top:10px;">
+                  <div class="item">
+                    <b>Community</b>
+                    <div class="muted">The Commons Hub · mycommunity.commonshub.social</div>
+                  </div>
+                  <div class="item">
+                    <b>Hosting</b>
+                    <div class="muted">Active · Managed by Commonshub</div>
+                  </div>
+                  <div class="item">
+                    <b>Members</b>
+                    <div class="muted">0 (expected)</div>
+                  </div>
+                </div>
+
+                <div class="note" style="margin-top:12px;">
+                  <b>Next:</b> Run a 3-step setup (branding, purpose, welcome post). ~5 minutes.
+                </div>
+
+                <div class="footerBar" style="margin-top:12px;">
+                  <a class="primary" href="setup-wizard.html">Set up your community</a>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- ========================= -->
+          <!-- POST-SETUP (wizard done)  -->
+          <!-- ========================= -->
+          <div id="postSetup" style="display:none;">
+            <section id="status-post" style="scroll-margin-top:90px;">
+              <div class="card">
+
+                <h3>Ready to invite</h3>
+                <div class="muted" style="margin-top:2px;">
+                  You’ll post and interact in Mastodon. Commonshub handles hosting, invites, and community funding.
+                </div>
+
+                <div class="list" style="margin-top:12px;">
+                  <div class="item">
+                    <b>Community</b>
+                    <div class="muted">The Commons Hub · mycommunity.commonshub.social</div>
+                  </div>
+                  <div class="item">
+                    <b>Hosting</b>
+                    <div class="muted">Active · Managed by Commonshub</div>
+                  </div>
+                  <div class="item">
+                    <b>Members</b>
+                    <div class="muted">0 (expected)</div>
+                  </div>
+                </div>
+
+
+
+<!-- Primary actions: Visit + Invite + Mastodon access -->
+<div class="footerBar" id="primaryActions" style="margin-top:14px; gap:12px;">
+
+  <!-- Visit community -->
+  <a class="primary" id="visitCommunityBtn"
+     href="community.html"
+     style="flex:1; justify-content:center;">
+    Visit community (Mastodon)
+  </a>
+
+  <!-- Sign in (shown by default) -->
+<a class="secondary" id="mastodonLoginBtn"
+   href="mastodon-login.html"
+   style="flex:1; justify-content:center;">
+  Sign in to Mastodon
+</a>
+
+  <!-- Dashboard (hidden initially) -->
+  <a class="secondary" id="mastodonAdminBtn"
+     href="mastodon-admin.html"
+     target="_blank" rel="noopener"
+     style="flex:1; justify-content:center; display:none;">
+    Mastodon dashboard
+  </a>
+
+  <!-- Invite -->
+  <button class="secondary" id="copyInviteBtn"
+          type="button"
+          style="flex:1; justify-content:center;">
+    Copy invite link
+  </button>
+
+</div>
+
+<div class="muted" id="mastodonHint"
+     style="margin-top:10px; font-size:13px;">
+  Sign in first, then you can open the Mastodon dashboard.
+</div>
+
+                <!-- Invite link stays hidden unless the user wants it -->
+                <div class="field" id="inviteField" style="margin-top:12px; display:none;">
+                  <label>Invite link</label>
+                  <input
+                    id="inviteLink"
+                    type="text"
+                    value="https://mycommunity.commonshub.social/invite/abc123"
+                    readonly
+                  />
+                  <div class="muted" style="margin-top:6px;">
+                    Share this link wherever your audience already is (Substack, YouTube, email, etc.).
+                  </div>
+                </div>
+
+         <!-- Community funding block (zen) -->
+<div class="fundingCard" style="margin-top:14px;">
+  <h3 style="margin:0 0 6px;">Community funding</h3>
+  <div class="muted" id="fundingSubcopy">
+    Optional. Participation is always free.
+  </div>
+
+  <!-- Status lines (quiet) -->
+  <div class="list" style="margin-top:12px;">
+    <div class="item">
+      <b>Stripe</b>
+      <div class="muted" id="stripeStatus">Not connected</div>
+    </div>
+    <div class="item">
+      <b>Community funding</b>
+      <div class="muted" id="fundingStatus">Off</div>
+    </div>
+  </div>
+
+  <!-- STATE A/B CTA (single large button) -->
+  <div id="fundingCtaWrap" class="footerBar" style="margin-top:14px;">
+    <a class="primary" id="fundingPrimaryBtn" href="funding-start.html">
+      Enable community funding
+    </a>
+  </div>
+
+  <!-- STATE C actions (only visible when funding is live) -->
+  <div id="fundingLiveActions" style="display:none; margin-top:14px;">
+    <div class="footerBar" style="gap:12px;">
+      <a class="secondary"
+         id="fundingPreviewBtn"
+         href="community-funding.html"
+         style="flex:1; width:auto; justify-content:center;">
+        Visit community funding page
+      </a>
+
+      <button class="secondary"
+              id="copyFundingLinkBtn"
+              type="button"
+              style="flex:1; width:auto; justify-content:center;">
+        Copy community funding link
+      </button>
+    </div>
+
+    <div class="muted" style="margin-top:10px; font-size:13px;">
+      <a href="funding-start.html" style="color:inherit; text-decoration:none;">
+        Manage community funding
+      </a>
+    </div>
+
+    <div class="field" id="fundingLinkField" style="margin-top:12px; display:none;">
+      <label>Community funding link</label>
+      <input
+        id="fundingLinkInput"
+        type="text"
+        value="https://mycommunity.commonshub.social/funding"
+        readonly
+      />
+      <div class="muted" style="margin-top:6px;">
+        Share this link anywhere. (This page also invites people to join your community.)
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+         
+            </section>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
