@@ -1,1 +1,634 @@
+/* =========================================================
+   Commonshub Mock — Base Design Tokens
+   ========================================================= */
 
+:root{
+  /* Surfaces */
+  --bg:#f4f7f5;
+  --card:#ffffff;
+  --card2:#fbfcfb;
+
+  /* Text */
+  --text:#102018;
+  --muted:#50665a;
+
+  /* Lines / borders */
+  --line:#d8e1db;
+  --border: var(--line); /* alias so either name works */
+
+  /* Brand */
+  --accent:#215f43;
+  --accent2:#0f5132;
+
+  /* Buttons */
+  --btn: var(--accent);
+  --btnText:#ffffff;
+
+  /* Pills */
+  --pill:#eef4f0;
+
+  /* Effects */
+  --shadow: 0 18px 50px rgba(16,32,24,.12);
+  --radius:18px;
+  --radius2:14px;
+
+  /* Font */
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+          "Apple Color Emoji","Segoe UI Emoji";
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family:var(--font);
+  line-height:1.35;
+  color:var(--text);
+
+  /* Default background (neutral, calm) */
+  background:
+    radial-gradient(1000px 520px at 20% 0%, rgba(31,111,74,.14) 0%, rgba(31,111,74,0) 62%),
+    radial-gradient(900px 520px at 80% 10%, rgba(15,81,50,.10) 0%, rgba(15,81,50,0) 62%),
+    var(--bg);
+}
+
+/* =========================================================
+   Layout: Sidebar + Stage
+   ========================================================= */
+
+.wrap{
+  max-width:1180px;
+  margin: 0 auto;
+  padding: 22px 16px 22px;
+  display:grid;
+  grid-template-columns: 300px 1fr;
+  gap:16px;
+  min-height: 100vh;
+  align-items:start;
+}
+
+.sidebar{
+  position:sticky;
+  top:16px;
+  align-self:start;
+  background: rgba(255,255,255,.7);
+  border:1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding:14px;
+  backdrop-filter: blur(10px);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 10px 12px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:12px;
+}
+
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(31,111,74,.14);
+}
+
+.brand b{font-size:15px}
+.brand span{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:2px
+}
+
+/* Sidebar nav */
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:10px;
+}
+
+.nav .navItem{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+
+  width:100%;
+  background: rgba(255,255,255,.85);
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:10px 10px;
+  border-radius: 12px;
+}
+
+.nav .navItem.active{
+  border-color: rgba(31,111,74,.55);
+  box-shadow: 0 0 0 3px rgba(31,111,74,.10) inset;
+}
+
+.nav .navItem small{ color:var(--muted); }
+
+.hint{
+  margin-top:14px;
+  padding:10px;
+  border-radius: 12px;
+  background: rgba(31,111,74,.06);
+  border:1px dashed rgba(31,111,74,.25);
+  color:var(--muted);
+  font-size:12px;
+}
+
+.hint b{ color:var(--text); }
+
+/* Stage */
+.stage{
+  background: rgba(255,255,255,.7);
+  border:1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  backdrop-filter: blur(10px);
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  background: rgba(255,255,255,.75);
+}
+
+.topbar .left{ display:flex; align-items:center; gap:10px; }
+
+.logoMark{
+  width:28px;
+  height:28px;
+  border-radius:10px;
+  background: linear-gradient(135deg, rgba(31,111,74,1), rgba(31,111,74,.20));
+  border:1px solid rgba(31,111,74,.25);
+}
+
+.topbar .meta b{ display:block; font-size:14px }
+.topbar .meta span{ display:block; font-size:12px; color:var(--muted) }
+
+.chip{
+  font-size:12px;
+  color:var(--muted);
+  background: var(--pill);
+  border:1px solid var(--line);
+  padding:6px 10px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+
+.content{ padding:14px 18px 18px; }
+.center{ max-width:860px; margin:0 auto; }
+
+/* =========================================================
+   Common Components
+   ========================================================= */
+
+.header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom:12px;
+  gap:12px;
+}
+
+.header h1, .header h2{ margin:0; font-size:18px; }
+.header p{ margin:8px 0 0; color:var(--muted); font-size:12px }
+
+.card{
+  background: var(--card);
+  border:1px solid var(--line);
+  border-radius: var(--radius2);
+  padding:14px;
+}
+
+.card h3{ margin:0 0 8px; font-size:14px }
+
+.muted{ color:var(--muted); font-size:12px }
+
+.list{ display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+
+.item{
+  padding:10px 10px;
+  border-radius: 12px;
+  border:1px solid var(--line);
+  background: var(--card2);
+}
+
+.item b{ font-size:13px }
+.item div{ margin-top:4px }
+
+.note{
+  margin-top:12px;
+  padding:10px;
+  border-radius: 12px;
+  background: rgba(31,111,74,.06);
+  border:1px solid rgba(31,111,74,.18);
+  color:var(--muted);
+  font-size:12px;
+}
+
+.note b{ color:var(--text) }
+
+.footerBar{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+.primary{
+  flex:1;
+  background: var(--btn);
+  color: var(--btnText);
+  border:none;
+  border-radius: 14px;
+  padding:12px 14px;
+  font-weight:900;
+  cursor:pointer;
+  min-width:220px;
+  text-align:center;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow: 0 6px 18px rgba(31,111,74,.35);
+}
+
+.secondary{
+  background:#ffffff;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius: 14px;
+  padding:12px 14px;
+  font-weight:900;
+  cursor:pointer;
+  width:160px;
+  text-align:center;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.editBadge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  color: var(--muted);
+  border:1px solid var(--line);
+  background: rgba(255,255,255,.6);
+  padding:3px 8px;
+  border-radius:999px;
+  margin-left:8px;
+  white-space:nowrap;
+}
+.editBadge b{ color: var(--text); font-weight:800; }
+
+/* Forms */
+.field{ margin-top:12px; }
+
+label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+input[type="text"], input[type="email"], textarea, select{
+  width:100%;
+  border-radius: 14px;
+  border:1px solid var(--line);
+  background:#ffffff;
+  color: var(--text);
+  padding:12px 12px;
+  font-size:14px;
+  outline:none;
+}
+
+textarea{ min-height:110px; resize:vertical }
+
+/* =========================================================
+   Progress Bar
+   ========================================================= */
+
+.progress{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+  align-items:center;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.bar{
+  flex:1;
+  height:8px;
+  border-radius:999px;
+  background: rgba(31,111,74,.08);
+  border:1px solid rgba(31,111,74,.12);
+  overflow:hidden;
+}
+
+.bar > div{
+  height:100%;
+  background: rgba(31,111,74,.70);
+}
+
+/* =========================================================
+   Flow Mode (setup / funding / provisioning)
+   Purpose: make it feel like you stepped into a short “journey”
+   ========================================================= */
+
+/* Hide sidebar / menu toggle only on pages that actually include .flowRoot */
+body.flow .flowRoot .sidebar{ display:none; }
+body.flow .flowRoot .wrap{ grid-template-columns:1fr; }
+body.flow .flowRoot .stage{ width:100%; }
+body.flow .flowRoot #navToggle{ display:none !important; }
+
+/* =========================================================
+   FLOW MODE (SAFE)
+   Only affects pages that include: <div class="flowRoot">
+   ========================================================= */
+
+.flowRoot{
+  min-height: 100vh;
+  padding: 22px 0;
+  background:
+    radial-gradient(1200px 700px at 20% 0%, rgba(31,111,74,.10), transparent 60%),
+    radial-gradient(900px 600px at 85% 15%, rgba(31,111,74,.07), transparent 55%),
+    linear-gradient(to bottom, rgba(31,111,74,.05) 0%, rgba(245,247,245,1) 70%);
+}
+
+/* The stage should feel like a panel sitting on the canvas */
+.flowRoot .stage{
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 18px 70px rgba(0,0,0,.08);
+}
+
+
+/* Flow banner + step chip (only apply if you use these classes) */
+.flowRoot .flowBanner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(31,111,74,.18);
+  background: rgba(31,111,74,.06);
+  margin-bottom:14px;
+}
+.flowRoot .flowBanner b{ font-weight:900; }
+
+.flowRoot .stepChip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(31,111,74,.22);
+  background: rgba(31,111,74,.08);
+  font-weight:900;
+  font-size:13px;
+}
+
+/* Make “Return to dashboard” / start over slightly quieter */
+.flowRoot .exitLink,
+.flowRoot a[data-reset]{
+  opacity: .82;
+}
+.flowRoot .exitLink:hover,
+.flowRoot a[data-reset]:hover{
+  opacity: 1;
+}
+
+/* Shimmer / motion for progress fill (flow only) */
+.flowRoot .progress .bar > div{
+  background: linear-gradient(90deg, var(--accent), rgba(31,111,74,0.65), var(--accent));
+  background-size: 200% 100%;
+  animation: flowPulse 3s ease-in-out infinite;
+}
+@keyframes flowPulse{
+  0%{ background-position: 0% 50%; }
+  50%{ background-position: 100% 50%; }
+  100%{ background-position: 0% 50%; }
+}
+
+/* Primary CTA “forward” arrow (only if you add .forward) */
+.flowRoot .primary.forward::after{
+  content:" →";
+  font-weight:900;
+}
+
+/* =========================================================
+   Funding “list looks like rows” helper (optional)
+   ========================================================= */
+.fundingCard .list{ gap:0 !important; }
+.fundingCard .list .item{
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 12px 0 !important;
+}
+.fundingCard .list .item + .item{
+  border-top: 1px solid rgba(16,32,24,.08) !important;
+}
+
+/* =========================
+   Dashboard theme (place-like)
+   Apply ONLY when <body class="dashboard">
+   ========================= */
+
+body.dashboard{
+  /* Dark “room” */
+  --bg:#46524d;
+
+  /* On dark surfaces */
+  --dashText:#e9f2ec;
+  --dashMuted: rgba(233,242,236,.70);
+  --dashBorder: rgba(233,242,236,.14);
+
+  /* Card surfaces (still light) */
+  --card: rgba(255,255,255,.94);
+  --card2: rgba(255,255,255,.88);
+
+  /* Card text (dark) */
+  --cardText:#0f1713;
+  --cardMuted: rgba(15,23,19,.70);
+
+  /* Make borders on light cards consistent */
+  --line: rgba(15,23,19,.10);
+}
+
+body.dashboard{
+  background: var(--bg);
+  color: var(--dashText);
+}
+
+body.dashboard .header{
+  padding-bottom:14px;
+  margin-bottom:18px;
+  border-bottom:1px solid var(--dashBorder);
+}
+
+/* Stage + topbar read as UI chrome on dark */
+body.dashboard .stage{
+   background: rgba(255,255,255,.10);
+  border: 1px solid var(--dashBorder);
+  box-shadow: 0 22px 60px rgba(0,0,0,.28);
+  backdrop-filter: blur(14px);
+}
+body.dashboard .topbar{
+  background: rgba(255,255,255,.12);
+  border-bottom: 1px solid var(--dashBorder);
+}
+body.dashboard .topbar .chip{
+  font-weight:700;
+}
+
+/* Cards are light "panels" */
+body.dashboard .card{
+  background: var(--card);
+  color: var(--cardText);
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+
+/* Chips and secondary buttons should be subtle but readable */
+body.dashboard .chip{
+  background: rgba(255,255,255,.10);
+  border: 1px solid var(--dashBorder);
+  color: var(--dashText);
+}
+
+body.dashboard .secondary{
+  background: rgba(255,255,255,.10);
+  border: 1px solid var(--dashBorder);
+  color: var(--dashText);
+}
+
+body.dashboard #fundingLiveActions .secondary{
+  background: #ffffff;
+  color: var(--cardText);
+  border: 1px solid var(--line);
+}
+
+body.dashboard #fundingLiveActions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* muted inside the dark dashboard chrome */
+body.dashboard .topbar .muted,
+body.dashboard .header .muted{
+  color: rgba(233,242,236,.82);
+}
+
+body.dashboard .header h2{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-.01em;
+}
+
+body.dashboard .card + .card{
+  margin-top:18px;
+}
+
+/* muted inside light cards stays dark-muted */
+body.dashboard .card .muted{
+  color: var(--cardMuted);
+}
+
+/* =========================================================
+   Plan grid + Responsive
+   ========================================================= */
+
+.planGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+  align-items:start;
+}
+
+@media (max-width: 860px){
+  .planGrid{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 1020px){
+  .wrap{ grid-template-columns:1fr; }
+  .sidebar{ position:relative; top:auto; }
+}
+
+/* =========================
+   Dashboard sidebar tuning
+   ========================= */
+
+body.dashboard .sidebar{
+  background: rgba(0,0,0,.28);
+  border: 1px solid var(--dashBorder);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+  backdrop-filter: blur(12px);
+}
+
+body.dashboard .brand{
+  border-bottom: 1px solid var(--dashBorder);
+}
+
+body.dashboard .brand b{
+  color: var(--dashText);
+}
+
+body.dashboard .brand span{
+  color: var(--dashMuted);
+}
+
+/* Sidebar hint becomes quiet banner */
+body.dashboard .hint{
+  background: rgba(255,255,255,.06);
+  border: 1px dashed var(--dashBorder);
+  color: var(--dashMuted);
+}
+
+/* Sidebar links */
+body.dashboard .sidebar a{
+  color: var(--dashText);
+}
+body.dashboard .wrap{
+  grid-template-columns: 1fr;
+  max-width: 900px;
+}
+
+/* Dashboard canvas (override) — keep this LAST */
+body.dashboard{
+  background:
+    radial-gradient(1200px 600px at 30% 0%, rgba(31,111,74,.05), transparent 70%),
+    radial-gradient(1000px 600px at 80% 10%, rgba(31,111,74,.04), transparent 70%),
+    var(--bg);
+}
+body.dashboard #fundingLiveActions a.secondary,
+body.dashboard #fundingLiveActions button.secondary{
+  background:#ffffff;
+  color:var(--cardText);
+  border:1px solid rgba(15,23,19,.14);
+}
+/* Invite CTA buttons inside light cards */
+body.dashboard .card .secondary{
+  background:#ffffff;
+  color:var(--cardText);
+  border:1px solid var(--line);
+}
