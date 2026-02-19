@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Commonshub — Choose plan</title>
+
+<style>
+  :root{
+    --bg:#f4f7f5;
+    --card:#ffffff;
+    --text:#102018;
+    --muted:#5b6f63;
+    --line:#d9e2dc;
+    --accent:#1f6f4a;
+    --accentSoft: rgba(31,111,74,.08);
+    --radius:16px;
+    --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);}
+  .wrap{max-width:880px;margin:auto;padding:40px 20px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;}
+  .card + .card{margin-top:16px;}
+  h1{margin:0 0 6px;font-size:22px;letter-spacing:.2px;}
+  .sub{color:var(--muted);margin:0 0 14px;line-height:1.45;}
+  .explainer{
+    background: rgba(255,255,255,.9);
+    border:1px solid var(--line);
+    border-left:4px solid var(--accent);
+    border-radius:14px;
+    padding:16px;
+  }
+  .explainerTop{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .eyebrow{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+  .path{font-size:14px;margin-top:2px;}
+  .chip{
+    font-size:12px;padding:6px 10px;border-radius:999px;
+    border:1px solid rgba(31,111,74,.22);
+    background: rgba(31,111,74,.08);
+    color:#355346;
+    white-space:nowrap;
+  }
+  .explainer h3{margin:12px 0 6px;font-size:14px;}
+  .explainer p{margin:6px 0;color:#355346;font-size:13.5px;line-height:1.55;}
+  .kv{display:grid;grid-template-columns: 170px 1fr;gap:8px 14px;margin-top:12px;font-size:13.5px;}
+  .kv .k{color:var(--muted);}
+  .kv .v{color:#355346;}
+  .callout{
+    margin-top:12px;
+    padding:12px;
+    border-radius:12px;
+    background: rgba(31,111,74,.06);
+    border:1px solid rgba(31,111,74,.18);
+    color:#355346;
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .plans{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+    margin-top:14px;
+  }
+  @media (max-width: 740px){
+    .plans{grid-template-columns:1fr;}
+    .kv{grid-template-columns:1fr;}
+  }
+  .plan{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    cursor:pointer;
+    transition: .12s ease;
+    background:#fff;
+  }
+  .plan:hover{border-color: rgba(31,111,74,.45); box-shadow: 0 10px 28px rgba(16,32,24,.08);}
+  .planHeader{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+  .planTitle{font-weight:800;font-size:15px;}
+  .price{font-weight:800;font-size:14px;color:#163a2a;}
+  .planDesc{color:var(--muted);font-size:13.5px;line-height:1.45;margin-top:6px;}
+  .bullets{margin:10px 0 0; padding-left:18px; color:#355346; font-size:13.5px; line-height:1.5;}
+  .badge{
+    font-size:12px;
+    padding:4px 8px;
+    border-radius:999px;
+    border:1px solid rgba(16,32,24,.12);
+    background: rgba(16,32,24,.04);
+    color:#355346;
+  }
+  .selected{
+    border-color: rgba(31,111,74,.65);
+    box-shadow: 0 0 0 3px var(--accentSoft);
+  }
+  .disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    background: rgba(16,32,24,.02);
+  }
+
+  .actions{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:center;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  a.link{color:var(--accent);text-decoration:none;font-weight:650;}
+  a.link:hover{text-decoration:underline;}
+  .primaryBtn{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:12px 16px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .primaryBtn[disabled]{opacity:.55;cursor:not-allowed;}
+  .secondaryBtn{
+    background:#fff;
+    border:1px solid var(--line);
+    padding:12px 16px;
+    border-radius:10px;
+    font-weight:650;
+    cursor:pointer;
+    color:#163a2a;
+  }
+
+  pre.json{
+    margin:10px 0 0;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background: rgba(16,32,24,.04);
+    overflow:auto;
+    font-size:12px;
+    line-height:1.45;
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- Explainer -->
+  <div class="explainer">
+    <div class="explainerTop">
+      <div>
+        <div class="eyebrow">You came from</div>
+        <div class="path">Guided ideation (Blueprint review) → <b>Choose plan</b></div>
+      </div>
+      <div class="chip">Commit point (pre-provision)</div>
+    </div>
+
+    <h3>What this step is doing</h3>
+    <p>
+      The creator has reviewed the <b>Community Blueprint</b> and is now choosing a plan.
+      This is the <b>commit point</b>: once a plan is selected, Commonshub can begin provisioning infrastructure.
+    </p>
+    <p>
+      If the creator chose a <b>custom domain</b> or an <b>external subdomain</b>, the plan choice is constrained to
+      <b>Premium</b> (because DNS + custom-domain features are part of that tier). If they chose a Commonshub subdomain,
+      they can start on Base and upgrade later.
+    </p>
+
+    <div class="kv">
+      <div class="k">Outputs already created</div>
+      <div class="v">Blueprint JSON (authoritative provisioning payload) + saved transcript (training signal)</div>
+
+      <div class="k">Provisioning happens</div>
+      <div class="v"><b>After</b> the creator confirms a plan on this page</div>
+
+      <div class="k">Next step</div>
+      <div class="v">Provisioning status page (orchestrator consumes Blueprint JSON)</div>
+    </div>
+
+    <div class="callout">
+      <b>Infra contract:</b> Plan choice + Blueprint JSON are sent to the Provisioning Orchestrator.
+      The orchestrator returns instance domain + owner admin account + status updates (Provisioning → Live).
+    </div>
+  </div>
+
+  <!-- Plan chooser -->
+  <div class="card">
+    <h1>Choose your plan</h1>
+    <p class="sub">
+      This mock page demonstrates the plan decision and the constraint logic for custom domains.
+      (In production, prices/features come from billing + product config.)
+    </p>
+
+    <div class="callout" id="domainCallout">
+      <b>Domain strategy:</b> <span id="domainStrategyText">Commonshub subdomain (fastest launch)</span><br/>
+      <span style="color:var(--muted)">For this mock, the domain choice is inferred from the Blueprint.</span>
+    </div>
+
+    <div class="plans" id="plans">
+      <!-- Base -->
+      <div class="plan" id="planBase" data-plan="base" tabindex="0" role="button" aria-label="Select Base plan">
+        <div class="planHeader">
+          <div>
+            <div class="planTitle">Base</div>
+            <div class="planDesc">Fast start on a Commonshub subdomain.</div>
+          </div>
+          <div style="text-align:right">
+            <div class="price">$X/mo</div>
+            <div class="badge">Pilot-friendly</div>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li>Provision instance on <b>*.commonshub.social</b></li>
+          <li>Guided launch checklist + deep links</li>
+          <li>Upgrade to Premium later</li>
+        </ul>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan" id="planPremium" data-plan="premium" tabindex="0" role="button" aria-label="Select Premium plan">
+        <div class="planHeader">
+          <div>
+            <div class="planTitle">Premium</div>
+            <div class="planDesc">Required for custom domains + DNS connection.</div>
+          </div>
+          <div style="text-align:right">
+            <div class="price">$Y/mo</div>
+            <div class="badge">Domain-enabled</div>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li>Custom domain / external subdomain support</li>
+          <li>DNS connection + migration tooling</li>
+          <li>Everything in Base</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="link" href="guided-ideation.html">← Back to Blueprint</a>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="secondaryBtn" id="saveBtn" type="button">Save & finish later</button>
+        <button class="primaryBtn" id="continueBtn" type="button" disabled>
+          Confirm plan & start provisioning →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payload preview -->
+  <div class="card">
+    <h3 style="margin:0 0 8px;">Provisioning request (mock)</h3>
+    <p class="sub" style="margin-bottom:10px;">
+      The orchestrator receives: <b>plan</b> + <b>Blueprint JSON</b>. (Transcript is stored separately.)
+    </p>
+    <pre class="json" id="payloadPreview"></pre>
+  </div>
+
+</div>
+
+<script>
+  // ---- Mock inputs: in a real app these come from your saved Blueprint store ----
+  // Change domain_path to simulate the plan constraint behavior:
+  // - "ukrainebrief.commonshub.social" -> Base allowed
+  // - "community.example.com" or "ukrainebrief.com" -> Premium required
+  const blueprint = {
+    positioning: "Option A — Strategic briefing room",
+    community_name: "ukraine brief",
+    domain_path: "ukrainebrief.commonshub.social",
+    domain_candidate: null,
+    short_description: "A real-time strategic briefing room for analysts and engaged readers tracking how the Ukraine war is reshaping the global balance of power.",
+    focus_line: "Real-time analysis of the Ukraine war",
+    owner_handle: "@phillipspobrien@ukrainebrief.commonshub.social",
+    owner_bio: "I am Professor of Strategic Studies at the University of St Andrews and author of a leading analysis of the war in Ukraine and modern military power. I use this space to provide real-time context, test ideas, and work in the open with serious participants. This is the live briefing room for that effort.",
+    long_description: "This is the live signal space for following how the war in Ukraine is transforming modern warfare and the structure of global power...",
+    launch_mode: "pilot"
+  };
+
+  // ---- Helpers ----
+  const isCommonshubSubdomain = (domain) =>
+    typeof domain === "string" && domain.endsWith(".commonshub.social");
+
+  const isCustomOrExternal = (domain) =>
+    typeof domain === "string" && !isCommonshubSubdomain(domain);
+
+  const domainStrategyText = document.getElementById("domainStrategyText");
+  const planBase = document.getElementById("planBase");
+  const planPremium = document.getElementById("planPremium");
+  const continueBtn = document.getElementById("continueBtn");
+  const saveBtn = document.getElementById("saveBtn");
+  const payloadPreview = document.getElementById("payloadPreview");
+
+  let selectedPlan = null;
+
+  function renderConstraintState() {
+    const forcedPremium = isCustomOrExternal(blueprint.domain_path);
+
+    domainStrategyText.textContent = forcedPremium
+      ? "Custom/external domain (Premium required)"
+      : "Commonshub subdomain (Base or Premium)";
+
+    if (forcedPremium) {
+      // Disable Base visually and functionally
+      planBase.classList.add("disabled");
+      planBase.setAttribute("aria-disabled", "true");
+      // Preselect Premium
+      selectPlan("premium", true);
+    } else {
+      planBase.classList.remove("disabled");
+      planBase.removeAttribute("aria-disabled");
+    }
+
+    renderPayload();
+  }
+
+  function clearSelected() {
+    planBase.classList.remove("selected");
+    planPremium.classList.remove("selected");
+  }
+
+  function selectPlan(plan, forced = false) {
+    // If base is disabled, ignore clicks
+    if (plan === "base" && planBase.classList.contains("disabled")) return;
+
+    selectedPlan = plan;
+    clearSelected();
+
+    const target = plan === "base" ? planBase : planPremium;
+    target.classList.add("selected");
+
+    continueBtn.disabled = false;
+    continueBtn.textContent = forced
+      ? "Premium required — start provisioning →"
+      : "Confirm plan & start provisioning →";
+
+    renderPayload();
+  }
+
+  function renderPayload() {
+    const payload = {
+      plan: selectedPlan || "(not selected)",
+      blueprint_json: blueprint
+    };
+    payloadPreview.textContent = JSON.stringify(payload, null, 2);
+  }
+
+  function attachPlanHandlers() {
+    planBase.addEventListener("click", () => selectPlan("base"));
+    planPremium.addEventListener("click", () => selectPlan("premium"));
+
+    planBase.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectPlan("base"); }
+    });
+    planPremium.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectPlan("premium"); }
+    });
+
+    saveBtn.addEventListener("click", () => {
+      alert("Mock: Blueprint + current progress saved. Creator can return later.");
+      // In real app: persist state + route to a “resume” landing
+    });
+
+    continueBtn.addEventListener("click", () => {
+      if (!selectedPlan) return;
+
+      // In real app: POST (plan + blueprint JSON) to orchestrator, then route to provisioning status.
+      // For the mock: just navigate.
+      window.location.href = "provisioning-status.html";
+    });
+  }
+
+  // Init
+  attachPlanHandlers();
+  renderPayload();
+  renderConstraintState();
+</script>
+</body>
+</html>
