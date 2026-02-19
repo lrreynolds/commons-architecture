@@ -14,10 +14,108 @@ h1{margin-top:0;font-size:22px;}
 .option:hover{border-color:#1f6f4a;}
 .primary{background:#1f6f4a;color:#fff;border:none;padding:12px 18px;border-radius:10px;margin-top:20px;font-weight:600;cursor:pointer;}
 .meta{color:#5b6f63;font-size:13px;margin-top:6px;}
+  .explainerCard{
+    background: rgba(255,255,255,.9);
+    border:1px solid #d9e2dc;
+    border-radius:14px;
+    padding:14px;
+    margin:14px 0;
+  }
+  .explainerTop{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+  .crumbs{
+    font-size:12px;
+    color:#5b6f63;
+    line-height:1.35;
+  }
+  .tag{
+    font-size:12px;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(31,111,74,.22);
+    background: rgba(31,111,74,.08);
+    color:#355346;
+    white-space:nowrap;
+  }
+  .explainerCard h3{
+    margin:10px 0 6px;
+    font-size:14px;
+  }
+  .explainerCard p{
+    margin:6px 0;
+    color:#355346;
+    font-size:13px;
+    line-height:1.45;
+  }
+  .kv{
+    display:grid;
+    grid-template-columns: 170px 1fr;
+    gap:6px 12px;
+    margin-top:10px;
+    font-size:13px;
+  }
+  .kv b{ color:#102018; }
+  .kv div{ color:#355346; }
+  pre.json{
+    margin:10px 0 0;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #d9e2dc;
+    background: rgba(16,32,24,.04);
+    overflow:auto;
+    font-size:12px;
+    line-height:1.4;
+  }
+  .callout{
+    margin-top:10px;
+    padding:10px;
+    border-radius:12px;
+    background: rgba(31,111,74,.06);
+    border:1px solid rgba(31,111,74,.18);
+    color:#355346;
+    font-size:12px;
+    line-height:1.45;
+  }
+  .callout b{ color:#102018; }
 </style>
 </head>
 
 <body>
+  <div class="explainerCard">
+  <div class="explainerTop">
+    <div class="crumbs">
+      <b>You came from</b><br/>
+      Landing page CTA → Step 1 (Positioning)
+    </div>
+    <div class="tag">Ideation flow (pre-provision)</div>
+  </div>
+
+  <h3>What this step is doing</h3>
+  <p>
+    We’re choosing the community’s strategic positioning. This becomes the invite preview,
+    the instance short description seed, and drives later defaults.
+  </p>
+
+  <div class="kv">
+    <b>Replaces (old mockup)</b>
+    <div>Manual “About” drafting + generic “setup wizard” step</div>
+
+    <b>Outputs created</b>
+    <div>Blueprint fields + transcript log (training signal)</div>
+
+    <b>Provisioning?</b>
+    <div><b>No.</b> We do not call infra until the Blueprint “Commit” step.</div>
+  </div>
+
+  <div class="callout">
+    <b>Example in progress:</b> Ukraine Brief (Phillips O’Brien) — Step 1 creates positioning + short description seed.
+  </div>
+</div>
 <div class="wrap">
 <div class="card">
 
