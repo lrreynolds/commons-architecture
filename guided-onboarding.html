@@ -6,82 +6,173 @@
 <title>Commonshub — Guided setup</title>
 
 <style>
-body{font-family:system-ui;background:#f4f7f5;margin:0;color:#102018;}
+:root{
+  --bg:#f4f7f5;
+  --card:#ffffff;
+  --line:#d9e2dc;
+  --text:#102018;
+  --muted:#5b6f63;
+  --accent:#1f6f4a;
+  --accentSoft:rgba(31,111,74,.08);
+}
+
+body{
+  font-family:system-ui;
+  background:var(--bg);
+  margin:0;
+  color:var(--text);
+}
+
 .wrap{max-width:760px;margin:auto;padding:40px 20px;}
-.card{background:#fff;border:1px solid #d9e2dc;border-radius:16px;padding:26px;}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:26px;
+  box-shadow:0 10px 28px rgba(16,32,24,.06);
+}
+
 h1{margin-top:0;font-size:22px;}
-.option{border:1px solid #d9e2dc;border-radius:12px;padding:14px;margin-top:10px;cursor:pointer;}
-.option:hover{border-color:#1f6f4a;}
-.primary{background:#1f6f4a;color:#fff;border:none;padding:12px 18px;border-radius:10px;margin-top:20px;font-weight:600;cursor:pointer;}
-.meta{color:#5b6f63;font-size:13px;margin-top:6px;}
-  .explainerCard{
-    background: rgba(255,255,255,.9);
-    border:1px solid #d9e2dc;
-    border-radius:14px;
-    padding:14px;
-    margin:14px 0;
-  }
-  .explainerTop{
-    display:flex;
-    gap:10px;
-    align-items:flex-start;
-    justify-content:space-between;
-    flex-wrap:wrap;
-  }
-  .crumbs{
-    font-size:12px;
-    color:#5b6f63;
-    line-height:1.35;
-  }
-  .tag{
-    font-size:12px;
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid rgba(31,111,74,.22);
-    background: rgba(31,111,74,.08);
-    color:#355346;
-    white-space:nowrap;
-  }
-  .explainerCard h3{
-    margin:10px 0 6px;
-    font-size:14px;
-  }
-  .explainerCard p{
-    margin:6px 0;
-    color:#355346;
-    font-size:13px;
-    line-height:1.45;
-  }
-  .kv{
-    display:grid;
-    grid-template-columns: 170px 1fr;
-    gap:6px 12px;
-    margin-top:10px;
-    font-size:13px;
-  }
-  .kv b{ color:#102018; }
-  .kv div{ color:#355346; }
-  pre.json{
-    margin:10px 0 0;
-    padding:12px;
-    border-radius:12px;
-    border:1px solid #d9e2dc;
-    background: rgba(16,32,24,.04);
-    overflow:auto;
-    font-size:12px;
-    line-height:1.4;
-  }
-  .callout{
-    margin-top:10px;
-    padding:10px;
-    border-radius:12px;
-    background: rgba(31,111,74,.06);
-    border:1px solid rgba(31,111,74,.18);
-    color:#355346;
-    font-size:12px;
-    line-height:1.45;
-  }
-  .callout b{ color:#102018; }
+h2{font-size:20px;letter-spacing:.02em;}
+h3{font-size:15px;}
+
+.primary{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:12px 18px;
+  border-radius:10px;
+  margin-top:20px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.primary:hover{filter:brightness(1.05);}
+
+.meta{color:var(--muted);font-size:13px;margin-top:6px;}
+
+/* ───────── EXPLAINER CARD ───────── */
+
+.explainerCard{
+  background:linear-gradient(#ffffff,#fbfdfc);
+  border:1px solid var(--line);
+  border-left:4px solid var(--accent);
+  border-radius:16px;
+  padding:18px 18px 16px;
+  margin-bottom:18px;
+  box-shadow:0 8px 22px rgba(16,32,24,.05);
+}
+
+.explainerTop{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:6px;
+}
+
+.eyebrow{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted);
+  margin-bottom:2px;
+}
+
+.path{
+  font-size:13px;
+  font-weight:500;
+}
+
+.phase-chip{
+  font-size:12px;
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid rgba(31,111,74,.25);
+  background:var(--accentSoft);
+  color:#355346;
+  white-space:nowrap;
+  height:fit-content;
+}
+
+.explainerCard p{
+  font-size:13.5px;
+  line-height:1.55;
+  color:#355346;
+  margin:8px 0;
+}
+
+.explainerCard ul{
+  margin:10px 0 4px 18px;
+  padding:0;
+}
+
+.explainerCard li{
+  margin:6px 0;
+  font-size:13.5px;
+}
+
+/* ───────── KEY VALUE GRID ───────── */
+
+.kv{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:8px 14px;
+  margin-top:12px;
+  font-size:13px;
+}
+
+.kv b{color:var(--text);}
+.kv div{color:#355346;}
+
+/* ───────── EXAMPLE CALLOUT ───────── */
+
+.example{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  background:var(--accentSoft);
+  border:1px solid rgba(31,111,74,.18);
+  font-size:13px;
+  line-height:1.45;
+}
+
+/* ───────── JSON BLOCK ───────── */
+
+pre.json{
+  margin:12px 0 0;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#0f1a14;
+  color:#d7efe3;
+  overflow:auto;
+  font-size:12px;
+  line-height:1.5;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
+}
+
+/* ───────── CALLOUT (INFRA CONTRACT) ───────── */
+
+.callout{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  background:rgba(31,111,74,.06);
+  border:1px solid rgba(31,111,74,.18);
+  font-size:12.5px;
+  line-height:1.45;
+  color:#355346;
+}
+
+.callout b{color:var(--text);}
+
+/* ───────── RESPONSIVE ───────── */
+
+@media (max-width:640px){
+  .kv{grid-template-columns:1fr;}
+}
 </style>
 </head>
 
