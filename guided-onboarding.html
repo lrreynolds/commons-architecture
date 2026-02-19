@@ -116,31 +116,112 @@ h1{margin-top:0;font-size:22px;}
     <b>Example in progress:</b> Ukraine Brief (Phillips O’Brien) — Step 1 creates positioning + short description seed.
   </div>
 </div>
-<div class="wrap">
-<div class="card">
+<!-- COMMUNITY BLUEPRINT (human readable) -->
 
-<h1>Step 1 — Community positioning</h1>
-<div class="meta">This defines who the space is for and what happens there.</div>
+<div class="card" style="margin-top:18px;">
 
-<div class="option">A real-time strategic briefing room for analysts and policy professionals.</div>
-<div class="option">A source-driven discussion space for serious readers.</div>
-<div class="option">An ongoing war-and-strategy signal beyond the news cycle.</div>
+  <h2 style="margin-top:0;">COMMUNITY BLUEPRINT</h2>
 
-<button class="primary" onclick="location.href='blueprint-review.html'">
-Approve & continue →
-</button>
+  <div class="kv">
 
-  <pre class="json">
-Blueprint draft (partial)
-{
-  "community_name": "ukraine brief",
-  "positioning": "Option A — Strategic briefing room",
-  "domain_path": "ukrainebrief.commonshub.social",
-  "launch_mode": "pilot"
-}
-</pre>
+    <b>Positioning</b>
+    <div>Option A — Strategic briefing room</div>
+
+    <b>Community name</b>
+    <div>ukraine brief</div>
+
+    <b>Domain path</b>
+    <div>ukrainebrief.commonshub.social</div>
+
+    <b>Short description</b>
+    <div>
+      A real-time strategic briefing room for analysts and engaged readers
+      tracking how the Ukraine war is reshaping the global balance of power.
+    </div>
+
+    <b>Focus line</b>
+    <div>Real-time analysis of the Ukraine war</div>
+
+    <b>Owner handle</b>
+    <div>@phillipspobrien@ukrainebrief.commonshub.social</div>
+
+    <b>Owner bio</b>
+    <div>
+      I am Professor of Strategic Studies at the University of St Andrews and
+      author of a leading analysis of the war in Ukraine and modern military
+      power. I use this space to provide real-time context, test ideas, and
+      work in the open with serious participants. This is the live briefing
+      room for that effort.
+    </div>
+
+    <b>Long description</b>
+    <div>
+      This is the live signal space for following how the war in Ukraine is
+      transforming modern warfare and the structure of global power. It exists
+      to provide continuous strategic context that sits between formal analysis
+      and the speed of daily events, creating a durable record that can be
+      worked on in real time.<br/><br/>
+
+      It is for analysts, journalists, policy professionals, military observers,
+      and highly engaged readers who are already serious about the subject and
+      want a place where informed discussion and source-driven interpretation
+      can compound over time. Casual commentary is not the purpose; this is a
+      working room for people who track developments closely and think in
+      strategic terms.<br/><br/>
+
+      Here you will find rapid assessments of battlefield dynamics, debates
+      about military effectiveness, historical comparison, and collaborative
+      interpretation that outlives the news cycle. Threads become reference
+      points. Disagreements are part of the analytical process. The goal is to
+      build shared context as events unfold.<br/><br/>
+
+      This space is independent and not shaped by algorithms or platform
+      incentives. The signal is chronological, the participants are visible,
+      and the conversation cannot be throttled when it becomes most important.<br/><br/>
+
+      I host this as an extension of my ongoing work on war and strategy, to
+      test arguments in the open, learn from informed participants, and
+      maintain a continuous strategic briefing that anyone serious about the
+      subject can rely on.
+    </div>
+
+  </div>
+
+  <div class="callout">
+    Your Blueprint is saved. You can return anytime and continue from here.
+  </div>
+
+  <div style="margin-top:14px;">
+    <button class="primary">
+      Ready to proceed to setup →
+    </button>
+  </div>
 
 </div>
+  <div class="card" style="margin-top:18px;">
+
+  <h3 style="margin-top:0;">Provisioning payload (authoritative JSON)</h3>
+
+  <pre class="json">
+{
+  "positioning": "Option A — Strategic briefing room",
+  "community_name": "ukraine brief",
+  "domain_path": "ukrainebrief.commonshub.social",
+  "domain_candidate": null,
+  "short_description": "A real-time strategic briefing room for analysts and engaged readers tracking how the Ukraine war is reshaping the global balance of power.",
+  "focus_line": "Real-time analysis of the Ukraine war",
+  "owner_handle": "@phillipspobrien@ukrainebrief.commonshub.social",
+  "owner_bio": "I am Professor of Strategic Studies at the University of St Andrews and author of a leading analysis of the war in Ukraine and modern military power. I use this space to provide real-time context, test ideas, and work in the open with serious participants. This is the live briefing room for that effort.",
+  "long_description": "This is the live signal space for following how the war in Ukraine is transforming modern warfare and the structure of global power...",
+  "launch_mode": "pilot"
+}
+  </pre>
+
+  <div class="callout">
+    <b>Infra contract:</b> This JSON is sent to the Provisioning Orchestrator.
+    The transcript is stored separately for evaluator/trainer tuning.
+  </div>
+
 </div>
 </body>
 </html>
