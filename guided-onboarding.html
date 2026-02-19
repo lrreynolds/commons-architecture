@@ -86,34 +86,60 @@ h1{margin-top:0;font-size:22px;}
 </head>
 
 <body>
+
+
   <div class="explainerCard">
   <div class="explainerTop">
-    <div class="crumbs">
-      <b>You came from</b><br/>
-      Landing page CTA → Step 1 (Positioning)
+    <div>
+      <div class="eyebrow">You came from</div>
+      <div class="path">Landing page CTA → Guided ideation flow (pre-provision)</div>
     </div>
-    <div class="tag">Ideation flow (pre-provision)</div>
+    <div class="phase-chip">Ideation flow (pre-provision)</div>
   </div>
 
   <h3>What this step is doing</h3>
+
   <p>
-    We’re choosing the community’s strategic positioning. This becomes the invite preview,
-    the instance short description seed, and drives later defaults.
+    We are using an AI model to run a guided imagination process that helps a creator design their
+    potential community before any infrastructure exists.
+    Through a structured series of prompts, the system proposes positioning, naming,
+    domain strategy, focus line, and host identity.
   </p>
 
+  <p>
+    Each approval locks a decision and writes structured fields into a <b>Community Blueprint</b>.
+    In parallel, the full conversation transcript is stored as a training signal so the model can
+    improve future runs without adding friction to the creator experience.
+  </p>
+
+  <p>
+    The result is the complete, human-readable Blueprint shown below.
+    At this point the creator can:
+  </p>
+
+  <ul>
+    <li><b>Proceed to setup</b> → choose a plan and trigger provisioning using this Blueprint</li>
+    <li><b>Pause</b> → the Blueprint is saved and they can return later</li>
+    <li><b>Refine</b> → go back into the ideation flow and change decisions</li>
+  </ul>
+
   <div class="kv">
-    <b>Replaces (old mockup)</b>
-    <div>Manual “About” drafting + generic “setup wizard” step</div>
+    <div class="k">Replaces (old mockup)</div>
+    <div class="v">Manual multi-screen setup wizard + separate “About” drafting</div>
 
-    <b>Outputs created</b>
-    <div>Blueprint fields + transcript log (training signal)</div>
+    <div class="k">Outputs created</div>
+    <div class="v">
+      Structured Blueprint JSON (authoritative provisioning payload)<br/>
+      Full ideation transcript (model-training signal)
+    </div>
 
-    <b>Provisioning?</b>
-    <div><b>No.</b> We do not call infra until the Blueprint “Commit” step.</div>
+    <div class="k">Provisioning?</div>
+    <div class="v"><b>No.</b> Infrastructure is only called after the creator clicks “Ready to proceed to setup”.</div>
   </div>
 
-  <div class="callout">
-    <b>Example in progress:</b> Ukraine Brief (Phillips O’Brien) — Step 1 creates positioning + short description seed.
+  <div class="example">
+    <b>Example in progress:</b> Ukraine Brief — this step produces the complete community definition
+    that will later configure the Mastodon instance at provision time.
   </div>
 </div>
 <!-- COMMUNITY BLUEPRINT (human readable) -->
