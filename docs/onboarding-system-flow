@@ -1,0 +1,203 @@
+🧭 Commonshub Onboarding — System Flow
+
+CREATOR (browser)
+        │
+        ▼
+FRONTEND (Flow UI)
+        │
+        │  step input / option selection
+        ▼
+ONBOARDING API (orchestrator)
+        │
+        ├──────────────► SESSION STORE
+        │                 (ephemeral state)
+        │
+        ├──────────────► LLM STEP ENGINE
+        │                 (returns options + recommendation)
+        │
+        ▼
+STEP RESPONSE → FRONTEND
+
+User iterates until:
+
+PHASE A COMPLETE (commit)
+        │
+        ▼
+ATOMIC PERSIST
+
+
+# 🔁 Resume / Magic Link Path (no re-onboarding)
+
+CREATOR clicks resume link
+        │
+        ▼
+FRONTEND (Resume Route /resume?token=…)
+        │
+        ▼
+BACKEND: RESUME TOKEN RESOLVER
+        │
+        ├── validates token (not expired / not revoked)
+        ├── loads session state + blueprint_id
+        ├── rotates token (issue new token, invalidate old)
+        ▼
+NEXT-STATE ROUTER (backend)
+        │
+        ├── if phase_completed != "A" → invalid → start New
+        ├── if phase_completed == "A" and purchase_success != true
+        │        → route to Plan Select (UI)
+        ├── if purchase_success == true and provisioning_complete != true
+        │        → route to Provisioning Status (UI)
+        └── if provisioning_complete == true
+                 → route to Dashboard (UI)
+
+
+
+💾 Artifact Creation Layer
+
+
+At commit:
+
+ONBOARDING API
+   │
+   ├──► BLUEPRINT STORE (authoritative)
+   │
+   ├──► DIAGNOSTIC TRANSCRIPT STORE (append-only)
+   │
+   └──► OUTCOME / STATS STORE (computed)
+
+   Then:
+
+   	resume_token generated
+	provisioning invite email triggered
+
+
+	🏗️ Provisioning Flow (Phase B)
+
+	PROVISIONING SERVICE
+        │
+        ▼
+reads BLUEPRINT ONLY
+        │
+        ├── create Mastodon instance
+        ├── apply branding
+        ├── create admin
+        ├── configure limits / defaults
+        ▼
+INSTANCE READY
+
+🚫 Provisioner never reads transcript or stats.
+
+🖥️ Dashboard Data Sources
+
+Creator dashboard
+
+Reads:
+
+BLUEPRINT
+
+Used for:
+	•	identity preview
+	•	launch status
+	•	configuration display
+
+
+Internal tuning / product dashboard
+
+	DIAGNOSTIC TRANSCRIPT
+	OUTCOME / STATS
+
+Used for:
+	•	option performance
+	•	abandonment analysis
+	•	recommendation accuracy
+	•	UX fixes
+
+Creators never see these.
+
+🧱 Storage Model
+
+blueprints
+  blueprint_id (PK)
+
+diagnostic_transcripts
+  session_id (PK)
+  blueprint_id (FK)
+
+outcomes
+  session_id (PK)
+  blueprint_id (FK)
+
+
+  🔌 Core Endpoints
+
+POST /v1/onboarding/session/start
+POST /v1/onboarding/session/{id}/step
+POST /v1/onboarding/session/{id}/commit
+
+Provisioning trigger
+
+GET  /v1/resume/{token}          → returns next_route + blueprint_id/session_id
+POST /v1/resume/{token}/rotate   → rotates token after successful use
+
+Resume token must resolve to blueprint_id + phase state; Blueprint is the authoritative resumable artifact.
+
+POST /v1/provision/{blueprint_id}
+
+Creator dashboard
+
+GET /v1/blueprints/{blueprint_id}
+
+
+Internal only
+
+GET /v1/onboarding/sessions/{id}/diagnostic
+GET /v1/onboarding/sessions/{id}/outcome
+
+
+🧠 Source of Truth Rules
+
+BLUEPRINT
+
+✅ provisioning
+✅ dashboard
+❌ analytics
+❌ AI tuning
+
+⸻
+
+DIAGNOSTIC TRANSCRIPT
+
+✅ AI tuning
+✅ UX debugging
+❌ provisioning
+❌ creator UI
+
+⸻
+
+OUTCOME / STATS
+
+✅ funnel metrics
+✅ product decisions
+❌ provisioning
+❌ creator UI
+
+⸻
+
+⏱️ Lifecycle Timeline
+
+
+session_start
+   ↓
+step iterations
+   ↓
+PHASE A COMMIT
+   → persist all artifacts
+   → send resume email
+   ↓
+PROVISION
+   ↓
+INSTANCE LIVE
+
+
+
+
