@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Commonshub — Blueprint Preview</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    /* Slightly richer blueprint layout, still using your tokens */
+    .explainerCard{
+      background: rgba(255,255,255,.9);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      margin:0 0 14px;
+    }
+    .explainerTop{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;}
+    .eyebrow{font-size:12px;color:var(--muted);font-weight:900;letter-spacing:.01em;}
+    .path{font-size:13px;color:var(--text);margin-top:4px;}
+    .phase-chip{
+      font-size:12px;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(31,111,74,.22);
+      background: rgba(31,111,74,.08);
+      color:#355346;font-weight:900;white-space:nowrap;
+    }
+    .explainerCard h3{margin:10px 0 6px;font-size:14px;}
+    .explainerCard p{margin:6px 0;color:#355346;font-size:13px;line-height:1.45;}
+    .kv{
+      display:grid;
+      grid-template-columns: 170px 1fr;
+      gap:6px 12px;
+      margin-top:10px;
+      font-size:13px;
+    }
+    .kv b{ color:var(--text); }
+    .kv div{ color:#355346; }
+    .callout{
+      margin-top:10px;
+      padding:10px;
+      border-radius:12px;
+      background: rgba(31,111,74,.06);
+      border:1px solid rgba(31,111,74,.18);
+      color:#355346;
+      font-size:12px;
+      line-height:1.45;
+    }
+    pre.json{
+      margin:10px 0 0;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(16,32,24,.04);
+      overflow:auto;
+      font-size:12px;
+      line-height:1.4;
+      white-space:pre;
+    }
+    .bpBlock{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background: var(--card2);
+      margin-top:10px;
+    }
+    .bpTitle{font-weight:900;font-size:13px;margin-bottom:6px;}
+    .bpText{font-size:13px;color:var(--text);line-height:1.45;white-space:pre-wrap;}
+  </style>
+</head>
+
+<body class="flow">
+  <div class="flowRoot">
+    <div class="wrap">
+      <main class="stage">
+        <div class="topbar">
+          <div class="left">
+            <div class="logoMark"></div>
+            <div class="meta">
+              <b>Blueprint preview</b>
+              <span>Review, then decide to proceed (nothing is provisioned yet)</span>
+            </div>
+          </div>
+          <div class="chip">End of Phase A</div>
+        </div>
+
+        <div class="content">
+          <div class="center">
+
+            <div class="explainerCard">
+              <div class="explainerTop">
+                <div>
+                  <div class="eyebrow">You came from</div>
+                  <div class="path">Landing page CTA → Guided ideation flow → Blueprint preview</div>
+                </div>
+                <div class="phase-chip">Ideation flow (pre-provision)</div>
+              </div>
+
+              <h3>What this page is doing</h3>
+              <p>
+                This is the final checkpoint before purchase/provisioning. The AI-guided session has produced a complete
+                <b>Community Blueprint</b> (human-readable) and an equivalent <b>provisioning payload</b> (JSON).
+              </p>
+              <p>
+                The creator can proceed to choose a plan and trigger provisioning using this blueprint — or pause and return later.
+                The full session transcript is stored separately as a tuning signal for improving future runs.
+              </p>
+
+              <div class="kv">
+                <b>Outputs created</b>
+                <div>Blueprint (human-readable) + Blueprint JSON (authoritative payload) + full transcript (training signal)</div>
+
+                <b>Provisioning?</b>
+                <div><b>No.</b> Provisioning starts only after the creator chooses a plan and confirms.</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2 style="margin:0;">COMMUNITY BLUEPRINT</h2>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Positioning</div>
+                <div class="bpText">Option A — Real-time war and security briefing room</div>
+              </div>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Community name</div>
+                <div class="bpText">The Briefing Room</div>
+              </div>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Domain path</div>
+                <div class="bpText">External subdomain — brand continuity</div>
+              </div>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Domain candidate</div>
+                <div class="bpText">briefingroom.jasonjaysmart.com</div>
+              </div>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Short description</div>
+                <div class="bpText">Analysts, journalists, and policy professionals tracking the Russia–Ukraine war and global security through real-time briefings, sources, and strategic context.</div>
+              </div>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Focus line</div>
+                <div class="bpText">Real-Time Strategic Warning</div>
+              </div>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Recommended owner handle</div>
+                <div class="bpText">@jjs@briefingroom.jasonjaysmart.com</div>
+              </div>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Owner bio</div>
+                <div class="bpText">I report on the Russia–Ukraine war, authoritarian systems, and global security in real time. My work connects battlefield developments, political power, and economic pressure into strategic context. I host The Briefing Room to maintain a direct, durable signal for serious observers.</div>
+              </div>
+
+              <div class="bpBlock">
+                <div class="bpTitle">Long description</div>
+                <div class="bpText">This is the live signal space for following the Russia–Ukraine war and the wider struggle between democratic resilience and authoritarian power. It exists to turn fast-moving events into working context through real-time briefings, verified sources, and strategic continuity that holds beyond the news cycle.
+
+It is for analysts, journalists, policy professionals, researchers, and highly engaged observers who are already operating in this field and need a serious, high-trust environment for accurate information and rapid interpretation.
+
+Here you will find battlefield reality connected to political intent, sanctions pressure mapped to regime stability, and geoeconomic shifts placed inside a strategic timeline. Threads remain durable so that today’s updates build a long-term record rather than disappearing into the feed.
+
+This space is independent and not shaped by algorithms. The signal is chronological, the sources are visible, and the conversation compounds over time into a reliable reference point for understanding the war and its global consequences.
+
+I host this because my work depends on speed, accuracy, and direct connection with people who are watching and analyzing these events in real time, and this room provides a permanent home for that shared situational awareness.</div>
+              </div>
+
+              <div class="callout">
+                Your Blueprint is saved. You can return anytime and continue from here.
+              </div>
+
+              <div class="footerBar">
+                <a class="primary forward" href="plan.html">Ready to proceed to setup</a>
+                <a class="secondary" href="ideation-02.html" style="width:auto;">Refine earlier steps</a>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:14px;">
+              <h3 style="margin-top:0;">Provisioning payload (authoritative JSON)</h3>
+              <pre class="json">{
+  "positioning": "Option A — Real-time war and security briefing room",
+  "community_name": "The Briefing Room",
+  "domain_path": "External subdomain — brand continuity",
+  "domain_candidate": "briefingroom.jasonjaysmart.com",
+  "short_description": "Analysts, journalists, and policy professionals tracking the Russia–Ukraine war and global security through real-time briefings, sources, and strategic context.",
+  "focus_line": "Real-Time Strategic Warning",
+  "owner_handle": "@jjs@briefingroom.jasonjaysmart.com",
+  "owner_bio": "I report on the Russia–Ukraine war, authoritarian systems, and global security in real time. My work connects battlefield developments, political power, and economic pressure into strategic context. I host The Briefing Room to maintain a direct, durable signal for serious observers.",
+  "long_description": "This is the live signal space for following the Russia–Ukraine war and the wider struggle between democratic resilience and authoritarian power. It exists to turn fast-moving events into working context through real-time briefings, verified sources, and strategic continuity that holds beyond the news cycle.\n\nIt is for analysts, journalists, policy professionals, researchers, and highly engaged observers who are already operating in this field and need a serious, high-trust environment for accurate information and rapid interpretation.\n\nHere you will find battlefield reality connected to political intent, sanctions pressure mapped to regime stability, and geoeconomic shifts placed inside a strategic timeline. Threads remain durable so that today’s updates build a long-term record rather than disappearing into the feed.\n\nThis space is independent and not shaped by algorithms. The signal is chronological, the sources are visible, and the conversation compounds over time into a reliable reference point for understanding the war and its global consequences.\n\nI host this because my work depends on speed, accuracy, and direct connection with people who are watching and analyzing these events in real time, and this room provides a permanent home for that shared situational awareness.",
+  "launch_mode": "flagship"
+}</pre>
+
+              <div class="callout">
+                <b>Infra contract:</b> This JSON is sent to the Provisioning Orchestrator after plan selection.
+                The full transcript is stored separately for evaluator/trainer tuning.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
