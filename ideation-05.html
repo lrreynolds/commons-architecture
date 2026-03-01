@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Commonshub — Step 4</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .consoleShell{display:flex;flex-direction:column;gap:12px;min-height:560px;}
+    .consoleStream{flex:1;border:1px solid var(--line);border-radius:var(--radius2);background:linear-gradient(to bottom, rgba(16,32,24,.02), rgba(16,32,24,.01));padding:12px;overflow:auto;}
+    .msg{border:1px solid var(--line);background:var(--card2);border-radius:14px;padding:12px;margin-bottom:10px;}
+    .msg.system{background:rgba(31,111,74,.06);border-color:rgba(31,111,74,.18);}
+    .metaLine{font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .metaLine b{color:var(--text);font-weight:900;}
+    .choiceGrid{display:grid;gap:10px;margin-top:10px;}
+    .choice{border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px;}
+    .choice b{display:block;margin-bottom:6px;}
+    .actionRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+    .actionRow .secondary{width:auto;min-width:160px;}
+    .actionRow .primary{flex:1;min-width:240px;}
+  </style>
+</head>
+
+<body class="flow">
+  <div class="flowRoot">
+    <div class="wrap">
+      <main class="stage">
+        <div class="topbar">
+          <div class="left">
+            <div class="logoMark"></div>
+            <div class="meta">
+              <b>Guided onboarding</b>
+              <span>Community definition</span>
+            </div>
+          </div>
+          <div class="chip">Step 4</div>
+        </div>
+
+        <div class="content">
+          <div class="center">
+            <div class="flowBanner">
+              <div>
+                <b>Step 4 — Focus Line</b>
+                <div class="muted" style="margin-top:6px;">This appears in the header + invite card — what the live signal is.</div>
+              </div>
+              <div class="stepChip">Focus</div>
+            </div>
+
+            <div class="progress">
+              <span>Phase: Definition</span>
+              <div class="bar"><div style="width:65%"></div></div>
+              <span>~1 min</span>
+            </div>
+
+            <div class="card" style="margin-top:14px;">
+              <div class="consoleShell">
+                <div class="consoleStream">
+
+                  <div class="msg">
+                    <div class="metaLine"><span><b>Options (set 1)</b></span><span class="muted">Creator asked for more</span></div>
+                    <div class="choiceGrid">
+                      <div class="choice"><b>Option A</b><div class="muted">Real-Time War and Security</div></div>
+                      <div class="choice"><b>Option B</b><div class="muted">Strategic Warning and Battlefield Reality</div></div>
+                      <div class="choice"><b>Option C</b><div class="muted">Authoritarian Systems and War</div></div>
+                      <div class="choice"><b>Option D</b><div class="muted">Open-Source War Intelligence</div></div>
+                      <div class="choice"><b>Option E</b><div class="muted">Geopolitics Under Fire</div></div>
+                    </div>
+                  </div>
+
+                  <div class="msg system">
+                    <div class="metaLine"><span><b>Recommendation</b></span><span class="muted">Clarity</span></div>
+                    <p><b>Option A — Real-Time War and Security</b> (clearest live descriptor; mirrors your briefing cadence)</p>
+                  </div>
+
+                  <div class="msg">
+                    <div class="metaLine"><span><b>Creator input</b></span><span class="muted">Branch</span></div>
+                    <p>You typed: <b>more options</b></p>
+                  </div>
+
+                  <div class="msg">
+                    <div class="metaLine"><span><b>Options (set 2)</b></span><span class="muted">Tightened editorial signal</span></div>
+                    <div class="choiceGrid">
+                      <div class="choice"><b>Option A</b><div class="muted">Real-Time Strategic Warning</div></div>
+                      <div class="choice"><b>Option B</b><div class="muted">War Power and Regime Stability</div></div>
+                      <div class="choice"><b>Option C</b><div class="muted">Battlefield Reality and Global Risk</div></div>
+                      <div class="choice"><b>Option D</b><div class="muted">Open-Source War Briefings</div></div>
+                      <div class="choice"><b>Option E</b><div class="muted">Authoritarian War Machine Watch</div></div>
+                    </div>
+                  </div>
+
+                  <div class="msg system">
+                    <div class="metaLine"><span><b>Recommendation</b></span><span class="muted">Early signal</span></div>
+                    <p><b>Option A — Real-Time Strategic Warning</b> (matches your positioning as an early-signal analyst)</p>
+                  </div>
+
+                  <div class="msg system">
+                    <div class="metaLine"><span><b>Locked</b></span><span class="muted">Approved</span></div>
+                    <p><b>Locked:</b> Real-Time Strategic Warning</p>
+                  </div>
+
+                </div>
+
+                <div class="actionRow">
+                  <button class="secondary" type="button" onclick="alert('Mock: this would regenerate options. Already shown above.')">More options</button>
+                  <a class="primary" href="ideation-06.html">Approve Real-Time Strategic Warning → Continue</a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</body>
+</html>
