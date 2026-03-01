@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Commonshub — Step 1</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .consoleShell{display:flex;flex-direction:column;gap:12px;min-height:560px;}
+    .consoleStream{flex:1;border:1px solid var(--line);border-radius:var(--radius2);background:linear-gradient(to bottom, rgba(16,32,24,.02), rgba(16,32,24,.01));padding:12px;overflow:auto;}
+    .msg{border:1px solid var(--line);background:var(--card2);border-radius:14px;padding:12px;margin-bottom:10px;}
+    .msg.system{background:rgba(31,111,74,.06);border-color:rgba(31,111,74,.18);}
+    .metaLine{font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .metaLine b{color:var(--text);font-weight:900;}
+    .msg p{margin:8px 0 0;font-size:13px;color:var(--text);}
+    .choiceGrid{display:grid;gap:10px;margin-top:10px;}
+    .choice{border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px;}
+    .choice b{display:block;font-size:13px;margin-bottom:6px;}
+    .choice .muted{font-size:12px;}
+    .actionRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+    .actionRow .secondary{width:auto;min-width:160px;}
+    .actionRow .primary{flex:1;min-width:240px;}
+    .inputBar{border:1px solid var(--line);border-radius:var(--radius2);background:#fff;padding:12px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;}
+    .inputBar .field{margin:0;flex:1;min-width:260px;}
+    textarea{min-height:86px;}
+  </style>
+</head>
+
+<body class="flow">
+  <div class="flowRoot">
+    <div class="wrap">
+      <main class="stage">
+        <div class="topbar">
+          <div class="left">
+            <div class="logoMark"></div>
+            <div class="meta">
+              <b>Guided onboarding</b>
+              <span>Community definition</span>
+            </div>
+          </div>
+          <div class="chip">Step 1</div>
+        </div>
+
+        <div class="content">
+          <div class="center">
+            <div class="flowBanner">
+              <div>
+                <b>Step 1 — Community Positioning</b>
+                <div class="muted" style="margin-top:6px;">Defines who the space is for and what happens there. Becomes invite preview + instance short description.</div>
+              </div>
+              <div class="stepChip">Positioning</div>
+            </div>
+
+            <div class="progress">
+              <span>Phase: Definition</span>
+              <div class="bar"><div style="width:22%"></div></div>
+              <span>~1 min</span>
+            </div>
+
+            <div class="card" style="margin-top:14px;">
+              <div class="consoleShell">
+                <div class="consoleStream">
+
+                  <div class="msg">
+                    <div class="metaLine"><span><b>Options</b></span><span class="muted">Choose or approve</span></div>
+
+                    <div class="choiceGrid">
+                      <div class="choice">
+                        <b>Option A</b>
+                        <div class="muted">Analysts, journalists, and policy professionals tracking the Russia–Ukraine war and global security through real-time briefings, source drops, and strategic context.</div>
+                      </div>
+                      <div class="choice">
+                        <b>Option B</b>
+                        <div class="muted">A working room for people following authoritarian systems, war economics, and geopolitical power shifts through fast analysis and durable threads beyond the news cycle.</div>
+                      </div>
+                      <div class="choice">
+                        <b>Option C</b>
+                        <div class="muted">An inner circle for serious Ukraine-focused observers: battlefield reality, political risk, sanctions, and regime stability mapped in real time.</div>
+                      </div>
+                      <div class="choice">
+                        <b>Option D</b>
+                        <div class="muted">A signal feed for investors, officials, and researchers translating military events, energy markets, and geoeconomics into strategic foresight.</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="msg system">
+                    <div class="metaLine"><span><b>Recommendation</b></span><span class="muted">Based on links + role</span></div>
+                    <p>
+                      <b>Option A</b> — it matches your existing role as a daily war analyst with a large, cross-platform audience
+                      that already treats your output as real-time briefings.
+                    </p>
+                  </div>
+
+                  <div class="msg">
+                    <div class="metaLine"><span><b>Approve</b> or choose another option</span><span class="muted">Action required</span></div>
+                    <p>Click Approve to lock Option A, or type “Option B/C/D”.</p>
+                  </div>
+
+                </div>
+
+                <div class="actionRow">
+                  <a class="primary" href="ideation-03.html">Approve Option A</a>
+                  <button class="secondary" type="button" onclick="alert('Mock: choosing another option would branch. For this run, we approve A.')">Choose B/C/D</button>
+                </div>
+
+                <div class="inputBar">
+                  <div class="field">
+                    <label>Type here (optional)</label>
+                    <textarea placeholder="approve"></textarea>
+                    <div class="muted" style="margin-top:8px;">Dev note: approvals lock fields into Blueprint JSON.</div>
+                  </div>
+                  <a class="primary" href="ideation-03.html" style="min-width:220px;">Continue →</a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</body>
+</html>
