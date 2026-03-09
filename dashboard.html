@@ -9,7 +9,7 @@
 <body class="dashboard">
 
   <div class="wrap">
- 
+
 
     <main class="stage">
       <div class="topbar">
@@ -49,45 +49,26 @@
                 <h3>Community status</h3>
                 <div class="muted">Role: Community owner</div>
 
-             <div class="list" style="margin-top:10px;">
-  <div class="item">
-    <b>Community name</b>
-    <div class="muted">The Commons Hub</div>
-  </div>
+                <div class="item">
+                  <b>The Commons Hub</b>
+                  <div class="muted">
+                    mycommunity.commonshub.social
+                    <span class="status running">Running</span>
+                  </div>
+                </div>
 
-  <div class="item">
-    <b>Domain</b>
-    <div class="muted">mycommunity.commonshub.social</div>
-  </div>
+                <div class="footerBar" style="margin-top:12px; gap:12px;">
+                  <a class="secondary" href="community.html" style="flex:1; justify-content:center;">
+                    Visit community
+                  </a>
 
-  <div class="item">
-    <b>Status</b>
-    <div class="muted">Running</div>
-  </div>
-
-  <div class="item">
-    <b>Hosting</b>
-    <div class="muted">Managed by Commonshub</div>
-  </div>
-
-  <div class="item">
-    <b>Members</b>
-    <div class="muted">0</div>
-  </div>
-</div>
-
-<div class="footerBar" style="margin-top:12px; gap:12px;">
-  <a class="secondary" href="community.html" style="flex:1; justify-content:center;">
-    Visit community
-  </a>
-
-  <a class="secondary" href="hosting-details.html" style="flex:1; justify-content:center;">
-    More details
-  </a>
-</div>
-               <div class="note" style="margin-top:12px;">
-  <b>Next:</b> Add your branding, purpose, and welcome post. About 5 minutes.
-</div>
+                  <a class="secondary" href="hosting-details.html" style="flex:1; justify-content:center;">
+                    More details
+                  </a>
+                </div>
+                <div class="note" style="margin-top:12px;">
+                  <b>Next:</b> Add your branding, purpose, and welcome post. About 5 minutes.
+                </div>
 
                 <div class="footerBar" style="margin-top:12px;">
                   <a class="primary" href="setup-wizard.html">Set up your community</a>
@@ -130,38 +111,38 @@
 
   <!-- Visit community -->
   <a class="primary" id="visitCommunityBtn"
-     href="community.html"
-     style="flex:1; justify-content:center;">
-    Visit community (Mastodon)
-  </a>
-
-  <!-- Sign in (shown by default) -->
-<a class="secondary" id="mastodonLoginBtn"
-   href="mastodon-login.html"
-   style="flex:1; justify-content:center;">
-  Sign in to Mastodon
+  href="community.html"
+  style="flex:1; justify-content:center;">
+  Visit community (Mastodon)
 </a>
 
-  <!-- Dashboard (hidden initially) -->
-  <a class="secondary" id="mastodonAdminBtn"
-     href="mastodon-admin.html"
-     target="_blank" rel="noopener"
-     style="flex:1; justify-content:center; display:none;">
-    Mastodon dashboard
-  </a>
+<!-- Sign in (shown by default) -->
+<a class="secondary" id="mastodonLoginBtn"
+href="mastodon-login.html"
+style="flex:1; justify-content:center;">
+Sign in to Mastodon
+</a>
 
-  <!-- Invite -->
-  <button class="secondary" id="copyInviteBtn"
-          type="button"
-          style="flex:1; justify-content:center;">
-    Copy invite link
-  </button>
+<!-- Dashboard (hidden initially) -->
+<a class="secondary" id="mastodonAdminBtn"
+href="mastodon-admin.html"
+target="_blank" rel="noopener"
+style="flex:1; justify-content:center; display:none;">
+Mastodon dashboard
+</a>
+
+<!-- Invite -->
+<button class="secondary" id="copyInviteBtn"
+type="button"
+style="flex:1; justify-content:center;">
+Copy invite link
+</button>
 
 </div>
 
 <div class="muted" id="mastodonHint"
-     style="margin-top:10px; font-size:13px;">
-  Sign in first, then you can open the Mastodon dashboard.
+style="margin-top:10px; font-size:13px;">
+Sign in first, then you can open the Mastodon dashboard.
 </div>
 <!-- Guided manual setup (deep links + copy pack) -->
 <div class="card" id="guidedSetupCard" style="margin-top:14px;">
@@ -178,21 +159,21 @@
   <div id="setupChecklist" style="margin-top:12px;"></div>
 </div>
 
-                <!-- Invite link stays hidden unless the user wants it -->
-                <div class="field" id="inviteField" style="margin-top:12px; display:none;">
-                  <label>Invite link</label>
-                  <input
-                    id="inviteLink"
-                    type="text"
-                    value="https://mycommunity.commonshub.social/invite/abc123"
-                    readonly
-                  />
-                  <div class="muted" style="margin-top:6px;">
-                    Share this link wherever your audience already is (Substack, YouTube, email, etc.).
-                  </div>
-                </div>
+<!-- Invite link stays hidden unless the user wants it -->
+<div class="field" id="inviteField" style="margin-top:12px; display:none;">
+  <label>Invite link</label>
+  <input
+  id="inviteLink"
+  type="text"
+  value="https://mycommunity.commonshub.social/invite/abc123"
+  readonly
+  />
+  <div class="muted" style="margin-top:6px;">
+    Share this link wherever your audience already is (Substack, YouTube, email, etc.).
+  </div>
+</div>
 
-         <!-- Community funding block (zen) -->
+<!-- Community funding block (zen) -->
 <div class="fundingCard" style="margin-top:14px;">
   <h3 style="margin:0 0 6px;">Community funding</h3>
   <div class="muted" id="fundingSubcopy">
@@ -222,50 +203,50 @@
   <div id="fundingLiveActions" style="display:none; margin-top:14px;">
     <div class="footerBar" style="gap:12px;">
       <a class="secondary"
-         id="fundingPreviewBtn"
-         href="community-funding.html"
-         style="flex:1; width:auto; justify-content:center;">
-        Visit community funding page
-      </a>
+      id="fundingPreviewBtn"
+      href="community-funding.html"
+      style="flex:1; width:auto; justify-content:center;">
+      Visit community funding page
+    </a>
 
-      <button class="secondary"
-              id="copyFundingLinkBtn"
-              type="button"
-              style="flex:1; width:auto; justify-content:center;">
-        Copy community funding link
-      </button>
-    </div>
+    <button class="secondary"
+    id="copyFundingLinkBtn"
+    type="button"
+    style="flex:1; width:auto; justify-content:center;">
+    Copy community funding link
+  </button>
+</div>
 
-    <div class="muted" style="margin-top:10px; font-size:13px;">
-      <a href="funding-start.html" style="color:inherit; text-decoration:none;">
-        Manage community funding
-      </a>
-    </div>
+<div class="muted" style="margin-top:10px; font-size:13px;">
+  <a href="funding-start.html" style="color:inherit; text-decoration:none;">
+    Manage community funding
+  </a>
+</div>
 
-    <div class="field" id="fundingLinkField" style="margin-top:12px; display:none;">
-      <label>Community funding link</label>
-      <input
-        id="fundingLinkInput"
-        type="text"
-        value="https://mycommunity.commonshub.social/funding"
-        readonly
-      />
-      <div class="muted" style="margin-top:6px;">
-        Share this link anywhere. (This page also invites people to join your community.)
-      </div>
-    </div>
+<div class="field" id="fundingLinkField" style="margin-top:12px; display:none;">
+  <label>Community funding link</label>
+  <input
+  id="fundingLinkInput"
+  type="text"
+  value="https://mycommunity.commonshub.social/funding"
+  readonly
+  />
+  <div class="muted" style="margin-top:6px;">
+    Share this link anywhere. (This page also invites people to join your community.)
   </div>
 </div>
 </div>
 </div>
-         
-            </section>
-          </div>
+</div>
+</div>
 
-        </div>
-      </div>
-    </main>
-  </div>
+</section>
+</div>
+
+</div>
+</div>
+</main>
+</div>
 
 <script src="assets/app.js"></script>
 </body>
