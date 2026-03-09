@@ -688,3 +688,8 @@ body.dashboard .card .secondary{
     grid-template-columns: 1fr;
   }
 }
+
+body.dashboard #headerSubcopy{
+  color: var(--dashMuted);
+  font-size: 13px;
+}
