@@ -6,7 +6,7 @@
   <title>Commonshub — Dashboard</title>
   <link rel="stylesheet" href="assets/styles.css" />
 </head>
-<body class="dashboard">
+<body class="dashboard" data-domain-type="external" data-dns-status="pending">
   <div class="wrap">
     <main class="stage">
       <div class="topbar">
@@ -57,7 +57,7 @@
     <span>·</span>
     <span class="status running">Running</span>
 
-    <span id="dnsPendingWrap" style="display:inline-flex; align-items:center; gap:8px;">
+    <span id="dnsPendingWrap" style="display:none; align-items:center; gap:8px;">
       <span>·</span>
       <span class="status pending">DNS pending</span>
       <button
