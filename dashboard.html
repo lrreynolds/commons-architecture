@@ -40,6 +40,14 @@
              <div class="card">
   <h3>Server</h3>
   <div class="muted">Mastodon · v4.5.7</div>
+  <div class="serviceTabs" style="margin-top:14px;">
+  <button class="serviceTab active" type="button" data-service-tab="mastodon">
+    Mastodon
+  </button>
+  <button class="serviceTab" type="button" data-service-tab="funding">
+    Funding
+  </button>
+</div>
   <div class="item" style="margin-top:12px;">
   <b>The peakX Feed</b>
   <div class="muted" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -70,29 +78,49 @@
     </span>
   </div>
 </div>
-  <div class="metricsRow" style="margin-top:14px;">
-    <div class="metricCard">
-      <div class="metricLabel">Database</div>
-      <div class="metricDial" aria-hidden="true">
-        <div class="metricValue">42%</div>
+<div class="metricsRow metersRow" style="margin-top:14px;">
+  <div class="metricCard meterCard">
+    <div class="metricLabel">Database</div>
+    <div class="fillMeter" aria-hidden="true">
+      <div class="fillTicks">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
-      <div class="metricSub">Used</div>
+      <div class="fillWater" style="height:42%;"></div>
+      <div class="fillValue">42%</div>
     </div>
-    <div class="metricCard">
-      <div class="metricLabel">Media</div>
-      <div class="metricDial" aria-hidden="true">
-        <div class="metricValue">18%</div>
-      </div>
-      <div class="metricSub">Used</div>
-    </div>
-    <div class="metricCard">
-      <div class="metricLabel">Uptime</div>
-      <div class="metricDial" aria-hidden="true">
-        <div class="metricValue">99.98%</div>
-      </div>
-      <div class="metricSub">30 days</div>
-    </div>
+    <div class="metricSub">Used</div>
   </div>
+
+  <div class="metricCard meterCard">
+    <div class="metricLabel">Media</div>
+    <div class="fillMeter" aria-hidden="true">
+      <div class="fillTicks">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="fillWater" style="height:18%;"></div>
+      <div class="fillValue">18%</div>
+    </div>
+    <div class="metricSub">Used</div>
+  </div>
+
+  <div class="metricCard meterCard">
+    <div class="metricLabel">Uptime</div>
+    <div class="fillMeter" aria-hidden="true">
+      <div class="fillTicks">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="fillWater uptimeWater" style="height:99.98%;"></div>
+      <div class="fillValue">99.98%</div>
+    </div>
+    <div class="metricSub">30 days</div>
+  </div>
+</div>
   <div class="footerBar" style="margin-top:14px; gap:12px;">
     <a class="secondary" href="hosting-details.html" style="flex:1; justify-content:center;">
       More details
