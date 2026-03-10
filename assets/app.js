@@ -1787,4 +1787,45 @@ if (headerSubcopy) {
       }, 700);
     });
   })();
+  // ----------------------------
+  // 7) DNS check mock (dashboard)
+  // ----------------------------
+  (() => {
+    const body = document.body;
+    const pendingWrap = document.getElementById("dnsPendingWrap");
+    const verifiedWrap = document.getElementById("dnsVerifiedWrap");
+    const checkDnsBtn = document.getElementById("checkDnsBtn");
+
+    if (!pendingWrap || !verifiedWrap || !checkDnsBtn) return;
+
+    const domainType = body.getAttribute("data-domain-type") || "commonshub";
+    let dnsStatus = body.getAttribute("data-dns-status") || "verified";
+
+    function renderDnsState() {
+      pendingWrap.style.display = "none";
+      verifiedWrap.style.display = "none";
+
+      // Commonshub domains are always valid, so show nothing extra
+      if (domainType === "commonshub") return;
+
+      if (dnsStatus === "pending") {
+        pendingWrap.style.display = "inline-flex";
+      } else if (dnsStatus === "verified") {
+        verifiedWrap.style.display = "inline-flex";
+      }
+    }
+
+    checkDnsBtn.addEventListener("click", () => {
+      checkDnsBtn.textContent = "Checking...";
+
+      setTimeout(() => {
+        dnsStatus = "verified";
+        body.setAttribute("data-dns-status", "verified");
+        checkDnsBtn.textContent = "Check DNS";
+        renderDnsState();
+      }, 700);
+    });
+
+    renderDnsState();
+  })();
 })();
