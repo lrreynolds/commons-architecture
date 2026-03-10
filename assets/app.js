@@ -1894,4 +1894,95 @@ if (headerSubcopy) {
 
     renderDnsState();
   })();
+
+// ----------------------------
+// 7) DNS status UI (dashboard header)
+// ----------------------------
+(() => {
+  const body = document.body;
+  const dnsPendingWrap = document.getElementById("dnsPendingWrap");
+  const dnsVerifiedWrap = document.getElementById("dnsVerifiedWrap");
+  const checkDnsBtn = document.getElementById("checkDnsBtn");
+
+  if (!dnsPendingWrap || !dnsVerifiedWrap) return;
+
+  // Priority:
+  // 1. localStorage override
+  // 2. body data attributes
+  let domainType = body?.dataset?.domainType || "commonshub";
+  let dnsStatus = "verified";
+
+  try {
+    domainType = localStorage.getItem("commonshub_domain_type") || domainType;
+    dnsStatus = localStorage.getItem("commonshub_dns_status") || body?.dataset?.dnsStatus || "verified";
+  } catch {
+    dnsStatus = body?.dataset?.dnsStatus || "verified";
+  }
+
+  function renderDnsState() {
+    const isManagedDomain = domainType === "commonshub";
+
+    if (isManagedDomain) {
+      dnsPendingWrap.style.display = "none";
+      dnsVerifiedWrap.style.display = "none";
+      return;
+    }
+
+    if (dnsStatus === "verified") {
+      dnsPendingWrap.style.display = "none";
+      dnsVerifiedWrap.style.display = "inline-flex";
+    } else {
+      dnsPendingWrap.style.display = "inline-flex";
+      dnsVerifiedWrap.style.display = "none";
+    }
+  }
+
+  renderDnsState();
+
+  if (checkDnsBtn) {
+    checkDnsBtn.addEventListener("click", () => {
+      checkDnsBtn.textContent = "Checking...";
+
+      setTimeout(() => {
+        dnsStatus = "verified";
+        try {
+          localStorage.setItem("commonshub_dns_status", "verified");
+        } catch {}
+
+        renderDnsState();
+      }, 900);
+    });
+  }
+})();
+
+// ----------------------------
+// 8) Service tabs (dashboard)
+// ----------------------------
+(() => {
+  const tabs = Array.from(document.querySelectorAll("[data-service-tab]"));
+  const panels = Array.from(document.querySelectorAll("[data-service-panel]"));
+
+  if (!tabs.length || !panels.length) return;
+
+  function activateTab(name) {
+    tabs.forEach((tab) => {
+      tab.classList.toggle("active", tab.getAttribute("data-service-tab") === name);
+    });
+
+    panels.forEach((panel) => {
+      const show = panel.getAttribute("data-service-panel") === name;
+      panel.style.display = show ? "block" : "none";
+      panel.classList.toggle("active", show);
+    });
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      activateTab(tab.getAttribute("data-service-tab"));
+    });
+  });
+
+  const initial = document.querySelector("[data-service-tab].active")?.getAttribute("data-service-tab") || "mastodon";
+  activateTab(initial);
+})();
 })();
