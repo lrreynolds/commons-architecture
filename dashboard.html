@@ -41,11 +41,35 @@
   <h3>Server</h3>
   <div class="muted">Mastodon · v4.5.7</div>
   <div class="item" style="margin-top:12px;">
-    <b>The peakX Feed</b>
-    <div class="muted">
-      peakx.social · <span class="status running">Running</span>
-    </div>
+  <b>The peakX Feed</b>
+  <div class="muted" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <span>peakx.social</span>
+    <span>·</span>
+    <span class="status running">Running</span>
+
+    <span id="dnsPendingWrap" style="display:none;">
+      <span style="display:inline-flex; align-items:center; gap:8px;">
+        <span>·</span>
+        <span class="status pending">DNS pending</span>
+        <button
+          class="secondary dnsCheckBtn"
+          id="checkDnsBtn"
+          type="button"
+          style="width:auto; padding:6px 10px; min-width:0;"
+        >
+          Check DNS
+        </button>
+      </span>
+    </span>
+
+    <span id="dnsVerifiedWrap" style="display:none;">
+      <span style="display:inline-flex; align-items:center; gap:8px;">
+        <span>·</span>
+        <span class="status verified">DNS verified</span>
+      </span>
+    </span>
   </div>
+</div>
   <div class="metricsRow" style="margin-top:14px;">
     <div class="metricCard">
       <div class="metricLabel">Database</div>
@@ -169,64 +193,7 @@ Sign in first, then you can open the Mastodon dashboard.
   <h3 style="margin:0 0 6px;">Community funding</h3>
   <div class="muted" id="fundingSubcopy">
     Optional. Participation is always free.
-<div class="item" style="margin-top:12px;">
-  <b>The peakX Feed</b>
-  <div class="muted" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-    <span>peakx.social</span>
-    <span>·</span>
-    <span class="status running">Running</span>
-    <!-- Only show this row for external/custom domains that are not verified -->
-    <span id="dnsPendingWrap" style="display:none; align-items:center; gap:8px;">
-      <span>·</span>
-      <span class="status pending">DNS pending</span>
-      <button
-        class="secondary dnsCheckBtn"
-        id="checkDnsBtn"
-        type="button"
-        style="width:auto; padding:6px 10px; min-width:0;"
-      >
-        Check DNS
-      </button>
-    </span>
-    <!-- Quiet success state -->
-    <span id="dnsVerifiedWrap" style="display:none; align-items:center; gap:8px;">
-      <span>·</span>
-      <span class="status verified">DNS verified</span>
-    </span>
   </div>
-  <!-- Status lines (quiet) -->
-  <div class="list" style="margin-top:12px;">
-    <div class="item">
-      <b>Stripe</b>
-      <div class="muted" id="stripeStatus">Not connected</div>
-    </div>
-    <div class="item">
-      <b>Community funding</b>
-      <div class="muted" id="fundingStatus">Off</div>
-    </div>
-  </div>
-  <!-- STATE A/B CTA (single large button) -->
-  <div id="fundingCtaWrap" class="footerBar" style="margin-top:14px;">
-    <a class="primary" id="fundingPrimaryBtn" href="funding-start.html">
-      Enable community funding
-    </a>
-  </div>
-  <!-- STATE C actions (only visible when funding is live) -->
-  <div id="fundingLiveActions" style="display:none; margin-top:14px;">
-    <div class="footerBar" style="gap:12px;">
-      <a class="secondary"
-      id="fundingPreviewBtn"
-      href="community-funding.html"
-      style="flex:1; width:auto; justify-content:center;">
-      Visit community funding page
-    </a>
-    <button class="secondary"
-    id="copyFundingLinkBtn"
-    type="button"
-    style="flex:1; width:auto; justify-content:center;">
-    Copy community funding link
-  </button>
-</div>
 <div class="muted" style="margin-top:10px; font-size:13px;">
   <a href="funding-start.html" style="color:inherit; text-decoration:none;">
     Manage community funding
