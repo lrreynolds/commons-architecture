@@ -27,9 +27,29 @@
           <div class="header">
             <div>
               <h2>The peakX Feed</h2>
-              <p id="headerSubcopy">
-                peakx.social · Running
-              </p>
+             <p id="headerSubcopy" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+  <span>peakx.social</span>
+  <span>·</span>
+  <span class="status running">Running</span>
+
+  <span id="dnsPendingWrap" style="display:none; align-items:center; gap:8px;">
+    <span>·</span>
+    <span class="status pending">DNS pending</span>
+    <button
+      class="secondary dnsCheckBtn"
+      id="checkDnsBtn"
+      type="button"
+      style="width:auto; padding:6px 10px; min-width:0;"
+    >
+      Check DNS
+    </button>
+  </span>
+
+  <span id="dnsVerifiedWrap" style="display:none; align-items:center; gap:8px;">
+    <span>·</span>
+    <span class="status verified">DNS verified</span>
+  </span>
+</p>
             </div>
           </div>
           <!-- ========================= -->
@@ -51,26 +71,8 @@
 <div class="servicePanel active" id="servicePanelMastodon" data-service-panel="mastodon">
 <div class="item" style="margin-top:12px;">
   <b>Mastodon server</b>
-  <div class="muted" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-    <span>Version 4.5.7</span>
-
-    <span id="dnsPendingWrap" style="display:none; align-items:center; gap:8px;">
-      <span>·</span>
-      <span class="status pending">DNS pending</span>
-      <button
-        class="secondary dnsCheckBtn"
-        id="checkDnsBtn"
-        type="button"
-        style="width:auto; padding:6px 10px; min-width:0;"
-      >
-        Check DNS
-      </button>
-    </span>
-
-    <span id="dnsVerifiedWrap" style="display:none; align-items:center; gap:8px;">
-      <span>·</span>
-      <span class="status verified">DNS verified</span>
-    </span>
+  <div class="muted">
+    Version 4.5.7
   </div>
 </div>
 <div class="metricsRow metersRow" style="margin-top:14px;">
@@ -306,44 +308,5 @@ Sign in first, then you can open the Mastodon dashboard.
 </main>
 </div>
 <script src="assets/app.js"></script>
-  <script>
-  (() => {
-    const body = document.body;
-    const pendingWrap = document.getElementById("dnsPendingWrap");
-    const verifiedWrap = document.getElementById("dnsVerifiedWrap");
-    const checkDnsBtn = document.getElementById("checkDnsBtn");
-
-    if (!pendingWrap || !verifiedWrap || !checkDnsBtn) return;
-
-    const domainType = body.getAttribute("data-domain-type") || "commonshub";
-    let dnsStatus = body.getAttribute("data-dns-status") || "verified";
-
-    function renderDnsState() {
-      pendingWrap.style.display = "none";
-      verifiedWrap.style.display = "none";
-
-      if (domainType === "commonshub") return;
-
-      if (dnsStatus === "pending") {
-        pendingWrap.style.display = "inline-flex";
-      } else if (dnsStatus === "verified") {
-        verifiedWrap.style.display = "inline-flex";
-      }
-    }
-
-    checkDnsBtn.addEventListener("click", () => {
-      checkDnsBtn.textContent = "Checking...";
-
-      setTimeout(() => {
-        dnsStatus = "verified";
-        body.setAttribute("data-dns-status", "verified");
-        checkDnsBtn.textContent = "Check DNS";
-        renderDnsState();
-      }, 700);
-    });
-
-    renderDnsState();
-  })();
-</script>
 </body>
 </html>                
