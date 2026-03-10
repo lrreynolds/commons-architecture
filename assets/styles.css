@@ -732,3 +732,107 @@ body.dashboard #headerSubcopy{
   border-radius:999px;
   padding:6px 10px;
 }
+.serviceTabs{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.serviceTab{
+  appearance:none;
+  border:1px solid var(--line);
+  background:#ffffff;
+  color:var(--cardText);
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.serviceTab.active{
+  background:rgba(31,111,74,.10);
+  border-color:rgba(31,111,74,.35);
+  color:#1f6f4a;
+}
+
+.status.running{
+  font-weight:700;
+}
+
+.status.pending{
+  font-weight:700;
+  color:#8a6a00;
+}
+
+.status.verified{
+  font-weight:700;
+  color:#1f6f4a;
+}
+
+.dnsCheckBtn{
+  font-size:12px;
+  line-height:1;
+  border-radius:999px;
+  padding:6px 10px;
+}
+
+.metersRow{
+  align-items:stretch;
+}
+
+.meterCard{
+  text-align:center;
+}
+
+.fillMeter{
+  position:relative;
+  width:84px;
+  height:130px;
+  margin:0 auto 10px;
+  border-radius:18px;
+  border:3px solid rgba(0,0,0,.14);
+  background:rgba(255,255,255,.55);
+  overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.fillTicks{
+  position:absolute;
+  inset:10px 10px 10px 10px;
+  pointer-events:none;
+}
+
+.fillTicks span{
+  position:absolute;
+  left:0;
+  right:0;
+  height:1px;
+  background:rgba(0,0,0,.14);
+}
+
+.fillTicks span:nth-child(1){ bottom:25%; }
+.fillTicks span:nth-child(2){ bottom:50%; }
+.fillTicks span:nth-child(3){ bottom:75%; }
+
+.fillWater{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(31,111,74,.24);
+}
+
+.uptimeWater{
+  background:rgba(31,111,74,.18);
+}
+
+.fillValue{
+  position:relative;
+  z-index:2;
+  font-size:14px;
+  font-weight:800;
+  line-height:1;
+  margin-bottom:10px;
+}
