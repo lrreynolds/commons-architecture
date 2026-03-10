@@ -1642,4 +1642,66 @@ if (headerSubcopy) {
     fundingCtaWrap.style.display = "none";
     fundingLiveActions.style.display = "block";
   })();
+  // ----------------------------
+// 4) DNS check UI (dashboard)
+// ----------------------------
+(() => {
+  const dnsPendingWrap = document.getElementById("dnsPendingWrap");
+  const dnsVerifiedWrap = document.getElementById("dnsVerifiedWrap");
+  const checkDnsBtn = document.getElementById("checkDnsBtn");
+  const headerSubcopy = document.getElementById("headerSubcopy");
+
+  if (!dnsPendingWrap || !dnsVerifiedWrap) return;
+
+  // Demo flags:
+  // commonshub domain => always verified
+  // external/custom domain => may need DNS check
+  let usesManagedDomain = true;
+  let dnsVerified = false;
+
+  try {
+    usesManagedDomain = localStorage.getItem("commonshub_uses_managed_domain") !== "0";
+    dnsVerified = localStorage.getItem("commonshub_dns_verified") === "1";
+  } catch {}
+
+  function renderDnsState() {
+    if (usesManagedDomain) {
+      dnsPendingWrap.style.display = "none";
+      dnsVerifiedWrap.style.display = "none";
+      return;
+    }
+
+    if (dnsVerified) {
+      dnsPendingWrap.style.display = "none";
+      dnsVerifiedWrap.style.display = "inline-flex";
+      if (headerSubcopy) {
+        headerSubcopy.textContent = "peakx.social · Running · DNS verified";
+      }
+    } else {
+      dnsPendingWrap.style.display = "inline-flex";
+      dnsVerifiedWrap.style.display = "none";
+      if (headerSubcopy) {
+        headerSubcopy.textContent = "peakx.social · Running · DNS pending";
+      }
+    }
+  }
+
+  if (checkDnsBtn) {
+    checkDnsBtn.addEventListener("click", () => {
+      checkDnsBtn.textContent = "Checking...";
+      checkDnsBtn.disabled = true;
+
+      setTimeout(() => {
+        dnsVerified = true;
+        try {
+          localStorage.setItem("commonshub_dns_verified", "1");
+        } catch {}
+
+        renderDnsState();
+      }, 900);
+    });
+  }
+
+  renderDnsState();
+})();
 })();
