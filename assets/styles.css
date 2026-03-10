@@ -734,7 +734,7 @@ body.dashboard #headerSubcopy{
 }
 .serviceTabs{
   display:flex;
-  gap:10px;
+  gap:12px;
   flex-wrap:wrap;
 }
 
@@ -744,19 +744,24 @@ body.dashboard #headerSubcopy{
   background:#ffffff;
   color:var(--cardText);
   border-radius:999px;
-  padding:8px 14px;
+  padding:10px 18px;
+  font-size:13px;
   font-weight:800;
   cursor:pointer;
 }
 
 .serviceTab.active{
   background:rgba(31,111,74,.10);
+  color:var(--accent);
   border-color:rgba(31,111,74,.35);
-  color:#1f6f4a;
 }
 
-.status.running{
-  font-weight:700;
+.servicePanel{
+  display:none;
+}
+
+.servicePanel.active{
+  display:block;
 }
 
 .status.pending{
@@ -766,14 +771,13 @@ body.dashboard #headerSubcopy{
 
 .status.verified{
   font-weight:700;
-  color:#1f6f4a;
+  color:#2b6b4b;
 }
 
 .dnsCheckBtn{
   font-size:12px;
-  line-height:1;
+  font-weight:700;
   border-radius:999px;
-  padding:6px 10px;
 }
 
 .metersRow{
