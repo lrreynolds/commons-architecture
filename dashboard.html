@@ -1,22 +1,66 @@
-  // ----------------------------
-  // 7) DNS check mock (dashboard)
-  // ----------------------------
-  (() => {
-    const pendingWrap = document.getElementById("dnsPendingWrap");
-    const verifiedWrap = document.getElementById("dnsVerifiedWrap");
-    const checkDnsBtn = document.getElementById("checkDnsBtn");
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Commonshub — Dashboard</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body class="dashboard">
+  <div class="wrap">
+    <main class="stage">
+      <div class="topbar">
+        <div class="left">
+          <div class="logoMark"></div>
+          <div class="meta">
+            <b>Commons Dashboard</b>
+            <span>Stewardship + hosting</span>
+          </div>
+        </div>
+        <div class="chip">Owner view</div>
+        <a class="secondary" href="#" data-reset="all" style="width:auto;">
+          Start over
+        </a>
+      </div>
+      <div class="content">
+        <div class="center">
+          <div class="header">
+            <div>
+              <h2>The peakX Feed</h2>
+              <p id="headerSubcopy">
+                peakx.social · Running
+              </p>
+            </div>
+          </div>
+          <!-- ========================= -->
+          <!-- PRE-SETUP (wizard not done) -->
+          <!-- ========================= -->
+          <div id="preSetup">
+            <section id="status" style="scroll-margin-top:90px;">
+             <div class="card">
+ <h3>Services</h3>
+<div class="muted">Select a service to view status, access, and key metrics.</div>
+<div class="serviceTabs" style="margin-top:14px;">
+  <button class="serviceTab active" type="button" data-service-tab="mastodon">
+    Mastodon
+  </button>
+  <button class="serviceTab" type="button" data-service-tab="stripe">
+    Stripe
+  </button>
+</div>
 
-    if (!pendingWrap || !verifiedWrap || !checkDnsBtn) return;
+<div class="servicePanel active" id="servicePanelMastodon" data-service-panel="mastodon">
+<div class="item" style="margin-top:12px;">
+  <b>The peakX Feed</b>
+  <div class="muted" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+    <span>peakx.social</span>
+    <span>·</span>
+    <span class="status running">Running</span>
 
-    checkDnsBtn.addEventListener("click", () => {
-      checkDnsBtn.textContent = "Checking...";
-
-      setTimeout(() => {
-        pendingWrap.style.display = "none";
-        verifiedWrap.style.display = "inline-flex";
-      }, 700);
-    });
-  })();      <button
+    <span id="dnsPendingWrap" style="display:inline-flex; align-items:center; gap:8px;">
+      <span>·</span>
+      <span class="status pending">DNS pending</span>
+      <button
         class="secondary dnsCheckBtn"
         id="checkDnsBtn"
         type="button"
