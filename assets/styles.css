@@ -836,3 +836,18 @@ body.dashboard #headerSubcopy{
   line-height:1;
   margin-bottom:10px;
 }
+.status.pending{
+  font-weight:700;
+  color:#8a6a00;
+}
+
+.status.verified{
+  font-weight:700;
+  color:#2b6b4b;
+}
+
+.dnsCheckBtn{
+  font-size:12px;
+  font-weight:700;
+  border-radius:999px;
+}
