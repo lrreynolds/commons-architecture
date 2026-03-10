@@ -855,3 +855,25 @@ body.dashboard #headerSubcopy{
   font-weight:700;
   border-radius:999px;
 }
+
+body.dashboard .status.running{
+  color:#215f43;
+  font-weight:800;
+}
+
+body.dashboard .status.pending{
+  color:#9a6b00;
+  font-weight:800;
+}
+
+body.dashboard .status.verified{
+  color:#215f43;
+  font-weight:800;
+}
+
+body.dashboard .dnsCheckBtn{
+  background:#ffffff;
+  color:var(--cardText);
+  border:1px solid rgba(15,23,19,.12);
+  box-shadow:none;
+}
