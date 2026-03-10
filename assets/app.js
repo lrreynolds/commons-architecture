@@ -1768,4 +1768,23 @@ if (headerSubcopy) {
 
   renderDnsState();
 })();
+  // ----------------------------
+  // 7) DNS check mock (dashboard)
+  // ----------------------------
+  (() => {
+    const pendingWrap = document.getElementById("dnsPendingWrap");
+    const verifiedWrap = document.getElementById("dnsVerifiedWrap");
+    const checkDnsBtn = document.getElementById("checkDnsBtn");
+
+    if (!pendingWrap || !verifiedWrap || !checkDnsBtn) return;
+
+    checkDnsBtn.addEventListener("click", () => {
+      checkDnsBtn.textContent = "Checking...";
+
+      setTimeout(() => {
+        pendingWrap.style.display = "none";
+        verifiedWrap.style.display = "inline-flex";
+      }, 700);
+    });
+  })();
 })();
