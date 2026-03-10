@@ -716,3 +716,19 @@ body.dashboard #headerSubcopy{
   box-shadow: none;
   font-weight: 800;
 }
+.status.pending{
+  font-weight:700;
+  color:#8a6a00;
+}
+
+.status.verified{
+  font-weight:700;
+  color:#1f6f4a;
+}
+
+.dnsCheckBtn{
+  font-size:12px;
+  line-height:1;
+  border-radius:999px;
+  padding:6px 10px;
+}
