@@ -693,3 +693,26 @@ body.dashboard #headerSubcopy{
   color: var(--dashMuted);
   font-size: 13px;
 }
+.status {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-weight:700;
+}
+
+.status.running {
+  color: rgba(15,23,19,.72);
+}
+
+.status.pending {
+  color: #8a6700;
+}
+
+.status.verified {
+  color: #1f6f4a;
+}
+
+.dnsCheckBtn {
+  box-shadow: none;
+  font-weight: 800;
+}
