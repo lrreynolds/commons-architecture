@@ -1828,4 +1828,70 @@ if (headerSubcopy) {
 
     renderDnsState();
   })();
+  // ----------------------------
+  // 7) Service tabs (dashboard)
+  // ----------------------------
+  (() => {
+    const tabs = document.querySelectorAll("[data-service-tab]");
+    const panels = document.querySelectorAll("[data-service-panel]");
+
+    if (!tabs.length || !panels.length) return;
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.getAttribute("data-service-tab");
+
+        tabs.forEach((t) => t.classList.remove("active"));
+        panels.forEach((p) => {
+          const matches = p.getAttribute("data-service-panel") === target;
+          p.classList.toggle("active", matches);
+          p.style.display = matches ? "block" : "none";
+        });
+
+        tab.classList.add("active");
+      });
+    });
+  })();
+
+  // ----------------------------
+  // 8) DNS check mock (dashboard)
+  // ----------------------------
+  (() => {
+    const body = document.body;
+    const pendingWrap = document.getElementById("dnsPendingWrap");
+    const verifiedWrap = document.getElementById("dnsVerifiedWrap");
+    const checkDnsBtn = document.getElementById("checkDnsBtn");
+
+    if (!pendingWrap || !verifiedWrap || !checkDnsBtn) return;
+
+    const domainType = body.getAttribute("data-domain-type") || "commonshub";
+    let dnsStatus = body.getAttribute("data-dns-status") || "verified";
+
+    function renderDnsState() {
+      pendingWrap.style.display = "none";
+      verifiedWrap.style.display = "none";
+
+      // Commonshub domains don't need DNS validation UI
+      if (domainType === "commonshub") return;
+
+      if (dnsStatus === "pending") {
+        pendingWrap.style.display = "inline-flex";
+      } else if (dnsStatus === "verified") {
+        verifiedWrap.style.display = "inline-flex";
+      }
+    }
+
+    checkDnsBtn.addEventListener("click", () => {
+      checkDnsBtn.textContent = "Checking...";
+
+      setTimeout(() => {
+        dnsStatus = "verified";
+        body.setAttribute("data-dns-status", "verified");
+        checkDnsBtn.textContent = "Check DNS";
+        renderDnsState();
+      }, 700);
+    });
+
+    renderDnsState();
+  })();
 })();
