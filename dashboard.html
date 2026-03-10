@@ -27,197 +27,195 @@
           <div class="header">
             <div>
               <h2>The peakX Feed</h2>
-             <p id="headerSubcopy" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-  <span>peakx.social</span>
-  <span>·</span>
-  <span class="status running">Running</span>
+              <p id="headerSubcopy" class="headerMeta">
+                <span>peakx.social</span>
+                <span>·</span>
+                <span class="status running">Running</span>
 
-<span id="dnsPendingWrap" style="display:none;">
-  <span style="display:inline-flex; align-items:center; gap:8px;">
-    <span>·</span>
-    <span class="status pending">DNS pending</span>
-    <button
-      class="secondary dnsCheckBtn"
-      id="checkDnsBtn"
-      type="button"
-      style="width:auto; padding:6px 10px; min-width:0;"
-    >
-      Check DNS
-    </button>
-  </span>
+                <span id="dnsPendingWrap" class="dnsMeta" style="display:none;">
+                  <span>·</span>
+                  <span class="status pending">DNS pending</span>
+                  <button
+                  class="secondary dnsCheckBtn"
+                  id="checkDnsBtn"
+                  type="button"
+                  >
+                  Check DNS
+                </button>
+              </span>
 
-  <span id="dnsVerifiedWrap" style="display:none; align-items:center; gap:8px;">
-    <span>·</span>
-    <span class="status verified">DNS verified</span>
-  </span>
-</p>
+              <span id="dnsVerifiedWrap" class="dnsMeta" style="display:none;">
+                <span>·</span>
+                <span class="status verified">DNS verified</span>
+              </span>
+            </p>
+          </div>
+        </div>
+        <!-- ========================= -->
+        <!-- PRE-SETUP (wizard not done) -->
+        <!-- ========================= -->
+        <div id="preSetup">
+          <section id="status" style="scroll-margin-top:90px;">
+           <div class="card">
+             <h3>Servers</h3>
+             <div class="serviceTabs" style="margin-top:14px;">
+              <button class="serviceTab active" type="button" data-service-tab="mastodon">
+                Mastodon
+              </button>
+              <button class="serviceTab" type="button" data-service-tab="stripe">
+                Stripe
+              </button>
+            </div>
+
+            <div class="servicePanel active" id="servicePanelMastodon" data-service-panel="mastodon">
+              <div class="item" style="margin-top:12px;">
+                <b>Mastodon server</b>
+                <div class="muted">
+                  Version 4.5.7
+                </div>
+              </div>
+              <div class="metricsRow metersRow" style="margin-top:14px;">
+                <div class="metricCard meterCard">
+                  <div class="metricLabel">Database</div>
+                  <div class="fillMeter" aria-hidden="true">
+                    <div class="fillTicks">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <div class="fillWater" style="height:42%;"></div>
+                    <div class="fillValue">42%</div>
+                  </div>
+                  <div class="metricSub">0.84 GB / 2 GB</div>
+                </div>
+
+                <div class="metricCard meterCard">
+                  <div class="metricLabel">Media</div>
+                  <div class="fillMeter" aria-hidden="true">
+                    <div class="fillTicks">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <div class="fillWater" style="height:18%;"></div>
+                    <div class="fillValue">18%</div>
+                  </div>
+                  <div class="metricSub">3.6 GB / 20 GB</div>
+                </div>
+
+                <div class="metricCard meterCard">
+                  <div class="metricLabel">Uptime</div>
+                  <div class="fillMeter" aria-hidden="true">
+                    <div class="fillTicks">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <div class="fillWater uptimeWater" style="height:99.98%;"></div>
+                    <div class="fillValue">99.98%</div>
+                  </div>
+                  <div class="metricSub">Past 30 days</div>
+                </div>
+              </div>
+              <div class="footerBar" style="margin-top:14px; gap:12px;">
+                <a class="secondary" href="hosting-details.html" style="flex:1; justify-content:center;">
+                  More details
+                </a>
+              </div>
+            </div>
+
+            <div class="servicePanel" id="servicePanelStripe" data-service-panel="stripe" style="display:none;">
+              <div class="item" style="margin-top:12px;">
+                <b>Stripe service</b>
+                <div class="muted">
+                  Not connected · Community funding unavailable
+                </div>
+              </div>
+
+              <div class="metricsRow metersRow" style="margin-top:14px;">
+                <div class="metricCard meterCard">
+                  <div class="metricLabel">Monthly support</div>
+                  <div class="fillMeter" aria-hidden="true">
+                    <div class="fillTicks">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <div class="fillWater" style="height:0%;"></div>
+                    <div class="fillValue">$0</div>
+                  </div>
+                  <div class="metricSub">This month</div>
+                </div>
+
+                <div class="metricCard meterCard">
+                  <div class="metricLabel">Goal progress</div>
+                  <div class="fillMeter" aria-hidden="true">
+                    <div class="fillTicks">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <div class="fillWater" style="height:0%;"></div>
+                    <div class="fillValue">0%</div>
+                  </div>
+                  <div class="metricSub">Current goal</div>
+                </div>
+
+                <div class="metricCard meterCard">
+                  <div class="metricLabel">Campaign</div>
+                  <div class="fillMeter" aria-hidden="true">
+                    <div class="fillTicks">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <div class="fillWater" style="height:35%;"></div>
+                    <div class="fillValue">14d</div>
+                  </div>
+                  <div class="metricSub">Ends in</div>
+                </div>
+              </div>
+
+              <div class="footerBar" style="margin-top:14px; gap:12px;">
+                <a class="secondary" href="funding-start.html" style="flex:1; justify-content:center;">
+                  Stripe details
+                </a>
+              </div>
+            </div>
+
+            <div class="note" style="margin-top:12px;">
+              <b>Next:</b> Add your branding, purpose, and welcome post. About 5 minutes.
+            </div>
+            <div class="footerBar" style="margin-top:12px;">
+              <a class="primary" href="setup-wizard.html">Set up your community</a>
             </div>
           </div>
-          <!-- ========================= -->
-          <!-- PRE-SETUP (wizard not done) -->
-          <!-- ========================= -->
-          <div id="preSetup">
-            <section id="status" style="scroll-margin-top:90px;">
-             <div class="card">
- <h3>Servers</h3>
-<div class="serviceTabs" style="margin-top:14px;">
-  <button class="serviceTab active" type="button" data-service-tab="mastodon">
-    Mastodon
-  </button>
-  <button class="serviceTab" type="button" data-service-tab="stripe">
-    Stripe
-  </button>
-</div>
-
-<div class="servicePanel active" id="servicePanelMastodon" data-service-panel="mastodon">
-<div class="item" style="margin-top:12px;">
-  <b>Mastodon server</b>
-  <div class="muted">
-    Version 4.5.7
-  </div>
-</div>
-<div class="metricsRow metersRow" style="margin-top:14px;">
-  <div class="metricCard meterCard">
-    <div class="metricLabel">Database</div>
-    <div class="fillMeter" aria-hidden="true">
-      <div class="fillTicks">
-        <span></span>
-        <span></span>
-        <span></span>
+        </section>
       </div>
-      <div class="fillWater" style="height:42%;"></div>
-      <div class="fillValue">42%</div>
-    </div>
-    <div class="metricSub">0.84 GB / 2 GB</div>
-  </div>
-
-  <div class="metricCard meterCard">
-    <div class="metricLabel">Media</div>
-    <div class="fillMeter" aria-hidden="true">
-      <div class="fillTicks">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="fillWater" style="height:18%;"></div>
-      <div class="fillValue">18%</div>
-    </div>
-   <div class="metricSub">3.6 GB / 20 GB</div>
-  </div>
-
-  <div class="metricCard meterCard">
-    <div class="metricLabel">Uptime</div>
-    <div class="fillMeter" aria-hidden="true">
-      <div class="fillTicks">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="fillWater uptimeWater" style="height:99.98%;"></div>
-      <div class="fillValue">99.98%</div>
-    </div>
-    <div class="metricSub">Past 30 days</div>
-  </div>
-</div>
-    <div class="footerBar" style="margin-top:14px; gap:12px;">
-    <a class="secondary" href="hosting-details.html" style="flex:1; justify-content:center;">
-      More details
-    </a>
-  </div>
-</div>
-
-<div class="servicePanel" id="servicePanelStripe" data-service-panel="stripe" style="display:none;">
-<div class="item" style="margin-top:12px;">
-  <b>Stripe service</b>
-  <div class="muted">
-    Not connected · Community funding unavailable
-  </div>
-</div>
-
-  <div class="metricsRow metersRow" style="margin-top:14px;">
-    <div class="metricCard meterCard">
-      <div class="metricLabel">Monthly support</div>
-      <div class="fillMeter" aria-hidden="true">
-        <div class="fillTicks">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="fillWater" style="height:0%;"></div>
-        <div class="fillValue">$0</div>
-      </div>
-      <div class="metricSub">This month</div>
-    </div>
-
-    <div class="metricCard meterCard">
-      <div class="metricLabel">Goal progress</div>
-      <div class="fillMeter" aria-hidden="true">
-        <div class="fillTicks">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="fillWater" style="height:0%;"></div>
-        <div class="fillValue">0%</div>
-      </div>
-      <div class="metricSub">Current goal</div>
-    </div>
-
-    <div class="metricCard meterCard">
-      <div class="metricLabel">Campaign</div>
-      <div class="fillMeter" aria-hidden="true">
-        <div class="fillTicks">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="fillWater" style="height:35%;"></div>
-        <div class="fillValue">14d</div>
-      </div>
-      <div class="metricSub">Ends in</div>
-    </div>
-  </div>
-
-  <div class="footerBar" style="margin-top:14px; gap:12px;">
-    <a class="secondary" href="funding-start.html" style="flex:1; justify-content:center;">
-      Stripe details
-    </a>
-  </div>
-</div>
-
-<div class="note" style="margin-top:12px;">
-    <b>Next:</b> Add your branding, purpose, and welcome post. About 5 minutes.
-  </div>
-  <div class="footerBar" style="margin-top:12px;">
-    <a class="primary" href="setup-wizard.html">Set up your community</a>
-  </div>
-</div>
-            </section>
-          </div>
-          <!-- ========================= -->
-          <!-- POST-SETUP (wizard done)  -->
-          <!-- ========================= -->
-          <div id="postSetup" style="display:none;">
-            <section id="status-post" style="scroll-margin-top:90px;">
-              <div class="card">
-                <h3>Ready to invite</h3>
-                <div class="muted" style="margin-top:2px;">
-                  You’ll post and interact in Mastodon. Commonshub handles hosting, invites, and community funding.
-                </div>
-                <div class="list" style="margin-top:12px;">
-                  <div class="item">
-                    <b>Community</b>
-                    <div class="muted">The Commons Hub · mycommunity.commonshub.social</div>
-                  </div>
-                  <div class="item">
-                    <b>Hosting</b>
-                    <div class="muted">Active · Managed by Commonshub</div>
-                  </div>
-                  <div class="item">
-                    <b>Members</b>
-                    <div class="muted">0 (expected)</div>
-                  </div>
-                </div>
+      <!-- ========================= -->
+      <!-- POST-SETUP (wizard done)  -->
+      <!-- ========================= -->
+      <div id="postSetup" style="display:none;">
+        <section id="status-post" style="scroll-margin-top:90px;">
+          <div class="card">
+            <h3>Ready to invite</h3>
+            <div class="muted" style="margin-top:2px;">
+              You’ll post and interact in Mastodon. Commonshub handles hosting, invites, and community funding.
+            </div>
+            <div class="list" style="margin-top:12px;">
+              <div class="item">
+                <b>Community</b>
+                <div class="muted">The Commons Hub · mycommunity.commonshub.social</div>
+              </div>
+              <div class="item">
+                <b>Hosting</b>
+                <div class="muted">Active · Managed by Commonshub</div>
+              </div>
+              <div class="item">
+                <b>Members</b>
+                <div class="muted">0 (expected)</div>
+              </div>
+            </div>
 <!-- Primary actions: Visit + Invite + Mastodon access -->
 <div class="footerBar" id="primaryActions" style="margin-top:14px; gap:12px;">
   <!-- Visit community -->
@@ -281,23 +279,23 @@ Sign in first, then you can open the Mastodon dashboard.
   <div class="muted" id="fundingSubcopy">
     Optional. Participation is always free.
   </div>
-<div class="muted" style="margin-top:10px; font-size:13px;">
-  <a href="funding-start.html" style="color:inherit; text-decoration:none;">
-    Manage community funding
-  </a>
-</div>
-<div class="field" id="fundingLinkField" style="margin-top:12px; display:none;">
-  <label>Community funding link</label>
-  <input
-  id="fundingLinkInput"
-  type="text"
-  value="https://mycommunity.commonshub.social/funding"
-  readonly
-  />
-  <div class="muted" style="margin-top:6px;">
-    Share this link anywhere. (This page also invites people to join your community.)
+  <div class="muted" style="margin-top:10px; font-size:13px;">
+    <a href="funding-start.html" style="color:inherit; text-decoration:none;">
+      Manage community funding
+    </a>
   </div>
-</div>
+  <div class="field" id="fundingLinkField" style="margin-top:12px; display:none;">
+    <label>Community funding link</label>
+    <input
+    id="fundingLinkInput"
+    type="text"
+    value="https://mycommunity.commonshub.social/funding"
+    readonly
+    />
+    <div class="muted" style="margin-top:6px;">
+      Share this link anywhere. (This page also invites people to join your community.)
+    </div>
+  </div>
 </div>
 </div>
 </div>
