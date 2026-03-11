@@ -1,1988 +1,579 @@
-
 // assets/app.js
 (() => {
+  const storage = {
+    get(key, fallback = null) {
+      try {
+        const value = localStorage.getItem(key);
+        return value === null ? fallback : value;
+      } catch {
+        return fallback;
+      }
+    },
+    set(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch {}
+    },
+    remove(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch {}
+    },
+  };
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      try {
+        const temp = document.createElement("textarea");
+        temp.value = text;
+        temp.setAttribute("readonly", "");
+        temp.style.position = "absolute";
+        temp.style.left = "-9999px";
+        document.body.appendChild(temp);
+        temp.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(temp);
+        return ok;
+      } catch {
+        return false;
+      }
+    }
+  }
+
+  function flashButtonText(button, nextText, delay = 900, restoreDisabled = null) {
+    if (!button) return;
+    const oldText = button.textContent;
+    button.textContent = nextText;
+
+    setTimeout(() => {
+      button.textContent = oldText;
+      if (typeof restoreDisabled === "boolean") {
+        button.disabled = restoreDisabled;
+      }
+    }, delay);
+  }
+
   // ----------------------------
-  // 1) Mobile/desktop nav toggle
+  // 1) Mobile / desktop nav toggle
   // ----------------------------
-  const navBtn = document.getElementById("navToggle");
-  if (navBtn) {
+  function setupNavToggle() {
+    const navBtn = document.getElementById("navToggle");
+    if (!navBtn) return;
+
     navBtn.addEventListener("click", () => {
       document.body.classList.toggle("navCollapsed");
     });
   }
 
   // ----------------------------
-  // 2) Pre/Post setup switching (dashboard only)
+  // 2) Pre / post setup switching
   // ----------------------------
-  let complete = false;
-  try {
-    complete = localStorage.getItem("commonshub_setup_complete") === "1";
-  } catch {}
+  function setupDashboardState() {
+    const complete = storage.get("commonshub_setup_complete") === "1";
 
-  const pre = document.getElementById("preSetup");
-  const post = document.getElementById("postSetup");
-  const navSubtitle = document.getElementById("navSubtitle");
-  const headerSubcopy = document.getElementById("headerSubcopy");
+    const pre = document.getElementById("preSetup");
+    const post = document.getElementById("postSetup");
+    const navSubtitle = document.getElementById("navSubtitle");
 
-  if (pre && post) {
-    pre.style.display = complete ? "none" : "block";
-    post.style.display = complete ? "block" : "none";
+    if (pre && post) {
+      pre.style.display = complete ? "none" : "block";
+      post.style.display = complete ? "block" : "none";
+    }
+
+    if (navSubtitle) {
+      navSubtitle.textContent = complete
+        ? "Health + key actions"
+        : "Live + next step";
+    }
   }
-  if (navSubtitle) {
-    navSubtitle.textContent = complete ? "Health + key actions" : "Live + next step";
-  }
-if (headerSubcopy) {
-  headerSubcopy.textContent = complete
-    ? "Mastodon v4.5.7 · Ready to invite"
-    : "Mastodon v4.5.7 · Setup not complete";
-}
 
   // ----------------------------
-  // 2.3) DNS state (dashboard)
-  // Show only for external/custom domains when DNS is pending
+  // 3) DNS state (dashboard header)
+  // Uses:
+  //   body data-domain-type / data-dns-status
+  //   localStorage overrides if present
+  // Allowed domain types:
+  //   commonshub_subdomain
+  //   external_subdomain
+  //   custom_domain
   // ----------------------------
-  (() => {
+  function setupDnsState() {
+    const body = document.body;
     const dnsPendingWrap = document.getElementById("dnsPendingWrap");
     const dnsVerifiedWrap = document.getElementById("dnsVerifiedWrap");
     const checkDnsBtn = document.getElementById("checkDnsBtn");
+
     if (!dnsPendingWrap || !dnsVerifiedWrap || !checkDnsBtn) return;
 
-    // Demo state:
-    // domainType: "commonshub_subdomain" | "external_subdomain" | "custom_domain"
-    // dnsStatus: "not_applicable" | "pending" | "verified"
-    let domainType = "commonshub_subdomain";
-    let dnsStatus = "not_applicable";
+    let domainType =
+      storage.get("commonshub_domain_type") ||
+      body.dataset.domainType ||
+      "commonshub_subdomain";
 
-    try {
-      domainType = localStorage.getItem("commonshub_domain_type") || "commonshub_subdomain";
-      dnsStatus = localStorage.getItem("commonshub_dns_status") || "not_applicable";
-    } catch {}
+    let dnsStatus =
+      storage.get("commonshub_dns_status") ||
+      body.dataset.dnsStatus ||
+      "not_applicable";
 
-    const isCustomLike =
-      domainType === "external_subdomain" || domainType === "custom_domain";
-
-    // Default hidden
-    dnsPendingWrap.style.display = "none";
-    dnsVerifiedWrap.style.display = "none";
-
-    if (!isCustomLike) return;
-
-    if (dnsStatus === "pending") {
-      dnsPendingWrap.style.display = "inline-flex";
+    function needsDns(domainTypeValue) {
+      return (
+        domainTypeValue === "external_subdomain" ||
+        domainTypeValue === "custom_domain"
+      );
     }
 
-    if (dnsStatus === "verified") {
-      dnsVerifiedWrap.style.display = "inline-flex";
+    function renderDnsState() {
+      dnsPendingWrap.style.display = "none";
+      dnsVerifiedWrap.style.display = "none";
+
+      if (!needsDns(domainType)) return;
+
+      if (dnsStatus === "verified") {
+        dnsVerifiedWrap.style.display = "inline-flex";
+      } else {
+        dnsPendingWrap.style.display = "inline-flex";
+      }
     }
 
     checkDnsBtn.addEventListener("click", () => {
-      const old = checkDnsBtn.textContent;
+      const oldText = checkDnsBtn.textContent;
       checkDnsBtn.textContent = "Checking...";
       checkDnsBtn.disabled = true;
 
-      // Demo behavior: pretend DNS succeeds
       setTimeout(() => {
-        try {
-          localStorage.setItem("commonshub_dns_status", "verified");
-        } catch {}
+        dnsStatus = "verified";
+        storage.set("commonshub_dns_status", "verified");
+        body.dataset.dnsStatus = "verified";
 
-        dnsPendingWrap.style.display = "none";
-        dnsVerifiedWrap.style.display = "inline-flex";
+        renderDnsState();
 
-        checkDnsBtn.textContent = old;
+        checkDnsBtn.textContent = oldText;
         checkDnsBtn.disabled = false;
       }, 900);
     });
-  })();
-  
-  // ----------------------------
-// 2.5) Mastodon access buttons (MVP mock)
-// ----------------------------
-// Show "Sign in" first, then "Mastodon dashboard" after 1 click
-// ----------------------------
-(function setupMastodonAdminButtons() {
-  const loginBtn = document.getElementById("mastodonLoginBtn");
-  const adminBtn = document.getElementById("mastodonAdminBtn");
-  const hint = document.getElementById("mastodonHint");
-
-  if (!loginBtn || !adminBtn) return;
-
-  const KEY = "commonshub_mastodon_login_attempted";
-
-  let loginAttempted = false;
-  try {
-    loginAttempted = localStorage.getItem(KEY) === "1";
-  } catch {}
-
-  // Default render
-  loginBtn.style.display = loginAttempted ? "none" : "inline-flex";
-  adminBtn.style.display = loginAttempted ? "inline-flex" : "none";
-  if (hint) hint.style.display = loginAttempted ? "none" : "block";
-
-  // IMPORTANT: DO NOT preventDefault.
-  // Let the link open in a new tab, but flip the local flag here.
-  loginBtn.addEventListener("click", () => {
-    try {
-      localStorage.setItem(KEY, "1");
-    } catch {}
-
-    // Optional: refresh this tab shortly after so the Admin button appears
-    setTimeout(() => window.location.reload(), 150);
-  });
-})();
-
-// ----------------------------
-// 2.7) Guided setup checklist (dashboard)
-// ----------------------------
-(() => {
-  const host = "https://peakx.social"; // swap to provisioned instance domain later
-  const checklistEl = document.getElementById("setupChecklist");
-  if (!checklistEl) return;
-
-  const DONE_KEY = "commonshub_setup_checklist_done_v1";
-
-  // Suggested copy pack (in real product: derived from Blueprint + provisioning outputs)
-  const copyPack = {
-    about_short_description:
-      "A calm home for your community — chronological signal, visible participants, no algorithmic incentives.",
-    about_long_description:
-      "This space is designed for serious conversation that compounds over time. Posts are chronological. Participants are visible. Discussion is stewarded, not optimized for engagement.\n\nUse this as a working room: make claims, share sources, ask better questions, and build shared context.\n\nCommonshub handles hosting and invites. Mastodon provides the social layer.",
-    rules:
-      "• Be constructive.\n• Argue with sources when possible.\n• No harassment or pile-ons.\n• Keep the signal high.\n• Moderation exists to protect the room, not to win arguments.",
-    welcome_post:
-      "Welcome — this is the first thread in the room.\n\nStart here:\n• Introduce yourself (who you are + what you’re here to learn/build)\n• Share one question you’d love the community to tackle\n\nThis space is chronological. The goal is to build shared context over time.",
-    invite_message:
-      "I’m opening a new community space on Mastodon. It’s a calm, chronological room for thoughtful discussion — no ads, no algorithmic feed.\n\nJoin here: [INVITE LINK]\n\nIf you join, reply with an intro + what you hope to contribute."
-  };
-
-  // Checklist steps (edit/extend freely)
-  const steps = [
-    {
-      id: "login",
-      title: "Sign in to Mastodon",
-      why: "You’ll need an authenticated Mastodon session before admin links will work.",
-      openUrl: `${host}/auth/sign_in`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "owner_profile",
-      title: "Owner profile basics",
-      why: "Set display name + bio so the room feels hosted and credible.",
-      openUrl: `${host}/settings/profile`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "about",
-      title: "About text",
-      why: "This becomes the server description + sets expectations for new members.",
-      openUrl: `${host}/admin/settings/about`,
-      copyKey: "about_long_description",
-      copyLabel: "Suggested About / long description"
-    },
-    {
-      id: "registrations",
-      title: "Registrations",
-      why: "Decide whether signups are invite-only, approval-based, or open.",
-      openUrl: `${host}/admin/settings/registrations`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "branding",
-      title: "Branding",
-      why: "Optional. If you want: set icon + banner. (We’re not storing assets in MVP.)",
-      openUrl: `${host}/admin/settings/branding`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "discovery",
-      title: "Discovery",
-      why: "Controls how visible the instance is (directory, discovery surfaces).",
-      openUrl: `${host}/admin/settings/discovery`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "invites",
-      title: "Invites",
-      why: "Generate invite links and share them with your initial collaborators.",
-      openUrl: `${host}/admin/invites`,
-      copyKey: "invite_message",
-      copyLabel: "Suggested invite message"
-    }
-  ];
-
-  function loadDone() {
-    try {
-      return JSON.parse(localStorage.getItem(DONE_KEY) || "{}");
-    } catch {
-      return {};
-    }
-  }
-
-  function saveDone(done) {
-    try {
-      localStorage.setItem(DONE_KEY, JSON.stringify(done));
-    } catch {}
-  }
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  function render() {
-    const done = loadDone();
-    checklistEl.innerHTML = "";
-
-    steps.forEach((s) => {
-      const isDone = !!done[s.id];
-
-      const row = document.createElement("div");
-      row.className = "item";
-      row.style.alignItems = "flex-start";
-      row.style.gap = "12px";
-      row.style.padding = "14px 0";
-      row.style.borderBottom = "1px solid var(--line, #d9e2dc)";
-
-      row.innerHTML = `
-        <div style="flex:1;">
-          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-            <b style="font-size:14px;">${s.title}</b>
-            ${
-              isDone
-                ? `<span class="chip" style="font-size:12px;">Done</span>`
-                : `<span class="chip" style="font-size:12px; opacity:.75;">To do</span>`
-            }
-          </div>
-          <div class="muted" style="margin-top:6px; font-size:13px; line-height:1.35;">
-            ${s.why}
-          </div>
-
-          ${
-            s.copyKey
-              ? `
-              <div style="margin-top:10px;">
-                <a href="#" data-toggle-copy="${s.id}" class="secondary" style="display:inline-flex; width:auto; padding:8px 10px;">
-                  ${isDone ? "Show suggested copy" : "Hide suggested copy"}
-                </a>
-
-                <div data-copy-wrap="${s.id}" style="margin-top:10px; ${isDone ? "display:none;" : ""}">
-                  <div class="muted" style="font-size:12px; margin-bottom:6px;">${s.copyLabel}</div>
-                  <textarea readonly style="width:100%; min-height:110px; resize:vertical; padding:10px; border-radius:12px; border:1px solid #d9e2dc; font-size:12px; line-height:1.35; background:rgba(16,32,24,.03);">${copyPack[s.copyKey]}</textarea>
-                  <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
-                    <button class="secondary" data-copy-btn="${s.id}" type="button" style="width:auto;">Copy text</button>
-                  </div>
-                </div>
-              </div>
-              `
-              : ``
-          }
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-          <a class="secondary" href="${s.openUrl}" target="_blank" rel="noopener" style="width:auto;">Open</a>
-          <button class="secondary" type="button" data-done-btn="${s.id}" style="width:auto;">
-            ${isDone ? "Mark not done" : "Mark done"}
-          </button>
-        </div>
-      `;
-
-      checklistEl.appendChild(row);
-    });
-
-    // Wire events
-    checklistEl.querySelectorAll("[data-done-btn]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-done-btn");
-        const done = loadDone();
-        done[id] = !done[id];
-        saveDone(done);
-        render();
-      });
-    });
-
-    checklistEl.querySelectorAll("[data-toggle-copy]").forEach((a) => {
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        const id = a.getAttribute("data-toggle-copy");
-        const wrap = checklistEl.querySelector(`[data-copy-wrap="${id}"]`);
-        if (!wrap) return;
-        const showing = wrap.style.display !== "none";
-        wrap.style.display = showing ? "none" : "block";
-        a.textContent = showing ? "Show suggested copy" : "Hide suggested copy";
-      });
-    });
-
-    checklistEl.querySelectorAll("[data-copy-btn]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const id = btn.getAttribute("data-copy-btn");
-        const step = steps.find((s) => s.id === id);
-        if (!step || !step.copyKey) return;
-
-        const ok = await copyText(copyPack[step.copyKey]);
-        const old = btn.textContent;
-        btn.textContent = ok ? "Copied" : "Copy failed";
-        setTimeout(() => (btn.textContent = old), 900);
-      });
-    });
-  }
-
-  render();
-})();
-
-  // ----------------------------
-  // 3) Copy invite (post-setup)
-  // ----------------------------
-  const copyBtn = document.getElementById("copyInviteBtn");
-  const inviteField = document.getElementById("inviteField");
-  const inviteInput = document.getElementById("inviteLink");
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  if (copyBtn && inviteInput) {
-    copyBtn.addEventListener("click", async () => {
-      if (inviteField) inviteField.style.display = "block";
-
-      inviteInput.focus();
-      inviteInput.select();
-
-      const ok = await copyText(inviteInput.value);
-      if (!ok) {
-        try {
-          document.execCommand("copy");
-        } catch {}
-      }
-
-      const old = copyBtn.textContent;
-      copyBtn.textContent = "Copied";
-      setTimeout(() => (copyBtn.textContent = old), 900);
-    });
-  }
-
-  // ----------------------------
-  // 5) Reset demo flow (works on ALL pages)
-  // ----------------------------
-  function resetFlow(kind) {
-    try {
-      if (kind === "all") {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      } else if (kind === "server") {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      } else if (kind === "community") {
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      }
-    } catch {}
-
-    const target =
-      kind === "server" ? "setup.html" :
-      kind === "community" ? "dashboard.html" :
-      "index.html";
-
-    window.location.href = target;
-  }
-
-  document.addEventListener("click", (e) => {
-    const el = e.target && e.target.closest ? e.target.closest("[data-reset]") : null;
-    if (!el) return;
-
-    e.preventDefault();
-    const kind = (el.getAttribute("data-reset") || "all").toLowerCase();
-    if (kind !== "all" && kind !== "server" && kind !== "community") return;
-
-    resetFlow(kind);
-  });
-
-  document.querySelectorAll("[data-reset='all']").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      try {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-        localStorage.removeItem("commonshub_stripe_connected");
-        localStorage.removeItem("commonshub_funding_enabled");
-        localStorage.removeItem("commonshub_funding_subs_on");
-        localStorage.removeItem("commonshub_funding_tips_on");
-      } catch {}
-      try { sessionStorage.removeItem("commonshub_in_setup_flow"); } catch {}
-      window.location.href = "index.html";
-    });
-  });
-
-  // ----------------------------
-  // 6) Funding UI (dashboard) — 3-state
-  // ----------------------------
-  (() => {
-    const stripeStatus = document.getElementById("stripeStatus");
-    const fundingStatus = document.getElementById("fundingStatus");
-    const fundingSubcopy = document.getElementById("fundingSubcopy");
-
-    const fundingPrimaryBtn = document.getElementById("fundingPrimaryBtn");
-    const fundingCtaWrap = document.getElementById("fundingCtaWrap");
-    const fundingLiveActions = document.getElementById("fundingLiveActions");
-
-    // Only run on pages that actually have the funding block
-    if (!fundingPrimaryBtn || !fundingCtaWrap || !fundingLiveActions) return;
-
-    let stripeConnected = false;
-    let fundingEnabled = false;
-
-    try {
-      stripeConnected = localStorage.getItem("commonshub_stripe_connected") === "1";
-      fundingEnabled = localStorage.getItem("commonshub_funding_enabled") === "1";
-    } catch {}
-
-    // Default: show single CTA, hide live actions
-    fundingCtaWrap.style.display = "flex";
-    fundingLiveActions.style.display = "none";
-
-    if (stripeStatus) stripeStatus.textContent = stripeConnected ? "Connected" : "Not connected";
-
-    // State A: Stripe not connected
-    if (!stripeConnected) {
-      if (fundingStatus) fundingStatus.textContent = "Off";
-      if (fundingSubcopy) {
-        fundingSubcopy.textContent =
-          "Optional. Participation is always free. Connect Stripe to enable community funding.";
-      }
-
-      fundingPrimaryBtn.textContent = "Enable community funding";
-      fundingPrimaryBtn.href = "funding-start.html";
-      return;
-    }
-
-    // State B: Stripe connected, funding off
-    if (!fundingEnabled) {
-      if (fundingStatus) fundingStatus.textContent = "Off";
-      if (fundingSubcopy) {
-        fundingSubcopy.textContent =
-          "Stripe is connected. Turn on community funding when you’re ready.";
-      }
-
-      fundingPrimaryBtn.textContent = "Turn on community funding";
-      fundingPrimaryBtn.href = "funding-options.html";
-      return;
-    }
-
-    // State C: Funding live
-    if (fundingStatus) fundingStatus.textContent = "Live";
-    if (fundingSubcopy) fundingSubcopy.textContent = "Community funding is live and shareable.";
-
-    fundingCtaWrap.style.display = "none";
-    fundingLiveActions.style.display = "block";
-  })();
-})();
-  // IMPORTANT: DO NOT preventDefault.
-  // Let the link open in a new tab, but flip the local flag here.
-  loginBtn.addEventListener("click", () => {
-    try {
-      localStorage.setItem(KEY, "1");
-    } catch {}
-
-    // Optional: refresh this tab shortly after so the Admin button appears
-    setTimeout(() => window.location.reload(), 150);
-  });
-})();
-
-// ----------------------------
-// 2.7) Guided setup checklist (dashboard)
-// ----------------------------
-(() => {
-  const host = "https://peakx.social"; // swap to provisioned instance domain later
-  const checklistEl = document.getElementById("setupChecklist");
-  if (!checklistEl) return;
-
-  const DONE_KEY = "commonshub_setup_checklist_done_v1";
-
-  // Suggested copy pack (in real product: derived from Blueprint + provisioning outputs)
-  const copyPack = {
-    about_short_description:
-      "A calm home for your community — chronological signal, visible participants, no algorithmic incentives.",
-    about_long_description:
-      "This space is designed for serious conversation that compounds over time. Posts are chronological. Participants are visible. Discussion is stewarded, not optimized for engagement.\n\nUse this as a working room: make claims, share sources, ask better questions, and build shared context.\n\nCommonshub handles hosting and invites. Mastodon provides the social layer.",
-    rules:
-      "• Be constructive.\n• Argue with sources when possible.\n• No harassment or pile-ons.\n• Keep the signal high.\n• Moderation exists to protect the room, not to win arguments.",
-    welcome_post:
-      "Welcome — this is the first thread in the room.\n\nStart here:\n• Introduce yourself (who you are + what you’re here to learn/build)\n• Share one question you’d love the community to tackle\n\nThis space is chronological. The goal is to build shared context over time.",
-    invite_message:
-      "I’m opening a new community space on Mastodon. It’s a calm, chronological room for thoughtful discussion — no ads, no algorithmic feed.\n\nJoin here: [INVITE LINK]\n\nIf you join, reply with an intro + what you hope to contribute."
-  };
-
-  // Checklist steps (edit/extend freely)
-  const steps = [
-    {
-      id: "login",
-      title: "Sign in to Mastodon",
-      why: "You’ll need an authenticated Mastodon session before admin links will work.",
-      openUrl: `${host}/auth/sign_in`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "owner_profile",
-      title: "Owner profile basics",
-      why: "Set display name + bio so the room feels hosted and credible.",
-      openUrl: `${host}/settings/profile`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "about",
-      title: "About text",
-      why: "This becomes the server description + sets expectations for new members.",
-      openUrl: `${host}/admin/settings/about`,
-      copyKey: "about_long_description",
-      copyLabel: "Suggested About / long description"
-    },
-    {
-      id: "registrations",
-      title: "Registrations",
-      why: "Decide whether signups are invite-only, approval-based, or open.",
-      openUrl: `${host}/admin/settings/registrations`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "branding",
-      title: "Branding",
-      why: "Optional. If you want: set icon + banner. (We’re not storing assets in MVP.)",
-      openUrl: `${host}/admin/settings/branding`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "discovery",
-      title: "Discovery",
-      why: "Controls how visible the instance is (directory, discovery surfaces).",
-      openUrl: `${host}/admin/settings/discovery`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "invites",
-      title: "Invites",
-      why: "Generate invite links and share them with your initial collaborators.",
-      openUrl: `${host}/admin/invites`,
-      copyKey: "invite_message",
-      copyLabel: "Suggested invite message"
-    }
-  ];
-
-  function loadDone() {
-    try {
-      return JSON.parse(localStorage.getItem(DONE_KEY) || "{}");
-    } catch {
-      return {};
-    }
-  }
-
-  function saveDone(done) {
-    try {
-      localStorage.setItem(DONE_KEY, JSON.stringify(done));
-    } catch {}
-  }
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  function render() {
-    const done = loadDone();
-    checklistEl.innerHTML = "";
-
-    steps.forEach((s) => {
-      const isDone = !!done[s.id];
-
-      const row = document.createElement("div");
-      row.className = "item";
-      row.style.alignItems = "flex-start";
-      row.style.gap = "12px";
-      row.style.padding = "14px 0";
-      row.style.borderBottom = "1px solid var(--line, #d9e2dc)";
-
-      row.innerHTML = `
-        <div style="flex:1;">
-          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-            <b style="font-size:14px;">${s.title}</b>
-            ${
-              isDone
-                ? `<span class="chip" style="font-size:12px;">Done</span>`
-                : `<span class="chip" style="font-size:12px; opacity:.75;">To do</span>`
-            }
-          </div>
-          <div class="muted" style="margin-top:6px; font-size:13px; line-height:1.35;">
-            ${s.why}
-          </div>
-
-          ${
-            s.copyKey
-              ? `
-              <div style="margin-top:10px;">
-                <a href="#" data-toggle-copy="${s.id}" class="secondary" style="display:inline-flex; width:auto; padding:8px 10px;">
-                  ${isDone ? "Show suggested copy" : "Hide suggested copy"}
-                </a>
-
-                <div data-copy-wrap="${s.id}" style="margin-top:10px; ${isDone ? "display:none;" : ""}">
-                  <div class="muted" style="font-size:12px; margin-bottom:6px;">${s.copyLabel}</div>
-                  <textarea readonly style="width:100%; min-height:110px; resize:vertical; padding:10px; border-radius:12px; border:1px solid #d9e2dc; font-size:12px; line-height:1.35; background:rgba(16,32,24,.03);">${copyPack[s.copyKey]}</textarea>
-                  <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
-                    <button class="secondary" data-copy-btn="${s.id}" type="button" style="width:auto;">Copy text</button>
-                  </div>
-                </div>
-              </div>
-              `
-              : ``
-          }
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-          <a class="secondary" href="${s.openUrl}" target="_blank" rel="noopener" style="width:auto;">Open</a>
-          <button class="secondary" type="button" data-done-btn="${s.id}" style="width:auto;">
-            ${isDone ? "Mark not done" : "Mark done"}
-          </button>
-        </div>
-      `;
-
-      checklistEl.appendChild(row);
-    });
-
-    // Wire events
-    checklistEl.querySelectorAll("[data-done-btn]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-done-btn");
-        const done = loadDone();
-        done[id] = !done[id];
-        saveDone(done);
-        render();
-      });
-    });
-
-    checklistEl.querySelectorAll("[data-toggle-copy]").forEach((a) => {
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        const id = a.getAttribute("data-toggle-copy");
-        const wrap = checklistEl.querySelector(`[data-copy-wrap="${id}"]`);
-        if (!wrap) return;
-        const showing = wrap.style.display !== "none";
-        wrap.style.display = showing ? "none" : "block";
-        a.textContent = showing ? "Show suggested copy" : "Hide suggested copy";
-      });
-    });
-
-    checklistEl.querySelectorAll("[data-copy-btn]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const id = btn.getAttribute("data-copy-btn");
-        const step = steps.find((s) => s.id === id);
-        if (!step || !step.copyKey) return;
-
-        const ok = await copyText(copyPack[step.copyKey]);
-        const old = btn.textContent;
-        btn.textContent = ok ? "Copied" : "Copy failed";
-        setTimeout(() => (btn.textContent = old), 900);
-      });
-    });
-  }
-
-  render();
-})();
-
-  // ----------------------------
-  // 3) Copy invite (post-setup)
-  // ----------------------------
-  const copyBtn = document.getElementById("copyInviteBtn");
-  const inviteField = document.getElementById("inviteField");
-  const inviteInput = document.getElementById("inviteLink");
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  if (copyBtn && inviteInput) {
-    copyBtn.addEventListener("click", async () => {
-      if (inviteField) inviteField.style.display = "block";
-
-      inviteInput.focus();
-      inviteInput.select();
-
-      const ok = await copyText(inviteInput.value);
-      if (!ok) {
-        try {
-          document.execCommand("copy");
-        } catch {}
-      }
-
-      const old = copyBtn.textContent;
-      copyBtn.textContent = "Copied";
-      setTimeout(() => (copyBtn.textContent = old), 900);
-    });
-  }
-
-  // ----------------------------
-  // 5) Reset demo flow (works on ALL pages)
-  // ----------------------------
-  function resetFlow(kind) {
-    try {
-      if (kind === "all") {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      } else if (kind === "server") {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      } else if (kind === "community") {
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      }
-    } catch {}
-
-    const target =
-      kind === "server" ? "setup.html" :
-      kind === "community" ? "dashboard.html" :
-      "index.html";
-
-    window.location.href = target;
-  }
-
-  document.addEventListener("click", (e) => {
-    const el = e.target && e.target.closest ? e.target.closest("[data-reset]") : null;
-    if (!el) return;
-
-    e.preventDefault();
-    const kind = (el.getAttribute("data-reset") || "all").toLowerCase();
-    if (kind !== "all" && kind !== "server" && kind !== "community") return;
-
-    resetFlow(kind);
-  });
-
-  document.querySelectorAll("[data-reset='all']").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      try {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-        localStorage.removeItem("commonshub_stripe_connected");
-        localStorage.removeItem("commonshub_funding_enabled");
-        localStorage.removeItem("commonshub_funding_subs_on");
-        localStorage.removeItem("commonshub_funding_tips_on");
-      } catch {}
-      try { sessionStorage.removeItem("commonshub_in_setup_flow"); } catch {}
-      window.location.href = "index.html";
-    });
-  });
-
-  // ----------------------------
-  // 6) Funding UI (dashboard) — 3-state
-  // ----------------------------
-  (() => {
-    const stripeStatus = document.getElementById("stripeStatus");
-    const fundingStatus = document.getElementById("fundingStatus");
-    const fundingSubcopy = document.getElementById("fundingSubcopy");
-
-    const fundingPrimaryBtn = document.getElementById("fundingPrimaryBtn");
-    const fundingCtaWrap = document.getElementById("fundingCtaWrap");
-    const fundingLiveActions = document.getElementById("fundingLiveActions");
-
-    // Only run on pages that actually have the funding block
-    if (!fundingPrimaryBtn || !fundingCtaWrap || !fundingLiveActions) return;
-
-    let stripeConnected = false;
-    let fundingEnabled = false;
-
-    try {
-      stripeConnected = localStorage.getItem("commonshub_stripe_connected") === "1";
-      fundingEnabled = localStorage.getItem("commonshub_funding_enabled") === "1";
-    } catch {}
-
-    // Default: show single CTA, hide live actions
-    fundingCtaWrap.style.display = "flex";
-    fundingLiveActions.style.display = "none";
-
-    if (stripeStatus) stripeStatus.textContent = stripeConnected ? "Connected" : "Not connected";
-
-    // State A: Stripe not connected
-    if (!stripeConnected) {
-      if (fundingStatus) fundingStatus.textContent = "Off";
-      if (fundingSubcopy) {
-        fundingSubcopy.textContent =
-          "Optional. Participation is always free. Connect Stripe to enable community funding.";
-      }
-
-      fundingPrimaryBtn.textContent = "Enable community funding";
-      fundingPrimaryBtn.href = "funding-start.html";
-      return;
-    }
-
-    // State B: Stripe connected, funding off
-    if (!fundingEnabled) {
-      if (fundingStatus) fundingStatus.textContent = "Off";
-      if (fundingSubcopy) {
-        fundingSubcopy.textContent =
-          "Stripe is connected. Turn on community funding when you’re ready.";
-      }
-
-      fundingPrimaryBtn.textContent = "Turn on community funding";
-      fundingPrimaryBtn.href = "funding-options.html";
-      return;
-    }
-
-    // State C: Funding live
-    if (fundingStatus) fundingStatus.textContent = "Live";
-    if (fundingSubcopy) fundingSubcopy.textContent = "Community funding is live and shareable.";
-
-    fundingCtaWrap.style.display = "none";
-    fundingLiveActions.style.display = "block";
-  })();
-})();
-  // IMPORTANT: DO NOT preventDefault.
-  // Let the link open in a new tab, but flip the local flag here.
-  loginBtn.addEventListener("click", () => {
-    try {
-      localStorage.setItem(KEY, "1");
-    } catch {}
-
-    // Optional: refresh this tab shortly after so the Admin button appears
-    setTimeout(() => window.location.reload(), 150);
-  });
-})();
-
-// ----------------------------
-// 2.7) Guided setup checklist (dashboard)
-// ----------------------------
-(() => {
-  const host = "https://peakx.social"; // swap to provisioned instance domain later
-  const checklistEl = document.getElementById("setupChecklist");
-  if (!checklistEl) return;
-
-  const DONE_KEY = "commonshub_setup_checklist_done_v1";
-
-  // Suggested copy pack (in real product: derived from Blueprint + provisioning outputs)
-  const copyPack = {
-    about_short_description:
-      "A calm home for your community — chronological signal, visible participants, no algorithmic incentives.",
-    about_long_description:
-      "This space is designed for serious conversation that compounds over time. Posts are chronological. Participants are visible. Discussion is stewarded, not optimized for engagement.\n\nUse this as a working room: make claims, share sources, ask better questions, and build shared context.\n\nCommonshub handles hosting and invites. Mastodon provides the social layer.",
-    rules:
-      "• Be constructive.\n• Argue with sources when possible.\n• No harassment or pile-ons.\n• Keep the signal high.\n• Moderation exists to protect the room, not to win arguments.",
-    welcome_post:
-      "Welcome — this is the first thread in the room.\n\nStart here:\n• Introduce yourself (who you are + what you’re here to learn/build)\n• Share one question you’d love the community to tackle\n\nThis space is chronological. The goal is to build shared context over time.",
-    invite_message:
-      "I’m opening a new community space on Mastodon. It’s a calm, chronological room for thoughtful discussion — no ads, no algorithmic feed.\n\nJoin here: [INVITE LINK]\n\nIf you join, reply with an intro + what you hope to contribute."
-  };
-
-  // Checklist steps (edit/extend freely)
-  const steps = [
-    {
-      id: "login",
-      title: "Sign in to Mastodon",
-      why: "You’ll need an authenticated Mastodon session before admin links will work.",
-      openUrl: `${host}/auth/sign_in`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "owner_profile",
-      title: "Owner profile basics",
-      why: "Set display name + bio so the room feels hosted and credible.",
-      openUrl: `${host}/settings/profile`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "about",
-      title: "About text",
-      why: "This becomes the server description + sets expectations for new members.",
-      openUrl: `${host}/admin/settings/about`,
-      copyKey: "about_long_description",
-      copyLabel: "Suggested About / long description"
-    },
-    {
-      id: "registrations",
-      title: "Registrations",
-      why: "Decide whether signups are invite-only, approval-based, or open.",
-      openUrl: `${host}/admin/settings/registrations`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "branding",
-      title: "Branding",
-      why: "Optional. If you want: set icon + banner. (We’re not storing assets in MVP.)",
-      openUrl: `${host}/admin/settings/branding`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "discovery",
-      title: "Discovery",
-      why: "Controls how visible the instance is (directory, discovery surfaces).",
-      openUrl: `${host}/admin/settings/discovery`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "invites",
-      title: "Invites",
-      why: "Generate invite links and share them with your initial collaborators.",
-      openUrl: `${host}/admin/invites`,
-      copyKey: "invite_message",
-      copyLabel: "Suggested invite message"
-    }
-  ];
-
-  function loadDone() {
-    try {
-      return JSON.parse(localStorage.getItem(DONE_KEY) || "{}");
-    } catch {
-      return {};
-    }
-  }
-
-  function saveDone(done) {
-    try {
-      localStorage.setItem(DONE_KEY, JSON.stringify(done));
-    } catch {}
-  }
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  function render() {
-    const done = loadDone();
-    checklistEl.innerHTML = "";
-
-    steps.forEach((s) => {
-      const isDone = !!done[s.id];
-
-      const row = document.createElement("div");
-      row.className = "item";
-      row.style.alignItems = "flex-start";
-      row.style.gap = "12px";
-      row.style.padding = "14px 0";
-      row.style.borderBottom = "1px solid var(--line, #d9e2dc)";
-
-      row.innerHTML = `
-        <div style="flex:1;">
-          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-            <b style="font-size:14px;">${s.title}</b>
-            ${
-              isDone
-                ? `<span class="chip" style="font-size:12px;">Done</span>`
-                : `<span class="chip" style="font-size:12px; opacity:.75;">To do</span>`
-            }
-          </div>
-          <div class="muted" style="margin-top:6px; font-size:13px; line-height:1.35;">
-            ${s.why}
-          </div>
-
-          ${
-            s.copyKey
-              ? `
-              <div style="margin-top:10px;">
-                <a href="#" data-toggle-copy="${s.id}" class="secondary" style="display:inline-flex; width:auto; padding:8px 10px;">
-                  ${isDone ? "Show suggested copy" : "Hide suggested copy"}
-                </a>
-
-                <div data-copy-wrap="${s.id}" style="margin-top:10px; ${isDone ? "display:none;" : ""}">
-                  <div class="muted" style="font-size:12px; margin-bottom:6px;">${s.copyLabel}</div>
-                  <textarea readonly style="width:100%; min-height:110px; resize:vertical; padding:10px; border-radius:12px; border:1px solid #d9e2dc; font-size:12px; line-height:1.35; background:rgba(16,32,24,.03);">${copyPack[s.copyKey]}</textarea>
-                  <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
-                    <button class="secondary" data-copy-btn="${s.id}" type="button" style="width:auto;">Copy text</button>
-                  </div>
-                </div>
-              </div>
-              `
-              : ``
-          }
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-          <a class="secondary" href="${s.openUrl}" target="_blank" rel="noopener" style="width:auto;">Open</a>
-          <button class="secondary" type="button" data-done-btn="${s.id}" style="width:auto;">
-            ${isDone ? "Mark not done" : "Mark done"}
-          </button>
-        </div>
-      `;
-
-      checklistEl.appendChild(row);
-    });
-
-    // Wire events
-    checklistEl.querySelectorAll("[data-done-btn]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-done-btn");
-        const done = loadDone();
-        done[id] = !done[id];
-        saveDone(done);
-        render();
-      });
-    });
-
-    checklistEl.querySelectorAll("[data-toggle-copy]").forEach((a) => {
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        const id = a.getAttribute("data-toggle-copy");
-        const wrap = checklistEl.querySelector(`[data-copy-wrap="${id}"]`);
-        if (!wrap) return;
-        const showing = wrap.style.display !== "none";
-        wrap.style.display = showing ? "none" : "block";
-        a.textContent = showing ? "Show suggested copy" : "Hide suggested copy";
-      });
-    });
-
-    checklistEl.querySelectorAll("[data-copy-btn]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const id = btn.getAttribute("data-copy-btn");
-        const step = steps.find((s) => s.id === id);
-        if (!step || !step.copyKey) return;
-
-        const ok = await copyText(copyPack[step.copyKey]);
-        const old = btn.textContent;
-        btn.textContent = ok ? "Copied" : "Copy failed";
-        setTimeout(() => (btn.textContent = old), 900);
-      });
-    });
-  }
-
-  render();
-})();
-
-  // ----------------------------
-  // 3) Copy invite (post-setup)
-  // ----------------------------
-  const copyBtn = document.getElementById("copyInviteBtn");
-  const inviteField = document.getElementById("inviteField");
-  const inviteInput = document.getElementById("inviteLink");
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  if (copyBtn && inviteInput) {
-    copyBtn.addEventListener("click", async () => {
-      if (inviteField) inviteField.style.display = "block";
-
-      inviteInput.focus();
-      inviteInput.select();
-
-      const ok = await copyText(inviteInput.value);
-      if (!ok) {
-        try {
-          document.execCommand("copy");
-        } catch {}
-      }
-
-      const old = copyBtn.textContent;
-      copyBtn.textContent = "Copied";
-      setTimeout(() => (copyBtn.textContent = old), 900);
-    });
-  }
-
-  // ----------------------------
-  // 5) Reset demo flow (works on ALL pages)
-  // ----------------------------
-  function resetFlow(kind) {
-    try {
-      if (kind === "all") {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      } else if (kind === "server") {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      } else if (kind === "community") {
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      }
-    } catch {}
-
-    const target =
-      kind === "server" ? "setup.html" :
-      kind === "community" ? "dashboard.html" :
-      "index.html";
-
-    window.location.href = target;
-  }
-
-  document.addEventListener("click", (e) => {
-    const el = e.target && e.target.closest ? e.target.closest("[data-reset]") : null;
-    if (!el) return;
-
-    e.preventDefault();
-    const kind = (el.getAttribute("data-reset") || "all").toLowerCase();
-    if (kind !== "all" && kind !== "server" && kind !== "community") return;
-
-    resetFlow(kind);
-  });
-
-  document.querySelectorAll("[data-reset='all']").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      try {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-        localStorage.removeItem("commonshub_stripe_connected");
-        localStorage.removeItem("commonshub_funding_enabled");
-        localStorage.removeItem("commonshub_funding_subs_on");
-        localStorage.removeItem("commonshub_funding_tips_on");
-      } catch {}
-      try { sessionStorage.removeItem("commonshub_in_setup_flow"); } catch {}
-      window.location.href = "index.html";
-    });
-  });
-
-  // ----------------------------
-  // 6) Funding UI (dashboard) — 3-state
-  // ----------------------------
-  (() => {
-    const stripeStatus = document.getElementById("stripeStatus");
-    const fundingStatus = document.getElementById("fundingStatus");
-    const fundingSubcopy = document.getElementById("fundingSubcopy");
-
-    const fundingPrimaryBtn = document.getElementById("fundingPrimaryBtn");
-    const fundingCtaWrap = document.getElementById("fundingCtaWrap");
-    const fundingLiveActions = document.getElementById("fundingLiveActions");
-
-    // Only run on pages that actually have the funding block
-    if (!fundingPrimaryBtn || !fundingCtaWrap || !fundingLiveActions) return;
-
-    let stripeConnected = false;
-    let fundingEnabled = false;
-
-    try {
-      stripeConnected = localStorage.getItem("commonshub_stripe_connected") === "1";
-      fundingEnabled = localStorage.getItem("commonshub_funding_enabled") === "1";
-    } catch {}
-
-    // Default: show single CTA, hide live actions
-    fundingCtaWrap.style.display = "flex";
-    fundingLiveActions.style.display = "none";
-
-    if (stripeStatus) stripeStatus.textContent = stripeConnected ? "Connected" : "Not connected";
-
-    // State A: Stripe not connected
-    if (!stripeConnected) {
-      if (fundingStatus) fundingStatus.textContent = "Off";
-      if (fundingSubcopy) {
-        fundingSubcopy.textContent =
-          "Optional. Participation is always free. Connect Stripe to enable community funding.";
-      }
-
-      fundingPrimaryBtn.textContent = "Enable community funding";
-      fundingPrimaryBtn.href = "funding-start.html";
-      return;
-    }
-
-    // State B: Stripe connected, funding off
-    if (!fundingEnabled) {
-      if (fundingStatus) fundingStatus.textContent = "Off";
-      if (fundingSubcopy) {
-        fundingSubcopy.textContent =
-          "Stripe is connected. Turn on community funding when you’re ready.";
-      }
-
-      fundingPrimaryBtn.textContent = "Turn on community funding";
-      fundingPrimaryBtn.href = "funding-options.html";
-      return;
-    }
-
-    // State C: Funding live
-    if (fundingStatus) fundingStatus.textContent = "Live";
-    if (fundingSubcopy) fundingSubcopy.textContent = "Community funding is live and shareable.";
-
-    fundingCtaWrap.style.display = "none";
-    fundingLiveActions.style.display = "block";
-  })();
-})();
-  // IMPORTANT: DO NOT preventDefault.
-  // Let the link open in a new tab, but flip the local flag here.
-  loginBtn.addEventListener("click", () => {
-    try {
-      localStorage.setItem(KEY, "1");
-    } catch {}
-
-    // Optional: refresh this tab shortly after so the Admin button appears
-    setTimeout(() => window.location.reload(), 150);
-  });
-})();
-
-// ----------------------------
-// 2.7) Guided setup checklist (dashboard)
-// ----------------------------
-(() => {
-  const host = "https://peakx.social"; // swap to provisioned instance domain later
-  const checklistEl = document.getElementById("setupChecklist");
-  if (!checklistEl) return;
-
-  const DONE_KEY = "commonshub_setup_checklist_done_v1";
-
-  // Suggested copy pack (in real product: derived from Blueprint + provisioning outputs)
-  const copyPack = {
-    about_short_description:
-      "A calm home for your community — chronological signal, visible participants, no algorithmic incentives.",
-    about_long_description:
-      "This space is designed for serious conversation that compounds over time. Posts are chronological. Participants are visible. Discussion is stewarded, not optimized for engagement.\n\nUse this as a working room: make claims, share sources, ask better questions, and build shared context.\n\nCommonshub handles hosting and invites. Mastodon provides the social layer.",
-    rules:
-      "• Be constructive.\n• Argue with sources when possible.\n• No harassment or pile-ons.\n• Keep the signal high.\n• Moderation exists to protect the room, not to win arguments.",
-    welcome_post:
-      "Welcome — this is the first thread in the room.\n\nStart here:\n• Introduce yourself (who you are + what you’re here to learn/build)\n• Share one question you’d love the community to tackle\n\nThis space is chronological. The goal is to build shared context over time.",
-    invite_message:
-      "I’m opening a new community space on Mastodon. It’s a calm, chronological room for thoughtful discussion — no ads, no algorithmic feed.\n\nJoin here: [INVITE LINK]\n\nIf you join, reply with an intro + what you hope to contribute."
-  };
-
-  // Checklist steps (edit/extend freely)
-  const steps = [
-    {
-      id: "login",
-      title: "Sign in to Mastodon",
-      why: "You’ll need an authenticated Mastodon session before admin links will work.",
-      openUrl: `${host}/auth/sign_in`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "owner_profile",
-      title: "Owner profile basics",
-      why: "Set display name + bio so the room feels hosted and credible.",
-      openUrl: `${host}/settings/profile`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "about",
-      title: "About text",
-      why: "This becomes the server description + sets expectations for new members.",
-      openUrl: `${host}/admin/settings/about`,
-      copyKey: "about_long_description",
-      copyLabel: "Suggested About / long description"
-    },
-    {
-      id: "registrations",
-      title: "Registrations",
-      why: "Decide whether signups are invite-only, approval-based, or open.",
-      openUrl: `${host}/admin/settings/registrations`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "branding",
-      title: "Branding",
-      why: "Optional. If you want: set icon + banner. (We’re not storing assets in MVP.)",
-      openUrl: `${host}/admin/settings/branding`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "discovery",
-      title: "Discovery",
-      why: "Controls how visible the instance is (directory, discovery surfaces).",
-      openUrl: `${host}/admin/settings/discovery`,
-      copyKey: null,
-      copyLabel: null
-    },
-    {
-      id: "invites",
-      title: "Invites",
-      why: "Generate invite links and share them with your initial collaborators.",
-      openUrl: `${host}/admin/invites`,
-      copyKey: "invite_message",
-      copyLabel: "Suggested invite message"
-    }
-  ];
-
-  function loadDone() {
-    try {
-      return JSON.parse(localStorage.getItem(DONE_KEY) || "{}");
-    } catch {
-      return {};
-    }
-  }
-
-  function saveDone(done) {
-    try {
-      localStorage.setItem(DONE_KEY, JSON.stringify(done));
-    } catch {}
-  }
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  function render() {
-    const done = loadDone();
-    checklistEl.innerHTML = "";
-
-    steps.forEach((s) => {
-      const isDone = !!done[s.id];
-
-      const row = document.createElement("div");
-      row.className = "item";
-      row.style.alignItems = "flex-start";
-      row.style.gap = "12px";
-      row.style.padding = "14px 0";
-      row.style.borderBottom = "1px solid var(--line, #d9e2dc)";
-
-      row.innerHTML = `
-        <div style="flex:1;">
-          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-            <b style="font-size:14px;">${s.title}</b>
-            ${
-              isDone
-                ? `<span class="chip" style="font-size:12px;">Done</span>`
-                : `<span class="chip" style="font-size:12px; opacity:.75;">To do</span>`
-            }
-          </div>
-          <div class="muted" style="margin-top:6px; font-size:13px; line-height:1.35;">
-            ${s.why}
-          </div>
-
-          ${
-            s.copyKey
-              ? `
-              <div style="margin-top:10px;">
-                <a href="#" data-toggle-copy="${s.id}" class="secondary" style="display:inline-flex; width:auto; padding:8px 10px;">
-                  ${isDone ? "Show suggested copy" : "Hide suggested copy"}
-                </a>
-
-                <div data-copy-wrap="${s.id}" style="margin-top:10px; ${isDone ? "display:none;" : ""}">
-                  <div class="muted" style="font-size:12px; margin-bottom:6px;">${s.copyLabel}</div>
-                  <textarea readonly style="width:100%; min-height:110px; resize:vertical; padding:10px; border-radius:12px; border:1px solid #d9e2dc; font-size:12px; line-height:1.35; background:rgba(16,32,24,.03);">${copyPack[s.copyKey]}</textarea>
-                  <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
-                    <button class="secondary" data-copy-btn="${s.id}" type="button" style="width:auto;">Copy text</button>
-                  </div>
-                </div>
-              </div>
-              `
-              : ``
-          }
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-          <a class="secondary" href="${s.openUrl}" target="_blank" rel="noopener" style="width:auto;">Open</a>
-          <button class="secondary" type="button" data-done-btn="${s.id}" style="width:auto;">
-            ${isDone ? "Mark not done" : "Mark done"}
-          </button>
-        </div>
-      `;
-
-      checklistEl.appendChild(row);
-    });
-
-    // Wire events
-    checklistEl.querySelectorAll("[data-done-btn]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-done-btn");
-        const done = loadDone();
-        done[id] = !done[id];
-        saveDone(done);
-        render();
-      });
-    });
-
-    checklistEl.querySelectorAll("[data-toggle-copy]").forEach((a) => {
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        const id = a.getAttribute("data-toggle-copy");
-        const wrap = checklistEl.querySelector(`[data-copy-wrap="${id}"]`);
-        if (!wrap) return;
-        const showing = wrap.style.display !== "none";
-        wrap.style.display = showing ? "none" : "block";
-        a.textContent = showing ? "Show suggested copy" : "Hide suggested copy";
-      });
-    });
-
-    checklistEl.querySelectorAll("[data-copy-btn]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const id = btn.getAttribute("data-copy-btn");
-        const step = steps.find((s) => s.id === id);
-        if (!step || !step.copyKey) return;
-
-        const ok = await copyText(copyPack[step.copyKey]);
-        const old = btn.textContent;
-        btn.textContent = ok ? "Copied" : "Copy failed";
-        setTimeout(() => (btn.textContent = old), 900);
-      });
-    });
-  }
-
-  render();
-})();
-
-  // ----------------------------
-  // 3) Copy invite (post-setup)
-  // ----------------------------
-  const copyBtn = document.getElementById("copyInviteBtn");
-  const inviteField = document.getElementById("inviteField");
-  const inviteInput = document.getElementById("inviteLink");
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  if (copyBtn && inviteInput) {
-    copyBtn.addEventListener("click", async () => {
-      if (inviteField) inviteField.style.display = "block";
-
-      inviteInput.focus();
-      inviteInput.select();
-
-      const ok = await copyText(inviteInput.value);
-      if (!ok) {
-        try {
-          document.execCommand("copy");
-        } catch {}
-      }
-
-      const old = copyBtn.textContent;
-      copyBtn.textContent = "Copied";
-      setTimeout(() => (copyBtn.textContent = old), 900);
-    });
-  }
-
-  // ----------------------------
-  // 5) Reset demo flow (works on ALL pages)
-  // ----------------------------
-  function resetFlow(kind) {
-    try {
-      if (kind === "all") {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      } else if (kind === "server") {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      } else if (kind === "community") {
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-      }
-    } catch {}
-
-    const target =
-      kind === "server" ? "setup.html" :
-      kind === "community" ? "dashboard.html" :
-      "index.html";
-
-    window.location.href = target;
-  }
-
-  document.addEventListener("click", (e) => {
-    const el = e.target && e.target.closest ? e.target.closest("[data-reset]") : null;
-    if (!el) return;
-
-    e.preventDefault();
-    const kind = (el.getAttribute("data-reset") || "all").toLowerCase();
-    if (kind !== "all" && kind !== "server" && kind !== "community") return;
-
-    resetFlow(kind);
-  });
-
-  document.querySelectorAll("[data-reset='all']").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      try {
-        localStorage.removeItem("commonshub_server_live");
-        localStorage.removeItem("commonshub_setup_complete");
-        localStorage.removeItem("commonshub_setup_step");
-        localStorage.removeItem("commonshub_celebrate_once");
-        localStorage.removeItem("commonshub_mastodon_login_attempted");
-        localStorage.removeItem("commonshub_stripe_connected");
-        localStorage.removeItem("commonshub_funding_enabled");
-        localStorage.removeItem("commonshub_funding_subs_on");
-        localStorage.removeItem("commonshub_funding_tips_on");
-      } catch {}
-      try { sessionStorage.removeItem("commonshub_in_setup_flow"); } catch {}
-      window.location.href = "index.html";
-    });
-  });
-
-  // ----------------------------
-  // 6) Funding UI (dashboard) — 3-state
-  // ----------------------------
-  (() => {
-    const stripeStatus = document.getElementById("stripeStatus");
-    const fundingStatus = document.getElementById("fundingStatus");
-    const fundingSubcopy = document.getElementById("fundingSubcopy");
-
-    const fundingPrimaryBtn = document.getElementById("fundingPrimaryBtn");
-    const fundingCtaWrap = document.getElementById("fundingCtaWrap");
-    const fundingLiveActions = document.getElementById("fundingLiveActions");
-
-    // Only run on pages that actually have the funding block
-    if (!fundingPrimaryBtn || !fundingCtaWrap || !fundingLiveActions) return;
-
-    let stripeConnected = false;
-    let fundingEnabled = false;
-
-    try {
-      stripeConnected = localStorage.getItem("commonshub_stripe_connected") === "1";
-      fundingEnabled = localStorage.getItem("commonshub_funding_enabled") === "1";
-    } catch {}
-
-    // Default: show single CTA, hide live actions
-    fundingCtaWrap.style.display = "flex";
-    fundingLiveActions.style.display = "none";
-
-    if (stripeStatus) stripeStatus.textContent = stripeConnected ? "Connected" : "Not connected";
-
-    // State A: Stripe not connected
-    if (!stripeConnected) {
-      if (fundingStatus) fundingStatus.textContent = "Off";
-      if (fundingSubcopy) {
-        fundingSubcopy.textContent =
-          "Optional. Participation is always free. Connect Stripe to enable community funding.";
-      }
-
-      fundingPrimaryBtn.textContent = "Enable community funding";
-      fundingPrimaryBtn.href = "funding-start.html";
-      return;
-    }
-
-    // State B: Stripe connected, funding off
-    if (!fundingEnabled) {
-      if (fundingStatus) fundingStatus.textContent = "Off";
-      if (fundingSubcopy) {
-        fundingSubcopy.textContent =
-          "Stripe is connected. Turn on community funding when you’re ready.";
-      }
-
-      fundingPrimaryBtn.textContent = "Turn on community funding";
-      fundingPrimaryBtn.href = "funding-options.html";
-      return;
-    }
-
-    // State C: Funding live
-    if (fundingStatus) fundingStatus.textContent = "Live";
-    if (fundingSubcopy) fundingSubcopy.textContent = "Community funding is live and shareable.";
-
-    fundingCtaWrap.style.display = "none";
-    fundingLiveActions.style.display = "block";
-  })();
-  // ----------------------------
-// 4) DNS check UI (dashboard)
-// ----------------------------
-(() => {
-  const dnsPendingWrap = document.getElementById("dnsPendingWrap");
-  const dnsVerifiedWrap = document.getElementById("dnsVerifiedWrap");
-  const checkDnsBtn = document.getElementById("checkDnsBtn");
-  const headerSubcopy = document.getElementById("headerSubcopy");
-
-  if (!dnsPendingWrap || !dnsVerifiedWrap) return;
-
-  // Demo flags:
-  // commonshub domain => always verified
-  // external/custom domain => may need DNS check
-  let usesManagedDomain = true;
-  let dnsVerified = false;
-
-  try {
-    usesManagedDomain = localStorage.getItem("commonshub_uses_managed_domain") !== "0";
-    dnsVerified = localStorage.getItem("commonshub_dns_verified") === "1";
-  } catch {}
-
-  function renderDnsState() {
-    if (usesManagedDomain) {
-      dnsPendingWrap.style.display = "none";
-      dnsVerifiedWrap.style.display = "none";
-      return;
-    }
-
-    if (dnsVerified) {
-      dnsPendingWrap.style.display = "none";
-      dnsVerifiedWrap.style.display = "inline-flex";
-      if (headerSubcopy) {
-        headerSubcopy.textContent = "peakx.social · Running · DNS verified";
-      }
-    } else {
-      dnsPendingWrap.style.display = "inline-flex";
-      dnsVerifiedWrap.style.display = "none";
-      if (headerSubcopy) {
-        headerSubcopy.textContent = "peakx.social · Running · DNS pending";
-      }
-    }
-  }
-
-  if (checkDnsBtn) {
-    checkDnsBtn.addEventListener("click", () => {
-      checkDnsBtn.textContent = "Checking...";
-      checkDnsBtn.disabled = true;
-
-      setTimeout(() => {
-        dnsVerified = true;
-        try {
-          localStorage.setItem("commonshub_dns_verified", "1");
-        } catch {}
-
-        renderDnsState();
-      }, 900);
-    });
-  }
-
-  renderDnsState();
-})();
-// ----------------------------
-// DNS state demo
-// ----------------------------
-(() => {
-  const dnsPendingWrap = document.getElementById("dnsPendingWrap");
-  const dnsVerifiedWrap = document.getElementById("dnsVerifiedWrap");
-  const checkDnsBtn = document.getElementById("checkDnsBtn");
-  const headerSubcopy = document.getElementById("headerSubcopy");
-
-  if (!dnsPendingWrap || !dnsVerifiedWrap) return;
-
-  // Demo assumptions:
-  // managed domain => no DNS UI
-  // external/custom => can be pending or verified
-  let usesManagedDomain = true;
-  let dnsVerified = false;
-
-  try {
-    usesManagedDomain = localStorage.getItem("commonshub_uses_managed_domain") !== "0";
-    dnsVerified = localStorage.getItem("commonshub_dns_verified") === "1";
-  } catch {}
-
-  function renderDnsState() {
-    if (usesManagedDomain) {
-      dnsPendingWrap.style.display = "none";
-      dnsVerifiedWrap.style.display = "none";
-      if (headerSubcopy) {
-        headerSubcopy.textContent = "peakx.social · Running";
-      }
-      return;
-    }
-
-    if (dnsVerified) {
-      dnsPendingWrap.style.display = "none";
-      dnsVerifiedWrap.style.display = "inline-flex";
-      if (headerSubcopy) {
-        headerSubcopy.textContent = "peakx.social · Running · DNS verified";
-      }
-    } else {
-      dnsPendingWrap.style.display = "inline-flex";
-      dnsVerifiedWrap.style.display = "none";
-      if (headerSubcopy) {
-        headerSubcopy.textContent = "peakx.social · Running · DNS pending";
-      }
-    }
-  }
-
-  if (checkDnsBtn) {
-    checkDnsBtn.addEventListener("click", () => {
-      checkDnsBtn.textContent = "Checking...";
-      checkDnsBtn.disabled = true;
-
-      setTimeout(() => {
-        dnsVerified = true;
-        try {
-          localStorage.setItem("commonshub_dns_verified", "1");
-        } catch {}
-        renderDnsState();
-      }, 900);
-    });
-  }
-
-  renderDnsState();
-})();
-  // ----------------------------
-  // 7) DNS check mock (dashboard)
-  // ----------------------------
-  (() => {
-    const pendingWrap = document.getElementById("dnsPendingWrap");
-    const verifiedWrap = document.getElementById("dnsVerifiedWrap");
-    const checkDnsBtn = document.getElementById("checkDnsBtn");
-
-    if (!pendingWrap || !verifiedWrap || !checkDnsBtn) return;
-
-    checkDnsBtn.addEventListener("click", () => {
-      checkDnsBtn.textContent = "Checking...";
-
-      setTimeout(() => {
-        pendingWrap.style.display = "none";
-        verifiedWrap.style.display = "inline-flex";
-      }, 700);
-    });
-  })();
-  // ----------------------------
-  // 7) DNS check mock (dashboard)
-  // ----------------------------
-  (() => {
-    const body = document.body;
-    const pendingWrap = document.getElementById("dnsPendingWrap");
-    const verifiedWrap = document.getElementById("dnsVerifiedWrap");
-    const checkDnsBtn = document.getElementById("checkDnsBtn");
-
-    if (!pendingWrap || !verifiedWrap || !checkDnsBtn) return;
-
-    const domainType = body.getAttribute("data-domain-type") || "commonshub";
-    let dnsStatus = body.getAttribute("data-dns-status") || "verified";
-
-    function renderDnsState() {
-      pendingWrap.style.display = "none";
-      verifiedWrap.style.display = "none";
-
-      // Commonshub domains are always valid, so show nothing extra
-      if (domainType === "commonshub") return;
-
-      if (dnsStatus === "pending") {
-        pendingWrap.style.display = "inline-flex";
-      } else if (dnsStatus === "verified") {
-        verifiedWrap.style.display = "inline-flex";
-      }
-    }
-
-    checkDnsBtn.addEventListener("click", () => {
-      checkDnsBtn.textContent = "Checking...";
-
-      setTimeout(() => {
-        dnsStatus = "verified";
-        body.setAttribute("data-dns-status", "verified");
-        checkDnsBtn.textContent = "Check DNS";
-        renderDnsState();
-      }, 700);
-    });
 
     renderDnsState();
-  })();
+  }
+
   // ----------------------------
-  // 7) Service tabs (dashboard)
+  // 4) Mastodon access buttons
+  // Show "Sign in" first, then "Mastodon dashboard"
+  // after login button has been clicked once
   // ----------------------------
-  (() => {
-    const tabs = document.querySelectorAll("[data-service-tab]");
-    const panels = document.querySelectorAll("[data-service-panel]");
+  function setupMastodonAdminButtons() {
+    const loginBtn = document.getElementById("mastodonLoginBtn");
+    const adminBtn = document.getElementById("mastodonAdminBtn");
+    const hint = document.getElementById("mastodonHint");
+
+    if (!loginBtn || !adminBtn) return;
+
+    const KEY = "commonshub_mastodon_login_attempted";
+    const loginAttempted = storage.get(KEY) === "1";
+
+    loginBtn.style.display = loginAttempted ? "none" : "inline-flex";
+    adminBtn.style.display = loginAttempted ? "inline-flex" : "none";
+    if (hint) hint.style.display = loginAttempted ? "none" : "block";
+
+    loginBtn.addEventListener("click", () => {
+      storage.set(KEY, "1");
+      setTimeout(() => window.location.reload(), 150);
+    });
+  }
+
+  // ----------------------------
+  // 5) Guided setup checklist
+  // ----------------------------
+  function setupChecklist() {
+    const checklistEl = document.getElementById("setupChecklist");
+    if (!checklistEl) return;
+
+    const host = "https://peakx.social";
+    const DONE_KEY = "commonshub_setup_checklist_done_v1";
+
+    const copyPack = {
+      about_short_description:
+        "A calm home for your community — chronological signal, visible participants, no algorithmic incentives.",
+      about_long_description:
+        "This space is designed for serious conversation that compounds over time. Posts are chronological. Participants are visible. Discussion is stewarded, not optimized for engagement.\n\nUse this as a working room: make claims, share sources, ask better questions, and build shared context.\n\nCommonshub handles hosting and invites. Mastodon provides the social layer.",
+      rules:
+        "• Be constructive.\n• Argue with sources when possible.\n• No harassment or pile-ons.\n• Keep the signal high.\n• Moderation exists to protect the room, not to win arguments.",
+      welcome_post:
+        "Welcome — this is the first thread in the room.\n\nStart here:\n• Introduce yourself (who you are + what you’re here to learn/build)\n• Share one question you’d love the community to tackle\n\nThis space is chronological. The goal is to build shared context over time.",
+      invite_message:
+        "I’m opening a new community space on Mastodon. It’s a calm, chronological room for thoughtful discussion — no ads, no algorithmic feed.\n\nJoin here: [INVITE LINK]\n\nIf you join, reply with an intro + what you hope to contribute.",
+    };
+
+    const steps = [
+      {
+        id: "login",
+        title: "Sign in to Mastodon",
+        why: "You’ll need an authenticated Mastodon session before admin links will work.",
+        openUrl: `${host}/auth/sign_in`,
+      },
+      {
+        id: "owner_profile",
+        title: "Owner profile basics",
+        why: "Set display name + bio so the room feels hosted and credible.",
+        openUrl: `${host}/settings/profile`,
+      },
+      {
+        id: "about",
+        title: "About text",
+        why: "This becomes the server description + sets expectations for new members.",
+        openUrl: `${host}/admin/settings/about`,
+        copyKey: "about_long_description",
+        copyLabel: "Suggested About / long description",
+      },
+      {
+        id: "registrations",
+        title: "Registrations",
+        why: "Decide whether signups are invite-only, approval-based, or open.",
+        openUrl: `${host}/admin/settings/registrations`,
+      },
+      {
+        id: "branding",
+        title: "Branding",
+        why: "Optional. If you want: set icon + banner. (We’re not storing assets in MVP.)",
+        openUrl: `${host}/admin/settings/branding`,
+      },
+      {
+        id: "discovery",
+        title: "Discovery",
+        why: "Controls how visible the instance is (directory, discovery surfaces).",
+        openUrl: `${host}/admin/settings/discovery`,
+      },
+      {
+        id: "invites",
+        title: "Invites",
+        why: "Generate invite links and share them with your initial collaborators.",
+        openUrl: `${host}/admin/invites`,
+        copyKey: "invite_message",
+        copyLabel: "Suggested invite message",
+      },
+    ];
+
+    function loadDone() {
+      try {
+        return JSON.parse(storage.get(DONE_KEY, "{}"));
+      } catch {
+        return {};
+      }
+    }
+
+    function saveDone(done) {
+      storage.set(DONE_KEY, JSON.stringify(done));
+    }
+
+    function render() {
+      const done = loadDone();
+      checklistEl.innerHTML = "";
+
+      steps.forEach((step) => {
+        const isDone = !!done[step.id];
+        const row = document.createElement("div");
+        row.className = "item";
+        row.style.alignItems = "flex-start";
+        row.style.gap = "12px";
+        row.style.padding = "14px 0";
+        row.style.borderBottom = "1px solid var(--line, #d9e2dc)";
+
+        row.innerHTML = `
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <b style="font-size:14px;">${step.title}</b>
+              ${
+                isDone
+                  ? `<span class="chip" style="font-size:12px;">Done</span>`
+                  : `<span class="chip" style="font-size:12px; opacity:.75;">To do</span>`
+              }
+            </div>
+
+            <div class="muted" style="margin-top:6px; font-size:13px; line-height:1.35;">
+              ${step.why}
+            </div>
+
+            ${
+              step.copyKey
+                ? `
+                <div style="margin-top:10px;">
+                  <a
+                    href="#"
+                    data-toggle-copy="${step.id}"
+                    class="secondary"
+                    style="display:inline-flex; width:auto; padding:8px 10px;"
+                  >
+                    ${isDone ? "Show suggested copy" : "Hide suggested copy"}
+                  </a>
+
+                  <div data-copy-wrap="${step.id}" style="margin-top:10px; ${isDone ? "display:none;" : ""}">
+                    <div class="muted" style="font-size:12px; margin-bottom:6px;">
+                      ${step.copyLabel}
+                    </div>
+                    <textarea
+                      readonly
+                      style="width:100%; min-height:110px; resize:vertical; padding:10px; border-radius:12px; border:1px solid #d9e2dc; font-size:12px; line-height:1.35; background:rgba(16,32,24,.03);"
+                    >${copyPack[step.copyKey]}</textarea>
+                    <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+                      <button
+                        class="secondary"
+                        data-copy-btn="${step.id}"
+                        type="button"
+                        style="width:auto;"
+                      >
+                        Copy text
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                `
+                : ""
+            }
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+            <a
+              class="secondary"
+              href="${step.openUrl}"
+              target="_blank"
+              rel="noopener"
+              style="width:auto;"
+            >
+              Open
+            </a>
+            <button
+              class="secondary"
+              type="button"
+              data-done-btn="${step.id}"
+              style="width:auto;"
+            >
+              ${isDone ? "Mark not done" : "Mark done"}
+            </button>
+          </div>
+        `;
+
+        checklistEl.appendChild(row);
+      });
+
+      checklistEl.querySelectorAll("[data-done-btn]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-done-btn");
+          const done = loadDone();
+          done[id] = !done[id];
+          saveDone(done);
+          render();
+        });
+      });
+
+      checklistEl.querySelectorAll("[data-toggle-copy]").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = link.getAttribute("data-toggle-copy");
+          const wrap = checklistEl.querySelector(`[data-copy-wrap="${id}"]`);
+          if (!wrap) return;
+
+          const showing = wrap.style.display !== "none";
+          wrap.style.display = showing ? "none" : "block";
+          link.textContent = showing
+            ? "Show suggested copy"
+            : "Hide suggested copy";
+        });
+      });
+
+      checklistEl.querySelectorAll("[data-copy-btn]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const id = btn.getAttribute("data-copy-btn");
+          const step = steps.find((s) => s.id === id);
+          if (!step?.copyKey) return;
+
+          const ok = await copyText(copyPack[step.copyKey]);
+          flashButtonText(btn, ok ? "Copied" : "Copy failed");
+        });
+      });
+    }
+
+    render();
+  }
+
+  // ----------------------------
+  // 6) Copy invite link
+  // ----------------------------
+  function setupInviteCopy() {
+    const copyBtn = document.getElementById("copyInviteBtn");
+    const inviteField = document.getElementById("inviteField");
+    const inviteInput = document.getElementById("inviteLink");
+
+    if (!copyBtn || !inviteInput) return;
+
+    copyBtn.addEventListener("click", async () => {
+      if (inviteField) inviteField.style.display = "block";
+
+      inviteInput.focus();
+      inviteInput.select();
+
+      const ok = await copyText(inviteInput.value);
+      flashButtonText(copyBtn, ok ? "Copied" : "Copy failed");
+    });
+  }
+
+  // ----------------------------
+  // 7) Reset flow
+  // ----------------------------
+  function resetFlow(kind) {
+    const baseKeys = [
+      "commonshub_server_live",
+      "commonshub_setup_complete",
+      "commonshub_setup_step",
+      "commonshub_celebrate_once",
+      "commonshub_mastodon_login_attempted",
+    ];
+
+    const fundingKeys = [
+      "commonshub_stripe_connected",
+      "commonshub_funding_enabled",
+      "commonshub_funding_subs_on",
+      "commonshub_funding_tips_on",
+    ];
+
+    if (kind === "all" || kind === "server") {
+      [...baseKeys, ...fundingKeys].forEach((key) => storage.remove(key));
+    } else if (kind === "community") {
+      [
+        "commonshub_setup_complete",
+        "commonshub_setup_step",
+        "commonshub_celebrate_once",
+        "commonshub_mastodon_login_attempted",
+      ].forEach((key) => storage.remove(key));
+    }
+
+    try {
+      sessionStorage.removeItem("commonshub_in_setup_flow");
+    } catch {}
+
+    const target =
+      kind === "server"
+        ? "setup.html"
+        : kind === "community"
+        ? "dashboard.html"
+        : "index.html";
+
+    window.location.href = target;
+  }
+
+  function setupResetHandlers() {
+    document.addEventListener("click", (e) => {
+      const el = e.target?.closest?.("[data-reset]");
+      if (!el) return;
+
+      e.preventDefault();
+      const kind = (el.getAttribute("data-reset") || "all").toLowerCase();
+
+      if (!["all", "server", "community"].includes(kind)) return;
+      resetFlow(kind);
+    });
+  }
+
+  // ----------------------------
+  // 8) Funding UI (dashboard)
+  // ----------------------------
+  function setupFundingUi() {
+    const stripeStatus = document.getElementById("stripeStatus");
+    const fundingStatus = document.getElementById("fundingStatus");
+    const fundingSubcopy = document.getElementById("fundingSubcopy");
+    const fundingPrimaryBtn = document.getElementById("fundingPrimaryBtn");
+    const fundingCtaWrap = document.getElementById("fundingCtaWrap");
+    const fundingLiveActions = document.getElementById("fundingLiveActions");
+
+    if (!fundingPrimaryBtn || !fundingCtaWrap || !fundingLiveActions) return;
+
+    const stripeConnected = storage.get("commonshub_stripe_connected") === "1";
+    const fundingEnabled = storage.get("commonshub_funding_enabled") === "1";
+
+    fundingCtaWrap.style.display = "flex";
+    fundingLiveActions.style.display = "none";
+
+    if (stripeStatus) {
+      stripeStatus.textContent = stripeConnected ? "Connected" : "Not connected";
+    }
+
+    if (!stripeConnected) {
+      if (fundingStatus) fundingStatus.textContent = "Off";
+      if (fundingSubcopy) {
+        fundingSubcopy.textContent =
+          "Optional. Participation is always free. Connect Stripe to enable community funding.";
+      }
+      fundingPrimaryBtn.textContent = "Enable community funding";
+      fundingPrimaryBtn.href = "funding-start.html";
+      return;
+    }
+
+    if (!fundingEnabled) {
+      if (fundingStatus) fundingStatus.textContent = "Off";
+      if (fundingSubcopy) {
+        fundingSubcopy.textContent =
+          "Stripe is connected. Turn on community funding when you’re ready.";
+      }
+      fundingPrimaryBtn.textContent = "Turn on community funding";
+      fundingPrimaryBtn.href = "funding-options.html";
+      return;
+    }
+
+    if (fundingStatus) fundingStatus.textContent = "Live";
+    if (fundingSubcopy) {
+      fundingSubcopy.textContent = "Community funding is live and shareable.";
+    }
+
+    fundingCtaWrap.style.display = "none";
+    fundingLiveActions.style.display = "block";
+  }
+
+  // ----------------------------
+  // 9) Service tabs
+  // ----------------------------
+  function setupServiceTabs() {
+    const tabs = Array.from(document.querySelectorAll("[data-service-tab]"));
+    const panels = Array.from(document.querySelectorAll("[data-service-panel]"));
 
     if (!tabs.length || !panels.length) return;
 
+    function activateTab(name) {
+      tabs.forEach((tab) => {
+        const active = tab.getAttribute("data-service-tab") === name;
+        tab.classList.toggle("active", active);
+      });
+
+      panels.forEach((panel) => {
+        const show = panel.getAttribute("data-service-panel") === name;
+        panel.classList.toggle("active", show);
+        panel.style.display = show ? "block" : "none";
+      });
+    }
+
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
-        const target = tab.getAttribute("data-service-tab");
-
-        tabs.forEach((t) => t.classList.remove("active"));
-        panels.forEach((p) => {
-          const matches = p.getAttribute("data-service-panel") === target;
-          p.classList.toggle("active", matches);
-          p.style.display = matches ? "block" : "none";
-        });
-
-        tab.classList.add("active");
+        activateTab(tab.getAttribute("data-service-tab"));
       });
     });
-  })();
+
+    const initial =
+      document.querySelector("[data-service-tab].active")?.getAttribute("data-service-tab") ||
+      "mastodon";
+
+    activateTab(initial);
+  }
 
   // ----------------------------
-  // 8) DNS check mock (dashboard)
+  // Init
   // ----------------------------
-  (() => {
-    const body = document.body;
-    const pendingWrap = document.getElementById("dnsPendingWrap");
-    const verifiedWrap = document.getElementById("dnsVerifiedWrap");
-    const checkDnsBtn = document.getElementById("checkDnsBtn");
-
-    if (!pendingWrap || !verifiedWrap || !checkDnsBtn) return;
-
-    const domainType = body.getAttribute("data-domain-type") || "commonshub";
-    let dnsStatus = body.getAttribute("data-dns-status") || "verified";
-
-    function renderDnsState() {
-      pendingWrap.style.display = "none";
-      verifiedWrap.style.display = "none";
-
-      // Commonshub domains don't need DNS validation UI
-      if (domainType === "commonshub") return;
-
-      if (dnsStatus === "pending") {
-        pendingWrap.style.display = "inline-flex";
-      } else if (dnsStatus === "verified") {
-        verifiedWrap.style.display = "inline-flex";
-      }
-    }
-
-    checkDnsBtn.addEventListener("click", () => {
-      checkDnsBtn.textContent = "Checking...";
-
-      setTimeout(() => {
-        dnsStatus = "verified";
-        body.setAttribute("data-dns-status", "verified");
-        checkDnsBtn.textContent = "Check DNS";
-        renderDnsState();
-      }, 700);
-    });
-
-    renderDnsState();
-  })();
-
-// ----------------------------
-// 7) DNS status UI (dashboard header)
-// ----------------------------
-(() => {
-  const body = document.body;
-  const dnsPendingWrap = document.getElementById("dnsPendingWrap");
-  const dnsVerifiedWrap = document.getElementById("dnsVerifiedWrap");
-  const checkDnsBtn = document.getElementById("checkDnsBtn");
-
-  if (!dnsPendingWrap || !dnsVerifiedWrap) return;
-
-  // Priority:
-  // 1. localStorage override
-  // 2. body data attributes
-  let domainType = body?.dataset?.domainType || "commonshub";
-  let dnsStatus = "verified";
-
-  try {
-    domainType = localStorage.getItem("commonshub_domain_type") || domainType;
-    dnsStatus = localStorage.getItem("commonshub_dns_status") || body?.dataset?.dnsStatus || "verified";
-  } catch {
-    dnsStatus = body?.dataset?.dnsStatus || "verified";
-  }
-
-  function renderDnsState() {
-    const isManagedDomain = domainType === "commonshub";
-
-    if (isManagedDomain) {
-      dnsPendingWrap.style.display = "none";
-      dnsVerifiedWrap.style.display = "none";
-      return;
-    }
-
-    if (dnsStatus === "verified") {
-      dnsPendingWrap.style.display = "none";
-      dnsVerifiedWrap.style.display = "inline-flex";
-    } else {
-      dnsPendingWrap.style.display = "inline-flex";
-      dnsVerifiedWrap.style.display = "none";
-    }
-  }
-
-  renderDnsState();
-
-  if (checkDnsBtn) {
-    checkDnsBtn.addEventListener("click", () => {
-      checkDnsBtn.textContent = "Checking...";
-
-      setTimeout(() => {
-        dnsStatus = "verified";
-        try {
-          localStorage.setItem("commonshub_dns_status", "verified");
-        } catch {}
-
-        renderDnsState();
-      }, 900);
-    });
-  }
-})();
-
-// ----------------------------
-// 8) Service tabs (dashboard)
-// ----------------------------
-(() => {
-  const tabs = Array.from(document.querySelectorAll("[data-service-tab]"));
-  const panels = Array.from(document.querySelectorAll("[data-service-panel]"));
-
-  if (!tabs.length || !panels.length) return;
-
-  function activateTab(name) {
-    tabs.forEach((tab) => {
-      tab.classList.toggle("active", tab.getAttribute("data-service-tab") === name);
-    });
-
-    panels.forEach((panel) => {
-      const show = panel.getAttribute("data-service-panel") === name;
-      panel.style.display = show ? "block" : "none";
-      panel.classList.toggle("active", show);
-    });
-  }
-
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      activateTab(tab.getAttribute("data-service-tab"));
-    });
-  });
-
-  const initial = document.querySelector("[data-service-tab].active")?.getAttribute("data-service-tab") || "mastodon";
-  activateTab(initial);
-})();
+  setupNavToggle();
+  setupDashboardState();
+  setupDnsState();
+  setupMastodonAdminButtons();
+  setupChecklist();
+  setupInviteCopy();
+  setupResetHandlers();
+  setupFundingUi();
+  setupServiceTabs();
 })();
