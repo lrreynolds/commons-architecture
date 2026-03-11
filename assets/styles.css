@@ -602,7 +602,7 @@ body.dashboard #headerSubcopy{
 }
 
 #headerDomain{
-   font-weight:600;
+  font-weight:600;
   opacity:.9;
 }
 
@@ -617,37 +617,38 @@ body.dashboard #headerSubcopy{
   display:inline-flex;
   align-items:center;
   font-weight:700;
-   line-height:1;
+  line-height:1;
+}
+
+body.dashboard .dnsCheckBtn{
+  margin-left:6px;
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#ffffff;
+  color:var(--cardText);
+  border:1px solid rgba(0,0,0,.15);
+  box-shadow:none;
 }
 
 body.dashboard .status.running{
-  color:#3cc37a;  /
+  color:#3cc37a;
 }
 
 body.dashboard .status.pending{
-   color:#f4a623;  /*
+   color:#f4a623;
 }
 
 body.dashboard .status.verified{
   color:#3cc37a;
 }
 
-body.dashboard .dnsCheckBtn{
-margin-left:6px;
 
-  padding:6px 14px;
-  border-radius:999px;
-
-  font-size:12px;
-  font-weight:700;
-  line-height:1;
-
-  display:inline-flex;
-  align-items:center;
-
-  background:#ffffff;
-  border:1px solid rgba(0,0,0,.15);
-}
 
 /* =========================================================
    Dashboard tabs
