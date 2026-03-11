@@ -496,7 +496,7 @@ body.dashboard{
 
 body.dashboard .wrap{
   grid-template-columns:1fr;
-  max-width:1400px;
+  max-width:900px;
 }
 
 body.dashboard .stage{
@@ -599,11 +599,13 @@ body.dashboard #headerSubcopy{
   margin-top:10px;
   font-size:14px;
   line-height:1;
+  color:var(--dashMuted);
 }
 
 #headerDomain{
+  color:var(--dashText);
   font-weight:600;
-  opacity:.9;
+  opacity:1;
 }
 
 .dnsMeta{
