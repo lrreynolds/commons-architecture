@@ -964,6 +964,10 @@ body.dashboard #fundingLiveActions{
   display:block;
 }
 
+.setupStep.done.open .setupStepDoneBar{
+  display:none;
+}
+
 .setupStepDoneRow{
   display:flex;
   justify-content:space-between;
@@ -1084,7 +1088,4 @@ body.dashboard #fundingLiveActions{
 
 .setupActions .secondary{
   width:auto;
-}
-.setupStep.done .setupStepHeader{
-  display:none;
 }
