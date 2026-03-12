@@ -660,6 +660,21 @@
     updateProgress();
   }
 
+    function markStepDone(step) {
+      const textWrap = step.querySelector(".stepTextWrap");
+      const doneBar = step.querySelector(".setupStepDoneBar");
+
+      if (textWrap && doneBar && !doneBar.contains(textWrap)) {
+        textWrap.classList.add("is-hidden");
+        doneBar.appendChild(textWrap);
+      }
+
+      setStepState(step, "done");
+      openNextStep(step);
+      updateProgress();
+    }
+
+
   // ----------------------------
   // Init
   // ----------------------------
