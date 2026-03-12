@@ -1097,3 +1097,16 @@ body.dashboard #fundingLiveActions{
 .setupStep.open .setupStepDoneBar{
   display:none;
 }
+
+.stepPasteGroup{
+  margin-top:14px;
+}
+
+.stepPasteGroup label{
+  display:block;
+  margin-bottom:6px;
+  font-size:12px;
+  font-weight:700;
+  color:rgba(15,23,19,.68);
+}
+
