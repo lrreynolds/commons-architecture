@@ -577,18 +577,38 @@ function setupLaunchSteps() {
 
   if (!steps.length || !progressBar || !progressText || !progressPercent) return;
 
-  function setToggleLabel(step) {
-    const toggleLink = step.querySelector(".stepToggleLink");
-    if (!toggleLink) return;
+function setToggleLabel(step) {
+  const toggleLink = step.querySelector(".stepToggleLink");
+  const doneManageBtn = step.querySelector(".reopenStepBtn");
+
+if (toggleLink) {
+  toggleLink.addEventListener("click", (e) => {
+    e.preventDefault();
 
     if (step.classList.contains("open")) {
-      toggleLink.textContent = "Close";
-    } else if (step.classList.contains("done")) {
-      toggleLink.textContent = "Manage";
+      closeStep(step);
     } else {
-      toggleLink.textContent = "Setup";
+      openStep(step);
     }
+  });
+}
+
+const reopenBtn = step.querySelector(".reopenStepBtn");
+
+if (reopenBtn) {
+  reopenBtn.addEventListener("click", () => {
+    if (step.classList.contains("open")) {
+      closeStep(step);
+    } else {
+      openStep(step);
+    }
+  });
+}
+
+  if (doneManageBtn) {
+    doneManageBtn.textContent = step.classList.contains("open") ? "Close" : "Manage";
   }
+}
 
   function syncStepUi(step) {
     const textWrap = step.querySelector(".stepTextWrap");
@@ -641,35 +661,50 @@ function setupLaunchSteps() {
     progressPercent.textContent = `${Math.round(percent)}% complete`;
   }
 
-  function markStepDone(step) {
-    step.classList.remove("locked", "open");
+function markStepDone(step) {
+  const textWrap = step.querySelector(".stepTextWrap");
+
+  step.dataset.completed = "true";
+
+  if (textWrap) {
+    textWrap.classList.add("is-hidden");
+  }
+
+  step.classList.remove("locked", "open");
+  step.classList.add("done");
+
+  syncStepUi(step);
+  updateProgress();
+}
+
+function openStep(step) {
+  closeOtherOpenSteps(step);
+
+  step.classList.remove("locked", "open");
+  step.classList.add("open");
+
+  if (step.dataset.completed === "true") {
     step.classList.add("done");
-    syncStepUi(step);
-    updateProgress();
+  } else {
+    step.classList.remove("done");
   }
 
-  function openStep(step) {
-    closeOtherOpenSteps(step);
-    step.classList.remove("locked", "done");
-    if (step.dataset.completed === "true") {
-      step.classList.add("open", "done");
-    } else {
-      step.classList.add("open");
-    }
-    syncStepUi(step);
+  syncStepUi(step);
+}
+
+function closeStep(step) {
+  step.classList.remove("open");
+
+  if (step.dataset.completed === "true") {
+    step.classList.add("done");
+    step.classList.remove("locked");
+  } else {
+    step.classList.add("locked");
+    step.classList.remove("done");
   }
 
-  function closeStep(step) {
-    step.classList.remove("open");
-
-    if (step.classList.contains("done") || step.dataset.completed === "true") {
-      step.classList.add("done");
-    } else {
-      step.classList.add("locked");
-    }
-
-    syncStepUi(step);
-  }
+  syncStepUi(step);
+}
 
   steps.forEach((step) => {
     const doneBtn = step.querySelector(".doneBtn");
