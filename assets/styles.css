@@ -887,6 +887,224 @@ body.dashboard #fundingLiveActions{
     align-items:flex-start;
   }
 
+
+/* =========================================================
+   Launch setup page
+   ========================================================= */
+
+.setupCard{
+  padding:18px;
+}
+
+.setupSteps{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.setupStep{
+  border-radius:18px;
+  border:1px solid rgba(15,23,19,.10);
+  background:rgba(255,255,255,.55);
+  padding:14px;
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease,
+    opacity .18s ease;
+}
+
+.setupStep.locked{
+  opacity:.72;
+}
+
+.setupStep.open{
+  background:rgba(255,255,255,.72);
+  border-color:rgba(15,23,19,.12);
+  box-shadow:0 8px 24px rgba(16,32,24,.06);
+}
+
+.setupStep.done{
+  background:rgba(31,111,74,.08);
+  border-color:rgba(31,111,74,.22);
+}
+
+.setupStepHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.setupStepTitle{
+  font-size:17px;
+  font-weight:900;
+  line-height:1.2;
+  margin:0;
+}
+
+.setupStepStatus{
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
+  border-radius:999px;
+  padding:6px 10px;
+  border:1px solid rgba(15,23,19,.10);
+  background:rgba(255,255,255,.65);
+  color:rgba(15,23,19,.58);
+}
+
+.setupStep.open .setupStepStatus{
+  color:var(--accent);
+  border-color:rgba(31,111,74,.25);
+  background:rgba(31,111,74,.08);
+}
+
+.setupStep.done .setupStepStatus{
+  display:none;
+}
+
+.setupStepSummary{
+  margin-top:6px;
+  color:rgba(15,23,19,.68);
+  font-size:14px;
+}
+
+.setupStepDetails{
+  margin-top:12px;
+  display:none;
+}
+
+.setupStep.open .setupStepDetails{
+  display:block;
+}
+
+.setupActions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.setupActions .secondary,
+.setupActions .primary{
+  width:auto;
+}
+
+.setupActions .primary{
+  flex:1;
+  min-width:220px;
+}
+
+.stepTextWrap{
+  margin-top:12px;
+}
+
+.stepTextWrap textarea{
+  min-height:140px;
+}
+
+.stepTextWrap.is-hidden{
+  display:none;
+}
+
+.progressMeta{
+  text-align:right;
+}
+
+.progressMeta b{
+  display:block;
+  font-size:16px;
+}
+
+/* done state */
+.setupStepDoneBar{
+  display:none;
+  margin-top:10px;
+}
+
+.setupStep.done .setupStepDoneBar{
+  display:block;
+}
+
+.setupStepDoneRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.setupStepDoneRow + .setupStepDoneRow{
+  margin-top:4px;
+}
+
+.doneTitle{
+  font-size:15px;
+  font-weight:800;
+  color:#215f43;
+}
+
+.doneSummary{
+  font-size:14px;
+  color:rgba(15,23,19,.68);
+  min-width:0;
+}
+
+.doneLinks{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex:0 0 auto;
+}
+
+.doneOpenLink,
+.doneTextLink{
+  appearance:none;
+  border:none;
+  background:none;
+  padding:0;
+  margin:0;
+  font-size:13px;
+  font-weight:700;
+  color:var(--accent);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.doneOpenLink:hover,
+.doneTextLink:hover{
+  text-decoration:underline;
+}
+
+.setupStep.done .stepTextWrap{
+  margin-top:8px;
+}
+
+@media (max-width:760px){
+  .setupStepHeader{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .progressMeta{
+    text-align:left;
+  }
+
+  .setupActions{
+    flex-direction:column;
+  }
+
+  .setupActions .primary,
+  .setupActions .secondary{
+    width:100%;
+  }
+
+  .setupStepDoneRow{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
   .doneLinks{
     justify-content:flex-start;
   }
