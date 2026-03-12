@@ -567,118 +567,127 @@ activateTab(initial);
 // ----------------------------
 // 10) Launch setup steps page
 // ----------------------------
+
 function setupLaunchSteps() {
-const TOTAL_STEPS = 7;
-const steps = Array.from(document.querySelectorAll(".setupStep"));
-const progressBar = document.getElementById("progressBar");
-const progressText = document.getElementById("progressText");
-const progressPercent = document.getElementById("progressPercent");
+  const TOTAL_STEPS = 7;
+  const steps = Array.from(document.querySelectorAll(".setupStep"));
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+  const progressPercent = document.getElementById("progressPercent");
 
-if (!steps.length || !progressBar || !progressText || !progressPercent) return;
+  if (!steps.length || !progressBar || !progressText || !progressPercent) return;
 
-function setStepState(step, state) {
-step.classList.remove("locked", "open", "done");
-step.classList.add(state);
+  function setStepState(step, state) {
+    step.classList.remove("locked", "open", "done");
+    step.classList.add(state);
 
-const toggleLink = step.querySelector(".stepToggleLink");
-if (!toggleLink) return;
+    const toggleLink = step.querySelector(".stepToggleLink");
+    if (!toggleLink) return;
 
-if (state === "open") toggleLink.textContent = "Close";
-if (state === "done") toggleLink.textContent = "Manage";
-if (state === "locked") toggleLink.textContent = "Setup";
-}
+    if (state === "open") toggleLink.textContent = "Close";
+    if (state === "done") toggleLink.textContent = "Manage";
+    if (state === "locked") toggleLink.textContent = "Setup";
+  }
 
-function updateProgress() {
-const completed = document.querySelectorAll(".setupStep.done").length;
-const percent = (completed / TOTAL_STEPS) * 100;
-const nextStep = Math.min(completed + 1, TOTAL_STEPS);
+  function closeOtherOpenSteps(currentStep) {
+    steps.forEach((step) => {
+      if (step !== currentStep && step.classList.contains("open")) {
+        setStepState(step, "locked");
 
-progressBar.style.width = `${percent}%`;
-progressText.textContent =
-completed === TOTAL_STEPS
-? "All steps complete"
-: `Step ${nextStep} of ${TOTAL_STEPS}`;
-progressPercent.textContent = `${Math.round(percent)}% complete`;
-}
+        const textWrap = step.querySelector(".stepTextWrap");
+        if (textWrap) {
+          textWrap.classList.remove("is-hidden");
+        }
+      }
+    });
+  }
 
-function markStepDone(step) {
-const textWrap = step.querySelector(".stepTextWrap");
-const doneBar = step.querySelector(".setupStepDoneBar");
-const toggleLink = step.querySelector(".stepToggleLink");
+  function updateProgress() {
+    const completed = document.querySelectorAll(".setupStep.done").length;
+    const percent = (completed / TOTAL_STEPS) * 100;
+    const nextStep = Math.min(completed + 1, TOTAL_STEPS);
 
-if (textWrap) {
-textWrap.classList.add("is-hidden");
-}
+    progressBar.style.width = `${percent}%`;
+    progressText.textContent =
+      completed === TOTAL_STEPS
+        ? "All steps complete"
+        : `Step ${nextStep} of ${TOTAL_STEPS}`;
+    progressPercent.textContent = `${Math.round(percent)}% complete`;
+  }
 
-setStepState(step, "done");
+  function markStepDone(step) {
+    const textWrap = step.querySelector(".stepTextWrap");
 
-if (toggleLink) {
-toggleLink.textContent = "Manage";
-}
+    if (textWrap) {
+      textWrap.classList.add("is-hidden");
+    }
 
-updateProgress();
-}
+    setStepState(step, "done");
+    updateProgress();
+  }
 
-steps.forEach((step) => {
-const doneBtn = step.querySelector(".doneBtn");
-const closeBtn = step.querySelector(".closeBtn");
-const toggleLink = step.querySelector(".stepToggleLink");
-const copyBtn = step.querySelector(".copyBtn");
-const textArea = step.querySelector("textarea");
-const textWrap = step.querySelector(".stepTextWrap");
-const hasText = step.dataset.hasText === "true";
+  steps.forEach((step) => {
+    const doneBtn = step.querySelector(".doneBtn");
+    const closeBtn = step.querySelector(".closeBtn");
+    const toggleLink = step.querySelector(".stepToggleLink");
+    const copyBtn = step.querySelector(".copyBtn");
+    const textArea = step.querySelector("textarea");
+    const textWrap = step.querySelector(".stepTextWrap");
 
-if (doneBtn) {
-doneBtn.addEventListener("click", () => {
-markStepDone(step);
-});
-}
-if (toggleLink) {
-toggleLink.addEventListener("click", (e) => {
-e.preventDefault();
+    if (doneBtn) {
+      doneBtn.addEventListener("click", () => {
+        markStepDone(step);
+      });
+    }
 
-if (step.classList.contains("done")) {
-setStepState(step, "open");
-if (textWrap) {
-textWrap.classList.add("is-hidden");
-}
-return;
-}
+    if (toggleLink) {
+      toggleLink.addEventListener("click", (e) => {
+        e.preventDefault();
 
-if (step.classList.contains("open")) {
-setStepState(step, "locked");
-if (textWrap) {
-textWrap.classList.remove("is-hidden");
-}
-return;
-}
+        if (step.classList.contains("done")) {
+          closeOtherOpenSteps(step);
+          setStepState(step, "open");
+          if (textWrap) {
+            textWrap.classList.add("is-hidden");
+          }
+          return;
+        }
 
-setStepState(step, "open");
-});
-}
+        if (step.classList.contains("open")) {
+          setStepState(step, "locked");
+          if (textWrap) {
+            textWrap.classList.remove("is-hidden");
+          }
+          return;
+        }
 
-if (closeBtn) {
-closeBtn.addEventListener("click", () => {
-setStepState(step, "locked");
-if (textWrap) {
-textWrap.classList.remove("is-hidden");
-}
-});
-}
+        closeOtherOpenSteps(step);
+        setStepState(step, "open");
+      });
+    }
 
-if (copyBtn && textArea) {
-copyBtn.addEventListener("click", async () => {
-const ok = await copyText(textArea.value.trim());
-flashButtonText(copyBtn, ok ? "Copied" : "Copy failed");
-});
-}
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        setStepState(step, "locked");
+        if (textWrap) {
+          textWrap.classList.remove("is-hidden");
+        }
+      });
+    }
 
-if (textWrap && step.classList.contains("done")) {
-textWrap.classList.add("is-hidden");
-}
-});
+    if (copyBtn && textArea) {
+      copyBtn.addEventListener("click", async () => {
+        const ok = await copyText(textArea.value.trim());
+        flashButtonText(copyBtn, ok ? "Copied" : "Copy failed");
+      });
+    }
 
-updateProgress();
+    if (textWrap && step.classList.contains("done")) {
+      textWrap.classList.add("is-hidden");
+    }
+  });
+
+  updateProgress();
 }
 
 
