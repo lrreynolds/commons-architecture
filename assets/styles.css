@@ -821,6 +821,15 @@ body.dashboard #fundingLiveActions{
   .topbar{
     flex-wrap:wrap;
   }
+    .fieldHeader{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .fieldHeader .secondary,
+  .fieldHeader .copyBtn{
+    width:auto;
+  }
 }
 
 
@@ -1065,14 +1074,29 @@ body.dashboard #fundingLiveActions{
   text-decoration:underline;
 }
 
-.stepTextActions{
-  margin-top:10px;
+.fieldHeader{
   display:flex;
-  justify-content:flex-start;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:6px;
 }
 
-.stepTextActions .secondary{
+.fieldHeader label{
+  margin-bottom:0;
+  font-size:12px;
+  font-weight:700;
+  color:rgba(15,23,19,.68);
+}
+
+.fieldHeader .secondary,
+.fieldHeader .copyBtn{
   width:auto;
+  min-width:auto;
+  padding:8px 12px;
+  font-size:12px;
+  line-height:1;
+  flex:0 0 auto;
 }
 
 .setupActions{
@@ -1105,7 +1129,6 @@ body.dashboard #fundingLiveActions{
 
 .stepPasteGroup label{
   display:block;
-  margin-bottom:6px;
   font-size:12px;
   font-weight:700;
   color:rgba(15,23,19,.68);
