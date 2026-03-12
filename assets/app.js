@@ -597,23 +597,34 @@ function syncStepUi(step) {
   const textWrap = step.querySelector(".stepTextWrap");
   const doneBtn = step.querySelector(".doneBtn");
   const copyBtn = step.querySelector(".copyBtn");
+  const helper = step.querySelector(".stepHelper");
 
-  if (step.classList.contains("open")) {
-    if (step.dataset.completed === "true") {
-      if (textWrap) textWrap.classList.add("is-hidden");
-      if (doneBtn) doneBtn.style.display = "none";
-      if (copyBtn) copyBtn.style.display = "none";
-    } else {
-      if (textWrap) textWrap.classList.remove("is-hidden");
-      if (doneBtn) doneBtn.style.display = "";
-      if (copyBtn) copyBtn.style.display = "";
-    }
-  } else {
+if (step.classList.contains("open")) {
+
+  if (step.dataset.completed === "true") {
+
     if (textWrap) textWrap.classList.add("is-hidden");
+    if (doneBtn) doneBtn.style.display = "none";
+    if (copyBtn) copyBtn.style.display = "none";
+    if (helper) helper.style.display = "none";
+
+  } else {
+
+    if (textWrap) textWrap.classList.remove("is-hidden");
     if (doneBtn) doneBtn.style.display = "";
     if (copyBtn) copyBtn.style.display = "";
+    if (helper) helper.style.display = "";
+
   }
 
+} else {
+
+  if (textWrap) textWrap.classList.add("is-hidden");
+  if (doneBtn) doneBtn.style.display = "";
+  if (copyBtn) copyBtn.style.display = "";
+  if (helper) helper.style.display = "";
+
+}
   setToggleLabel(step);
 }
 
