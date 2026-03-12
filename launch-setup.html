@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Commonshub — Launch setup</title>
+<link rel="stylesheet" href="assets/styles.css" />
+</head>
+
+<body class="dashboard">
+
+<div class="wrap">
+
+<main class="stage">
+
+<div class="topbar">
+<div class="left">
+<div class="logoMark"></div>
+<div class="meta">
+<b>Commons Dashboard</b>
+<span>Launch setup</span>
+</div>
+</div>
+
+<a class="secondary" href="dashboard.html" style="width:auto;">
+Back to dashboard
+</a>
+
+</div>
+
+<div class="content">
+<div class="center">
+
+<div class="header">
+<div>
+<h2>Prepare your community for launch</h2>
+<p id="headerSubcopy">
+Complete these steps before inviting your first cohort. About 20–30 minutes.
+</p>
+</div>
+</div>
+
+<section class="card">
+
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+<div>
+<h3>Launch setup</h3>
+<div class="muted">Follow each step in order. Open the Mastodon page, apply the change, then mark the step done.</div>
+</div>
+
+<div style="text-align:right;">
+<b id="progressText">Step 1 of 7</b>
+<div class="muted" id="progressPercent">0% complete</div>
+</div>
+</div>
+
+<div class="progress" style="margin-top:12px;">
+<div class="bar">
+<div id="progressBar" style="width:0%"></div>
+</div>
+</div>
+
+<div id="steps" style="margin-top:16px;">
+
+<!-- STEP 1 -->
+
+<div class="item setupStep open" data-step="1">
+
+<b>1. Secure your launch</b>
+<div class="muted">Start with an invite-only space so your first cohort sets the tone.</div>
+
+<div style="margin-top:10px;">
+<a class="secondary"
+href="https://securitybrief.jasonjaysmart.com/admin/settings/registrations"
+target="_blank"
+style="width:auto;">
+Open registration settings
+</a>
+</div>
+
+<textarea style="margin-top:10px;" readonly>
+This space launches in small cohorts.
+
+If your work is in this field and you’d like to join, contact:
+jason@jasonjaysmart.com
+</textarea>
+
+<div class="footerBar">
+<button class="secondary copyBtn">Copy text</button>
+<button class="primary doneBtn">Mark done</button>
+</div>
+
+</div>
+
+
+<!-- STEP 2 -->
+
+<div class="item setupStep locked" data-step="2">
+
+<b>2. Set your host identity</b>
+<div class="muted">Complete your profile so the space feels hosted and credible.</div>
+
+<div style="margin-top:10px;">
+<a class="secondary"
+href="https://securitybrief.jasonjaysmart.com/settings/profile"
+target="_blank"
+style="width:auto;">
+Open profile
+</a>
+</div>
+
+<div class="footerBar">
+<button class="primary doneBtn">Mark done</button>
+</div>
+
+</div>
+
+
+<!-- STEP 3 -->
+
+<div class="item setupStep locked" data-step="3">
+
+<b>3. Define the community identity</b>
+<div class="muted">Apply branding and description so the space reads like your intended room.</div>
+
+<div style="margin-top:10px;">
+<a class="secondary"
+href="https://securitybrief.jasonjaysmart.com/admin/settings/branding"
+target="_blank"
+style="width:auto;">
+Open branding settings
+</a>
+</div>
+
+<div class="footerBar">
+<button class="primary doneBtn">Mark done</button>
+</div>
+
+</div>
+
+
+<!-- STEP 4 -->
+
+<div class="item setupStep locked" data-step="4">
+
+<b>4. Establish the signal structure</b>
+<div class="muted">Set rules, recommended follows, and core hashtags.</div>
+
+<div style="margin-top:10px;">
+<a class="secondary"
+href="https://securitybrief.jasonjaysmart.com/admin/rules"
+target="_blank"
+style="width:auto;">
+Open rules
+</a>
+</div>
+
+<div class="footerBar">
+<button class="primary doneBtn">Mark done</button>
+</div>
+
+</div>
+
+
+<!-- STEP 5 -->
+
+<div class="item setupStep locked" data-step="5">
+
+<b>5. Create pinned posts</b>
+<div class="muted">Publish your welcome post and participation guidance.</div>
+
+<div style="margin-top:10px;">
+<a class="secondary"
+href="https://securitybrief.jasonjaysmart.com/home"
+target="_blank"
+style="width:auto;">
+Open home feed
+</a>
+</div>
+
+<div class="footerBar">
+<button class="primary doneBtn">Mark done</button>
+</div>
+
+</div>
+
+
+<!-- STEP 6 -->
+
+<div class="item setupStep locked" data-step="6">
+
+<b>6. Publish welcome announcement</b>
+<div class="muted">This banner explains the space to new visitors.</div>
+
+<div style="margin-top:10px;">
+<a class="secondary"
+href="https://securitybrief.jasonjaysmart.com/admin/announcements"
+target="_blank"
+style="width:auto;">
+Open announcements
+</a>
+</div>
+
+<div class="footerBar">
+<button class="primary doneBtn">Mark done</button>
+</div>
+
+</div>
+
+
+<!-- STEP 7 -->
+
+<div class="item setupStep locked" data-step="7">
+
+<b>7. Generate invite links</b>
+<div class="muted">Create links for collaborators and your first cohort.</div>
+
+<div style="margin-top:10px;">
+<a class="secondary"
+href="https://securitybrief.jasonjaysmart.com/admin/invites"
+target="_blank"
+style="width:auto;">
+Open invites
+</a>
+</div>
+
+<div class="footerBar">
+<button class="primary doneBtn">Finish setup</button>
+</div>
+
+</div>
+
+</div>
+</section>
+
+</div>
+</div>
+</main>
+</div>
+
+<script>
+
+const steps=document.querySelectorAll('.setupStep')
+const progressBar=document.getElementById('progressBar')
+const progressText=document.getElementById('progressText')
+const progressPercent=document.getElementById('progressPercent')
+
+let completed=0
+
+function updateProgress(){
+
+completed=document.querySelectorAll('.setupStep.done').length
+
+const percent=(completed/7)*100
+
+progressBar.style.width=percent+'%'
+
+progressText.innerText=`Step ${completed+1} of 7`
+progressPercent.innerText=Math.round(percent)+'% complete'
+
+}
+
+document.querySelectorAll('.doneBtn').forEach(btn=>{
+
+btn.onclick=()=>{
+
+const step=btn.closest('.setupStep')
+step.classList.remove('open')
+step.classList.add('done')
+
+const next=step.nextElementSibling
+
+if(next){
+next.classList.remove('locked')
+next.classList.add('open')
+}
+
+updateProgress()
+
+}
+
+})
+
+updateProgress()
+
+</script>
+
+</body>
+</html>
