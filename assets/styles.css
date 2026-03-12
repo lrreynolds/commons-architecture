@@ -858,6 +858,7 @@ body.dashboard #fundingLiveActions{
 .setupStep.open{
   background: #f6f8f7;
   border-color:rgba(15,23,19,.12);
+  border: 1px solid #d9e3dd;
   box-shadow:0 8px 24px rgba(16,32,24,.06);
 }
 
