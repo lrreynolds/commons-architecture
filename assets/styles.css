@@ -809,29 +809,6 @@ body.dashboard #fundingLiveActions{
   }
 }
 
-@media (max-width:760px){
-  .metricsRow{
-    grid-template-columns:1fr;
-  }
-
-  body.dashboard #headerSubcopy{
-    align-items:flex-start;
-  }
-
-  .topbar{
-    flex-wrap:wrap;
-  }
-    .fieldHeader{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .fieldHeader .secondary,
-  .fieldHeader .copyBtn{
-    width:auto;
-  }
-}
-
 
 /* =========================================================
    Launch setup page
@@ -1050,6 +1027,16 @@ body.dashboard #fundingLiveActions{
 
   .doneLinks{
     justify-content:flex-start;
+  }
+
+  .fieldHeader{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .fieldHeader .secondary,
+  .fieldHeader .copyBtn{
+    width:auto;
   }
 }
 
