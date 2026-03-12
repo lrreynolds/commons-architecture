@@ -1110,3 +1110,24 @@ body.dashboard #fundingLiveActions{
   color:rgba(15,23,19,.68);
 }
 
+.stepTextWrap textarea {
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 10px 12px;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+/* Compact single-line fields */
+.stepPasteGroup.compact textarea {
+  min-height: 38px;
+  height: 38px;
+  overflow: hidden;
+}
+
+/* Multi-line content */
+.stepPasteGroup.large textarea {
+  min-height: 120px;
+}
+
