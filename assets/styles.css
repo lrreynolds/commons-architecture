@@ -987,13 +987,6 @@ body.dashboard #fundingLiveActions{
   min-width:0;
 }
 
-.doneLinks{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  flex:0 0 auto;
-}
-
 .doneOpenLink,
 .doneTextLink{
   appearance:none;
