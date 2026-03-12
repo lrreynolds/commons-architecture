@@ -856,7 +856,7 @@ body.dashboard #fundingLiveActions{
 }
 
 .setupStep.open{
-  background:rgba(255,255,255,.72);
+  background: #f6f8f7;
   border-color:rgba(15,23,19,.12);
   box-shadow:0 8px 24px rgba(16,32,24,.06);
 }
@@ -1130,4 +1130,3 @@ body.dashboard #fundingLiveActions{
 .stepPasteGroup.large textarea {
   min-height: 120px;
 }
-
