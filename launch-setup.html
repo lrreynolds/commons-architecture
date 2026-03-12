@@ -44,7 +44,7 @@
             <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
               <div>
                 <h3>Launch setup</h3>
-                <div class="muted">Follow each step in order. Open the Mastodon page, apply the change, then mark the step done.</div>
+                <div class="muted">Open the step, make the changes in Mastodon, save changes on every affected page, then click Done.</div>
               </div>
 
               <div class="progressMeta">
@@ -68,13 +68,16 @@
                     <div class="setupStepTitle">1. Secure your launch</div>
                     <div class="setupStepSummary">Start with an invite-only space so your first cohort sets the tone.</div>
                   </div>
-                  <div class="setupStepStatus">Current step</div>
+                  <a class="stepToggleLink" href="#">Close</a>
                 </div>
 
                 <div class="setupStepDetails">
+                  <div class="muted stepHelper">
+                    Complete the tasks below in Mastodon, save changes on every affected page, then click Done.
+                  </div>
                   <div class="setupActions">
                     <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/settings/registrations" target="_blank" style="width:auto;">
-                      Open registration settings
+                      Manage registration settings
                     </a>
                   </div>
 
@@ -87,7 +90,8 @@
 
                 <div class="setupActions">
                   <button class="secondary copyBtn" type="button">Copy text</button>
-                  <button class="primary doneBtn" type="button">Mark done</button>
+                  <button class="secondary closeBtn" type="button">Close</button>
+                  <button class="primary doneBtn" type="button">Done</button>
                 </div>
               </div>
 
@@ -95,105 +99,116 @@
                 <div class="setupStepDoneRow">
                  <span class="doneTitle">✓ 1. Secure your launch</span>                  </div>
                  <div class="setupStepDoneRow">
-                  <span class="doneSummary">Complete your profile so the space feels hosted and credible.</span>
-                  <div class="doneLinks">
-                    <button class="doneTextLink" type="button">Show text</button>
-                    <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/settings/registrations" target="_blank">Open</a>
-                  </div>
+                   <span class="doneSummary">Invite-only launch settings applied and saved in Mastodon.</span>
+                 </div>
+                 <div class="doneLinks">
+                  <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/settings/registrations" target="_blank">Open</a>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- STEP 2 -->
-            <div class="setupStep locked" data-step="2" data-has-text="false">
-              <div class="setupStepHeader">
-                <div>
-                  <div class="setupStepTitle">2. Set your host identity</div>
-                  <div class="setupStepSummary">Complete your profile so the space feels hosted and credible.</div>
-                </div>
-                <div class="setupStepStatus">Locked</div>
+          <!-- STEP 2 -->
+          <div class="setupStep locked" data-step="2" data-has-text="false">
+            <div class="setupStepHeader">
+              <div>
+                <div class="setupStepTitle">2. Set your host identity</div>
+                <div class="setupStepSummary">Complete your profile so the space feels hosted and credible.</div>
+              </div>
+              <a class="stepToggleLink" href="#">Setup</a>
+            </div>
+
+            <div class="setupStepDetails">
+              <div class="muted stepHelper">
+                Complete the tasks below in Mastodon, save changes on every affected page, then click Done.
+              </div>
+              <div class="setupActions">
+                <a class="secondary" href="https://securitybrief.jasonjaysmart.com/settings/profile" target="_blank" style="width:auto;">
+                  Manage profile
+                </a>
               </div>
 
-              <div class="setupStepDetails">
-                <div class="setupActions">
-                  <a class="secondary" href="https://securitybrief.jasonjaysmart.com/settings/profile" target="_blank" style="width:auto;">
-                    Open profile
-                  </a>
-                </div>
-
-                <div class="setupActions">
-                  <button class="primary doneBtn" type="button">Mark done</button>
-                </div>
-              </div>
-
-              <div class="setupStepDoneBar">
-                <div class="setupStepDoneRow">
-                  <span class="doneTitle">✓ 2. Set your host identity</span>
-                </div>
-                <div class="setupStepDoneRow">
-                  <span class="doneSummary">Complete your profile so the space feels hosted and credible.</span>
-                  <div class="doneLinks">
-                    <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/settings/profile" target="_blank">Open</a>
-                  </div>
-                </div>
+              <div class="setupActions">
+                <button class="secondary closeBtn" type="button">Close</button>
+                <button class="primary doneBtn" type="button">Done</button>
               </div>
             </div>
 
-            <!-- STEP 3 -->
-            <div class="setupStep locked" data-step="3" data-has-text="false">
-              <div class="setupStepHeader">
-                <div>
-                  <div class="setupStepTitle">3. Define the community identity</div>
-                  <div class="setupStepSummary">Apply branding and description so the space reads like your intended room.</div>
-                </div>
-                <div class="setupStepStatus">Locked</div>
+            <div class="setupStepDoneBar">
+              <div class="setupStepDoneRow">
+                <span class="doneTitle">✓ 2. Set your host identity</span>
               </div>
-
-              <div class="setupStepDetails">
-                <div class="setupActions">
-                  <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/settings/branding" target="_blank" style="width:auto;">
-                    Open branding settings
-                  </a>
-                </div>
-
-                <div class="setupActions">
-                  <button class="primary doneBtn" type="button">Mark done</button>
-                </div>
-              </div>
-
-              <div class="setupStepDoneBar">
-                <div class="setupStepDoneRow">
-                  <span class="doneTitle">✓ 3. Define the community identity</span>
-                </div>
-                <div class="setupStepDoneRow">
-                  <span class="doneSummary">Apply branding and description so the space reads like your intended room.</span>
-                  <div class="doneLinks">
-                    <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/settings/branding" target="_blank">Open</a>
-                  </div>
+              <div class="setupStepDoneRow">
+                <span class="doneSummary">Profile details applied and saved in Mastodon.</span>
+                <div class="doneLinks">
+                  <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/settings/profile" target="_blank">Open</a>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- STEP 4 -->
-            <div class="setupStep locked" data-step="4" data-has-text="false">
-              <div class="setupStepHeader">
-                <div>
-                  <div class="setupStepTitle">4. Establish the signal structure</div>
-                  <div class="setupStepSummary">Set rules, recommended follows, and core hashtags.</div>
-                </div>
-                <div class="setupStepStatus">Locked</div>
+          <!-- STEP 3 -->
+          <div class="setupStep locked" data-step="3" data-has-text="false">
+            <div class="setupStepHeader">
+              <div>
+                <div class="setupStepTitle">3. Define the community identity</div>
+                <div class="setupStepSummary">Apply branding and description so the space reads like your intended room.</div>
+              </div>
+              <a class="stepToggleLink" href="#">Setup</a>
+            </div>
+
+            <div class="setupStepDetails">
+              <div class="muted stepHelper">
+                Complete the tasks below in Mastodon, save changes on every affected page, then click Done.
+              </div>
+              <div class="setupActions">
+                <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/settings/branding" target="_blank" style="width:auto;">
+                  Manage branding settings
+                </a>
               </div>
 
-              <div class="setupStepDetails">
-                <div class="setupActions">
-                  <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/rules" target="_blank" style="width:auto;">
-                    Open rules
-                  </a>
-                </div>
+              <div class="setupActions">
+                <button class="secondary closeBtn" type="button">Close</button>
+                <button class="primary doneBtn" type="button">Done</button>
+              </div>
+            </div>
 
-                <div class="setupActions">
-                  <button class="primary doneBtn" type="button">Mark done</button>
+            <div class="setupStepDoneBar">
+              <div class="setupStepDoneRow">
+                <span class="doneTitle">✓ 3. Define the community identity</span>
+              </div>
+              <div class="setupStepDoneRow">
+                <span class="doneSummary">Branding and identity settings applied and saved in Mastodon.</span>
+                <div class="doneLinks">
+                  <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/settings/branding" target="_blank">Open</a>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4 -->
+          <div class="setupStep locked" data-step="4" data-has-text="false">
+            <div class="setupStepHeader">
+              <div>
+                <div class="setupStepTitle">4. Establish the signal structure</div>
+                <div class="setupStepSummary">Set rules, recommended follows, and core hashtags.</div>
+              </div>
+              <a class="stepToggleLink" href="#">Setup</a>
+            </div>
+
+            <div class="setupStepDetails">
+              <div class="muted stepHelper">
+                Complete the tasks below in Mastodon, save changes on every affected page, then click Done.
+              </div>
+              <div class="setupActions">
+                <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/rules" target="_blank" style="width:auto;">
+                  Manage rules
+                </a>
+              </div>
+
+              <div class="setupActions">
+                <button class="secondary closeBtn" type="button">Close</button>
+                <button class="primary doneBtn" type="button">Done</button>                </div>
               </div>
 
               <div class="setupStepDoneBar">
@@ -201,125 +216,133 @@
                   <span class="doneTitle">✓ 4. Establish the signal structure</span>
                 </div>
                 <div class="setupStepDoneRow">
-                  <span class="doneSummary">Set rules, recommended follows, and core hashtags.</span>
-                  <div class="doneLinks">
-                    <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/rules" target="_blank">Open</a>
-                  </div>
+                 <span class="doneSummary">Rules and structure settings applied and saved in Mastodon.</span>
+                 <div class="doneLinks">
+                  <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/rules" target="_blank">Open</a>
                 </div>
               </div>
             </div>
-
-            <!-- STEP 5 -->
-            <div class="setupStep locked" data-step="5" data-has-text="false">
-              <div class="setupStepHeader">
-                <div>
-                  <div class="setupStepTitle">5. Create pinned posts</div>
-                  <div class="setupStepSummary">Publish your welcome post and participation guidance.</div>
-                </div>
-                <div class="setupStepStatus">Locked</div>
-              </div>
-
-              <div class="setupStepDetails">
-                <div class="setupActions">
-                  <a class="secondary" href="https://securitybrief.jasonjaysmart.com/home" target="_blank" style="width:auto;">
-                    Open home feed
-                  </a>
-                </div>
-
-                <div class="setupActions">
-                  <button class="primary doneBtn" type="button">Mark done</button>
-                </div>
-              </div>
-
-              <div class="setupStepDoneBar">
-                <div class="setupStepDoneRow">
-                  <span class="doneTitle">✓ 5. Create pinned posts</span>
-                </div>
-                <div class="setupStepDoneRow">
-                  <span class="doneSummary">Publish your welcome post and participation guidance.</span>
-                  <div class="doneLinks">
-                    <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/home" target="_blank">Open</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- STEP 6 -->
-            <div class="setupStep locked" data-step="6" data-has-text="false">
-              <div class="setupStepHeader">
-                <div>
-                  <div class="setupStepTitle">6. Publish welcome announcement</div>
-                  <div class="setupStepSummary">This banner explains the space to new visitors.</div>
-                </div>
-                <div class="setupStepStatus">Locked</div>
-              </div>
-
-              <div class="setupStepDetails">
-                <div class="setupActions">
-                  <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/announcements" target="_blank" style="width:auto;">
-                    Open announcements
-                  </a>
-                </div>
-
-                <div class="setupActions">
-                  <button class="primary doneBtn" type="button">Mark done</button>
-                </div>
-              </div>
-
-              <div class="setupStepDoneBar">
-                <div class="setupStepDoneRow">
-                  <span class="doneTitle">✓ 6. Publish welcome announcement</span>
-                </div>
-                <div class="setupStepDoneRow">
-                  <span class="doneSummary">This banner explains the space to new visitors.</span>
-                  <div class="doneLinks">
-                    <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/announcements" target="_blank">Open</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- STEP 7 -->
-            <div class="setupStep locked" data-step="7" data-has-text="false">
-              <div class="setupStepHeader">
-                <div>
-                  <div class="setupStepTitle">7. Generate invite links</div>
-                  <div class="setupStepSummary">Create links for collaborators and your first cohort.</div>
-                </div>
-                <div class="setupStepStatus">Locked</div>
-              </div>
-
-              <div class="setupStepDetails">
-                <div class="setupActions">
-                  <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/invites" target="_blank" style="width:auto;">
-                    Open invites
-                  </a>
-                </div>
-
-                <div class="setupActions">
-                  <button class="primary doneBtn" type="button">Finish setup</button>
-                </div>
-              </div>
-
-              <div class="setupStepDoneBar">
-                <div class="setupStepDoneRow">
-                  <span class="doneTitle">✓ 7. Generate invite links</span>
-                </div>
-                <div class="setupStepDoneRow">
-                  <span class="doneSummary">Create links for collaborators and your first cohort.</span>
-                  <div class="doneLinks">
-                    <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/invites" target="_blank">Open</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
-        </section>
 
+          <!-- STEP 5 -->
+          <div class="setupStep locked" data-step="5" data-has-text="false">
+            <div class="setupStepHeader">
+              <div>
+                <div class="setupStepTitle">5. Create pinned posts</div>
+                <div class="setupStepSummary">Publish your welcome post and participation guidance.</div>
+              </div>
+              <a class="stepToggleLink" href="#">Setup</a>
+            </div>
+
+            <div class="setupStepDetails">
+              <div class="muted stepHelper">
+                Complete the tasks below in Mastodon, save changes on every affected page, then click Done.
+              </div>
+              <div class="setupActions">
+                <a class="secondary" href="https://securitybrief.jasonjaysmart.com/home" target="_blank" style="width:auto;">
+                  Manage home feed
+                </a>
+              </div>
+
+              <div class="setupActions">
+                <button class="secondary closeBtn" type="button">Close</button>
+                <button class="primary doneBtn" type="button">Done</button>
+              </div>
+            </div>
+
+            <div class="setupStepDoneBar">
+              <div class="setupStepDoneRow">
+                <span class="doneTitle">✓ 5. Create pinned posts</span>
+              </div>
+              <div class="setupStepDoneRow">
+                <span class="doneSummary">Pinned posts created and saved in Mastodon.</span>
+                <div class="doneLinks">
+                  <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/home" target="_blank">Open</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 6 -->
+          <div class="setupStep locked" data-step="6" data-has-text="false">
+            <div class="setupStepHeader">
+              <div>
+                <div class="setupStepTitle">6. Publish welcome announcement</div>
+                <div class="setupStepSummary">This banner explains the space to new visitors.</div>
+              </div>
+              <a class="stepToggleLink" href="#">Setup</a>
+            </div>
+
+            <div class="setupStepDetails">
+              <div class="muted stepHelper">
+                Complete the tasks below in Mastodon, save changes on every affected page, then click Done.
+              </div>
+              <div class="setupActions">
+                <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/announcements" target="_blank" style="width:auto;">
+                  Manage announcements
+                </a>
+              </div>
+
+              <div class="setupActions">
+                <button class="secondary closeBtn" type="button">Close</button>
+                <button class="primary doneBtn" type="button">Done</button>
+              </div>
+            </div>
+
+            <div class="setupStepDoneBar">
+              <div class="setupStepDoneRow">
+                <span class="doneTitle">✓ 6. Publish welcome announcement</span>
+              </div>
+              <div class="setupStepDoneRow">
+                <span class="doneSummary">Welcome announcement published and saved in Mastodon.</span>
+                <div class="doneLinks">
+                  <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/announcements" target="_blank">Open</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 7 -->
+          <div class="setupStep locked" data-step="7" data-has-text="false">
+            <div class="setupStepHeader">
+              <div>
+                <div class="setupStepTitle">7. Generate invite links</div>
+                <div class="setupStepSummary">Create links for collaborators and your first cohort.</div>
+              </div>
+              <a class="stepToggleLink" href="#">Setup</a>
+            </div>
+            <div class="setupStepDetails">
+              <div class="muted stepHelper">
+                Complete the tasks below in Mastodon, save changes on every affected page, then click Done.
+              </div>
+              <div class="setupActions">
+                <a class="secondary" href="https://securitybrief.jasonjaysmart.com/admin/invites" target="_blank" style="width:auto;">
+                  Manage invites
+                </a>
+              </div>
+
+              <div class="setupActions">
+                <button class="secondary closeBtn" type="button">Close</button>
+                <button class="primary doneBtn" type="button">Done</button>
+              </div>
+            </div>
+            <div class="setupStepDoneBar">
+              <div class="setupStepDoneRow">
+                <span class="doneTitle">✓ 7. Generate invite links</span>
+              </div>
+              <div class="setupStepDoneRow">
+               <span class="doneSummary">Invite links created and saved in Mastodon.</span>
+               <div class="doneLinks">
+                <a class="doneOpenLink" href="https://securitybrief.jasonjaysmart.com/admin/invites" target="_blank">Open</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </main>
+    </section>
+  </div>
+</div>
+</main>
 </div>
 <script src="assets/app.js"></script>
 </body>
