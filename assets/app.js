@@ -577,27 +577,53 @@ function setupLaunchSteps() {
 
   if (!steps.length || !progressBar || !progressText || !progressPercent) return;
 
-  function setStepState(step, state) {
-    step.classList.remove("locked", "open", "done");
-    step.classList.add(state);
-
+  function setToggleLabel(step) {
     const toggleLink = step.querySelector(".stepToggleLink");
     if (!toggleLink) return;
 
-    if (state === "open") toggleLink.textContent = "Close";
-    if (state === "done") toggleLink.textContent = "Manage";
-    if (state === "locked") toggleLink.textContent = "Setup";
+    if (step.classList.contains("open")) {
+      toggleLink.textContent = "Close";
+    } else if (step.classList.contains("done")) {
+      toggleLink.textContent = "Manage";
+    } else {
+      toggleLink.textContent = "Setup";
+    }
+  }
+
+  function syncStepUi(step) {
+    const textWrap = step.querySelector(".stepTextWrap");
+    const doneBtn = step.querySelector(".doneBtn");
+    const copyBtn = step.querySelector(".copyBtn");
+
+    if (step.classList.contains("open")) {
+      if (step.classList.contains("done")) {
+        if (textWrap) textWrap.classList.add("is-hidden");
+        if (doneBtn) doneBtn.style.display = "none";
+        if (copyBtn) copyBtn.style.display = "none";
+      } else {
+        if (textWrap) textWrap.classList.remove("is-hidden");
+        if (doneBtn) doneBtn.style.display = "";
+        if (copyBtn) copyBtn.style.display = "";
+      }
+    } else {
+      if (textWrap) textWrap.classList.add("is-hidden");
+      if (doneBtn) doneBtn.style.display = "";
+      if (copyBtn) copyBtn.style.display = "";
+    }
+
+    setToggleLabel(step);
   }
 
   function closeOtherOpenSteps(currentStep) {
     steps.forEach((step) => {
       if (step !== currentStep && step.classList.contains("open")) {
-        setStepState(step, "locked");
-
-        const textWrap = step.querySelector(".stepTextWrap");
-        if (textWrap) {
-          textWrap.classList.remove("is-hidden");
+        step.classList.remove("open");
+        if (step.classList.contains("done")) {
+          step.classList.add("done");
+        } else {
+          step.classList.add("locked");
         }
+        syncStepUi(step);
       }
     });
   }
@@ -616,26 +642,51 @@ function setupLaunchSteps() {
   }
 
   function markStepDone(step) {
-    const textWrap = step.querySelector(".stepTextWrap");
+    step.classList.remove("locked", "open");
+    step.classList.add("done");
+    syncStepUi(step);
+    updateProgress();
+  }
 
-    if (textWrap) {
-      textWrap.classList.add("is-hidden");
+  function openStep(step) {
+    closeOtherOpenSteps(step);
+    step.classList.remove("locked", "done");
+    if (step.dataset.completed === "true") {
+      step.classList.add("open", "done");
+    } else {
+      step.classList.add("open");
+    }
+    syncStepUi(step);
+  }
+
+  function closeStep(step) {
+    step.classList.remove("open");
+
+    if (step.classList.contains("done") || step.dataset.completed === "true") {
+      step.classList.add("done");
+    } else {
+      step.classList.add("locked");
     }
 
-    setStepState(step, "done");
-    updateProgress();
+    syncStepUi(step);
   }
 
   steps.forEach((step) => {
     const doneBtn = step.querySelector(".doneBtn");
-const toggleLink = step.querySelector(".stepToggleLink");
-const doneOpenLink = step.querySelector(".doneOpenLink");
-const copyBtn = step.querySelector(".copyBtn");
-const textArea = step.querySelector("textarea");
-const textWrap = step.querySelector(".stepTextWrap");
+    const toggleLink = step.querySelector(".stepToggleLink");
+    const reopenBtn = step.querySelector(".reopenStepBtn");
+    const copyBtn = step.querySelector(".copyBtn");
+    const textArea = step.querySelector("textarea");
+
+    if (step.classList.contains("done")) {
+      step.dataset.completed = "true";
+    }
+
+    syncStepUi(step);
 
     if (doneBtn) {
       doneBtn.addEventListener("click", () => {
+        step.dataset.completed = "true";
         markStepDone(step);
       });
     }
@@ -644,52 +695,25 @@ const textWrap = step.querySelector(".stepTextWrap");
       toggleLink.addEventListener("click", (e) => {
         e.preventDefault();
 
-        if (step.classList.contains("done")) {
-          closeOtherOpenSteps(step);
-          setStepState(step, "open");
-          if (textWrap) {
-            textWrap.classList.add("is-hidden");
-          }
-          return;
-        }
-
         if (step.classList.contains("open")) {
-          setStepState(step, "locked");
-          if (textWrap) {
-            textWrap.classList.remove("is-hidden");
-          }
-          return;
+          closeStep(step);
+        } else {
+          openStep(step);
         }
-
-        closeOtherOpenSteps(step);
-        setStepState(step, "open");
       });
     }
 
-    if (doneOpenLink) {
-  doneOpenLink.addEventListener("click", (e) => {
-    e.preventDefault();
-
-    closeOtherOpenSteps(step);
-    setStepState(step, "open");
-
-    if (textWrap) {
-      textWrap.classList.add("is-hidden");
+    if (reopenBtn) {
+      reopenBtn.addEventListener("click", () => {
+        openStep(step);
+      });
     }
-  });
-}
-
- 
 
     if (copyBtn && textArea) {
       copyBtn.addEventListener("click", async () => {
         const ok = await copyText(textArea.value.trim());
         flashButtonText(copyBtn, ok ? "Copied" : "Copy failed");
       });
-    }
-
-    if (textWrap && step.classList.contains("done")) {
-      textWrap.classList.add("is-hidden");
     }
   });
 
