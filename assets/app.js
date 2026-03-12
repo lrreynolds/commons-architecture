@@ -579,87 +579,76 @@ function setupLaunchSteps() {
 
 function setToggleLabel(step) {
   const toggleLink = step.querySelector(".stepToggleLink");
-  const doneManageBtn = step.querySelector(".reopenStepBtn");
+  if (!toggleLink) return;
 
-if (toggleLink) {
-  toggleLink.addEventListener("click", (e) => {
-    e.preventDefault();
-
-    if (step.classList.contains("open")) {
-      closeStep(step);
-    } else {
-      openStep(step);
-    }
-  });
-}
-
-const reopenBtn = step.querySelector(".reopenStepBtn");
-
-if (reopenBtn) {
-  reopenBtn.addEventListener("click", () => {
-    if (step.classList.contains("open")) {
-      closeStep(step);
-    } else {
-      openStep(step);
-    }
-  });
-}
-
-  if (doneManageBtn) {
-    doneManageBtn.textContent = step.classList.contains("open") ? "Close" : "Manage";
+  if (step.classList.contains("open")) {
+    toggleLink.textContent = "Close";
+  } else if (step.dataset.completed === "true") {
+    toggleLink.textContent = "Manage";
+  } else {
+    toggleLink.textContent = "Setup";
   }
 }
 
-  function syncStepUi(step) {
-    const textWrap = step.querySelector(".stepTextWrap");
-    const doneBtn = step.querySelector(".doneBtn");
-    const copyBtn = step.querySelector(".copyBtn");
+function syncStepUi(step) {
+  const textWrap = step.querySelector(".stepTextWrap");
+  const doneBtn = step.querySelector(".doneBtn");
+  const copyBtn = step.querySelector(".copyBtn");
+  const reopenBtn = step.querySelector(".reopenStepBtn");
 
-    if (step.classList.contains("open")) {
-      if (step.classList.contains("done")) {
-        if (textWrap) textWrap.classList.add("is-hidden");
-        if (doneBtn) doneBtn.style.display = "none";
-        if (copyBtn) copyBtn.style.display = "none";
-      } else {
-        if (textWrap) textWrap.classList.remove("is-hidden");
-        if (doneBtn) doneBtn.style.display = "";
-        if (copyBtn) copyBtn.style.display = "";
-      }
-    } else {
+  if (step.classList.contains("open")) {
+    if (step.dataset.completed === "true") {
       if (textWrap) textWrap.classList.add("is-hidden");
+      if (doneBtn) doneBtn.style.display = "none";
+      if (copyBtn) copyBtn.style.display = "none";
+    } else {
+      if (textWrap) textWrap.classList.remove("is-hidden");
       if (doneBtn) doneBtn.style.display = "";
       if (copyBtn) copyBtn.style.display = "";
     }
-
-    setToggleLabel(step);
+  } else {
+    if (textWrap) textWrap.classList.add("is-hidden");
+    if (doneBtn) doneBtn.style.display = "";
+    if (copyBtn) copyBtn.style.display = "";
   }
 
-  function closeOtherOpenSteps(currentStep) {
-    steps.forEach((step) => {
-      if (step !== currentStep && step.classList.contains("open")) {
-        step.classList.remove("open");
-        if (step.classList.contains("done")) {
-          step.classList.add("done");
-        } else {
-          step.classList.add("locked");
-        }
-        syncStepUi(step);
+  if (reopenBtn) {
+    reopenBtn.textContent = step.classList.contains("open") ? "Close" : "Manage";
+  }
+
+  setToggleLabel(step);
+}
+
+function closeOtherOpenSteps(currentStep) {
+  steps.forEach((step) => {
+    if (step !== currentStep && step.classList.contains("open")) {
+      step.classList.remove("open");
+
+      if (step.dataset.completed === "true") {
+        step.classList.add("done");
+        step.classList.remove("locked");
+      } else {
+        step.classList.add("locked");
+        step.classList.remove("done");
       }
-    });
-  }
 
-  function updateProgress() {
-    const completed = document.querySelectorAll(".setupStep.done").length;
-    const percent = (completed / TOTAL_STEPS) * 100;
-    const nextStep = Math.min(completed + 1, TOTAL_STEPS);
+      syncStepUi(step);
+    }
+  });
+}
 
-    progressBar.style.width = `${percent}%`;
-    progressText.textContent =
-      completed === TOTAL_STEPS
-        ? "All steps complete"
-        : `Step ${nextStep} of ${TOTAL_STEPS}`;
-    progressPercent.textContent = `${Math.round(percent)}% complete`;
-  }
+function updateProgress() {
+  const completed = document.querySelectorAll(".setupStep.done").length;
+  const percent = (completed / TOTAL_STEPS) * 100;
+  const nextStep = Math.min(completed + 1, TOTAL_STEPS);
+
+  progressBar.style.width = `${percent}%`;
+  progressText.textContent =
+    completed === TOTAL_STEPS
+      ? "All steps complete"
+      : `Step ${nextStep} of ${TOTAL_STEPS}`;
+  progressPercent.textContent = `${Math.round(percent)}% complete`;
+}
 
 function markStepDone(step) {
   const textWrap = step.querySelector(".stepTextWrap");
@@ -739,10 +728,14 @@ function closeStep(step) {
     }
 
     if (reopenBtn) {
-      reopenBtn.addEventListener("click", () => {
-        openStep(step);
-      });
+  reopenBtn.addEventListener("click", () => {
+    if (step.classList.contains("open")) {
+      closeStep(step);
+    } else {
+      openStep(step);
     }
+  });
+}
 
     if (copyBtn && textArea) {
       copyBtn.addEventListener("click", async () => {
