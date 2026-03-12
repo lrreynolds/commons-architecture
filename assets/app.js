@@ -628,10 +628,11 @@ function setupLaunchSteps() {
 
   steps.forEach((step) => {
     const doneBtn = step.querySelector(".doneBtn");
-    const toggleLink = step.querySelector(".stepToggleLink");
-    const copyBtn = step.querySelector(".copyBtn");
-    const textArea = step.querySelector("textarea");
-    const textWrap = step.querySelector(".stepTextWrap");
+const toggleLink = step.querySelector(".stepToggleLink");
+const doneOpenLink = step.querySelector(".doneOpenLink");
+const copyBtn = step.querySelector(".copyBtn");
+const textArea = step.querySelector("textarea");
+const textWrap = step.querySelector(".stepTextWrap");
 
     if (doneBtn) {
       doneBtn.addEventListener("click", () => {
@@ -664,6 +665,19 @@ function setupLaunchSteps() {
         setStepState(step, "open");
       });
     }
+
+    if (doneOpenLink) {
+  doneOpenLink.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    closeOtherOpenSteps(step);
+    setStepState(step, "open");
+
+    if (textWrap) {
+      textWrap.classList.add("is-hidden");
+    }
+  });
+}
 
  
 
