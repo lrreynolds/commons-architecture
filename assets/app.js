@@ -594,7 +594,6 @@ function syncStepUi(step) {
   const textWrap = step.querySelector(".stepTextWrap");
   const doneBtn = step.querySelector(".doneBtn");
   const copyBtn = step.querySelector(".copyBtn");
-  const reopenBtn = step.querySelector(".reopenStepBtn");
 
   if (step.classList.contains("open")) {
     if (step.dataset.completed === "true") {
@@ -610,10 +609,6 @@ function syncStepUi(step) {
     if (textWrap) textWrap.classList.add("is-hidden");
     if (doneBtn) doneBtn.style.display = "";
     if (copyBtn) copyBtn.style.display = "";
-  }
-
-  if (reopenBtn) {
-    reopenBtn.textContent = step.classList.contains("open") ? "Close" : "Manage";
   }
 
   setToggleLabel(step);
@@ -698,7 +693,6 @@ function closeStep(step) {
   steps.forEach((step) => {
     const doneBtn = step.querySelector(".doneBtn");
     const toggleLink = step.querySelector(".stepToggleLink");
-    const reopenBtn = step.querySelector(".reopenStepBtn");
     const copyBtn = step.querySelector(".copyBtn");
     const textArea = step.querySelector("textarea");
 
@@ -727,15 +721,6 @@ function closeStep(step) {
       });
     }
 
-    if (reopenBtn) {
-  reopenBtn.addEventListener("click", () => {
-    if (step.classList.contains("open")) {
-      closeStep(step);
-    } else {
-      openStep(step);
-    }
-  });
-}
 
     if (copyBtn && textArea) {
       copyBtn.addEventListener("click", async () => {
