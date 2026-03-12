@@ -578,16 +578,19 @@ function setupLaunchSteps() {
   if (!steps.length || !progressBar || !progressText || !progressPercent) return;
 
 function setToggleLabel(step) {
-  const toggleLink = step.querySelector(".stepToggleLink");
-  if (!toggleLink) return;
+  const toggleLinks = step.querySelectorAll(".stepToggleLink");
+  if (!toggleLinks.length) return;
 
+  let label = "Setup";
   if (step.classList.contains("open")) {
-    toggleLink.textContent = "Close";
+    label = "Close";
   } else if (step.dataset.completed === "true") {
-    toggleLink.textContent = "Manage";
-  } else {
-    toggleLink.textContent = "Setup";
+    label = "Manage";
   }
+
+  toggleLinks.forEach((link) => {
+    link.textContent = label;
+  });
 }
 
 function syncStepUi(step) {
@@ -709,17 +712,17 @@ function closeStep(step) {
       });
     }
 
-    if (toggleLink) {
-      toggleLink.addEventListener("click", (e) => {
-        e.preventDefault();
+step.querySelectorAll(".stepToggleLink").forEach((toggleLink) => {
+  toggleLink.addEventListener("click", (e) => {
+    e.preventDefault();
 
-        if (step.classList.contains("open")) {
-          closeStep(step);
-        } else {
-          openStep(step);
-        }
-      });
+    if (step.classList.contains("open")) {
+      closeStep(step);
+    } else {
+      openStep(step);
     }
+  });
+});
 
 
     if (copyBtn && textArea) {
