@@ -564,6 +564,102 @@
     activateTab(initial);
   }
 
+    // ----------------------------
+  // 10) Launch setup steps page
+  // ----------------------------
+  function setupLaunchSteps() {
+    const TOTAL_STEPS = 7;
+    const steps = Array.from(document.querySelectorAll(".setupStep"));
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const progressPercent = document.getElementById("progressPercent");
+
+    if (!steps.length || !progressBar || !progressText || !progressPercent) return;
+
+    function setStepState(step, state) {
+      step.classList.remove("locked", "open", "done");
+      step.classList.add(state);
+
+      const status = step.querySelector(".setupStepStatus");
+      if (!status) return;
+
+      if (state === "done") {
+        status.style.display = "none";
+        return;
+      }
+
+      status.style.display = "";
+      if (state === "locked") status.textContent = "Locked";
+      if (state === "open") status.textContent = "Current step";
+    }
+
+    function updateProgress() {
+      const completed = document.querySelectorAll(".setupStep.done").length;
+      const percent = (completed / TOTAL_STEPS) * 100;
+      const nextStep = Math.min(completed + 1, TOTAL_STEPS);
+
+      progressBar.style.width = `${percent}%`;
+      progressText.textContent =
+        completed === TOTAL_STEPS
+          ? "All steps complete"
+          : `Step ${nextStep} of ${TOTAL_STEPS}`;
+      progressPercent.textContent = `${Math.round(percent)}% complete`;
+    }
+
+    function openNextStep(currentStep) {
+      const next = currentStep.nextElementSibling;
+      if (next && next.classList.contains("setupStep") && next.classList.contains("locked")) {
+        setStepState(next, "open");
+      }
+    }
+
+    function markStepDone(step) {
+      setStepState(step, "done");
+      openNextStep(step);
+      updateProgress();
+    }
+
+    steps.forEach((step) => {
+      const doneBtn = step.querySelector(".doneBtn");
+      const copyBtn = step.querySelector(".copyBtn");
+      const textArea = step.querySelector("textarea");
+      const textWrap = step.querySelector(".stepTextWrap");
+      const doneTextBtn = step.querySelector(".doneTextLink");
+      const hasText = step.dataset.hasText === "true";
+
+      if (doneBtn) {
+        doneBtn.addEventListener("click", () => {
+          markStepDone(step);
+        });
+      }
+
+      if (copyBtn && textArea) {
+        copyBtn.addEventListener("click", async () => {
+          const ok = await copyText(textArea.value.trim());
+          flashButtonText(copyBtn, ok ? "Copied" : "Copy failed");
+        });
+      }
+
+      if (doneTextBtn && textWrap && hasText) {
+        doneTextBtn.addEventListener("click", () => {
+          const hidden = textWrap.classList.contains("is-hidden");
+          textWrap.classList.toggle("is-hidden");
+          doneTextBtn.textContent = hidden ? "Hide text" : "Show text";
+        });
+      }
+
+      if (!hasText && doneTextBtn) {
+        doneTextBtn.style.display = "none";
+      }
+
+      if (textWrap && !step.classList.contains("open")) {
+        textWrap.classList.add("is-hidden");
+      }
+    });
+
+    updateProgress();
+  }
+
   // ----------------------------
   // Init
   // ----------------------------
@@ -576,4 +672,5 @@
   setupResetHandlers();
   setupFundingUi();
   setupServiceTabs();
+  setupLaunchSteps();
 })();
