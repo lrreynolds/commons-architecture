@@ -1045,3 +1045,50 @@ body.dashboard #fundingLiveActions{
     justify-content:flex-start;
   }
 }
+
+.stepToggleLink,
+.doneOpenLink,
+.doneTextLink{
+  appearance:none;
+  border:none;
+  background:none;
+  padding:0;
+  margin:0;
+  font-size:14px;
+  font-weight:700;
+  color:var(--accent);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.stepToggleLink:hover,
+.doneOpenLink:hover,
+.doneTextLink:hover{
+  text-decoration:underline;
+}
+
+.stepTextActions{
+  margin-top:10px;
+  display:flex;
+  justify-content:flex-start;
+}
+
+.stepTextActions .secondary{
+  width:auto;
+}
+
+.setupActions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.setupActions .primary{
+  flex:1;
+  min-width:220px;
+}
+
+.setupActions .secondary{
+  width:auto;
+}
