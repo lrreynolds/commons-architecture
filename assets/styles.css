@@ -1089,3 +1089,11 @@ body.dashboard #fundingLiveActions{
 .setupActions .secondary{
   width:auto;
 }
+
+.setupStep.done .setupStepHeader .setupStepSummary{
+  display:none;
+}
+
+.setupStep.open .setupStepDoneBar{
+  display:none;
+}
