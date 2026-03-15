@@ -1,354 +1,943 @@
-<!-- flow-diagram.html -->
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Commonshub — AI Blueprint → Provisioning → Launch (with Feedback Loop)</title>
-  <style>
-    :root{
-      --bg:#f4f7f5;
-      --card:#ffffff;
-      --text:#102018;
-      --muted:#50665a;
-      --line:#d8e1db;
-      --accent:#215f43;
-      --accentSoft: rgba(33,95,67,.10);
-      --shadow: 0 18px 50px rgba(16,32,24,.12);
-      --radius:18px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-              "Apple Color Emoji","Segoe UI Emoji";
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family:var(--font);
-      color:var(--text);
-      background:
-        radial-gradient(1000px 520px at 20% 0%, rgba(31,111,74,.14) 0%, rgba(31,111,74,0) 62%),
-        radial-gradient(900px 520px at 80% 10%, rgba(15,81,50,.10) 0%, rgba(15,81,50,0) 62%),
-        var(--bg);
-    }
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:22px 16px 40px;
-    }
-    .stage{
-      background: rgba(255,255,255,.75);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      backdrop-filter: blur(10px);
-    }
-    .topbar{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:14px;
-      padding:14px 16px;
-      border-bottom:1px solid var(--line);
-      background: rgba(255,255,255,.8);
-    }
-    .title b{ display:block; font-size:16px; }
-    .title span{ display:block; font-size:12px; color:var(--muted); margin-top:2px; line-height:1.35; }
-    .chip{
-      font-size:12px;
-      color:var(--muted);
-      background: rgba(33,95,67,.08);
-      border:1px solid rgba(33,95,67,.18);
-      padding:6px 10px;
-      border-radius:999px;
-      white-space:nowrap;
-      align-self:center;
-    }
-    .content{ padding:16px; }
-    .card{
-      background: var(--card);
-      border:1px solid var(--line);
-      border-radius: 14px;
-      padding:14px;
-    }
-    .legend{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-      color:var(--muted);
-      font-size:12px;
-      align-items:center;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:999px;background:var(--accent);
-      box-shadow:0 0 0 3px var(--accentSoft);
-      display:inline-block; vertical-align:middle; margin-right:6px;
-    }
-    .note{
-      margin-top:10px;
-      padding:10px;
-      border-radius:12px;
-      background: rgba(33,95,67,.06);
-      border:1px solid rgba(33,95,67,.18);
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.45;
-    }
-    .note b{ color:var(--text); }
-    svg{ width:100%; height:auto; display:block; }
-    .svgLabel{
-      font-family: var(--font);
-      fill: #102018;
-    }
-    .svgMuted{
-      fill: #50665a;
-    }
-    .pill{
-      fill: rgba(33,95,67,.08);
-      stroke: rgba(33,95,67,.20);
-    }
-    .box{
-      fill: #ffffff;
-      stroke: #d8e1db;
-    }
-    .boxStrong{
-      fill: #ffffff;
-      stroke: rgba(33,95,67,.35);
-    }
-    .arrow{
-      stroke: rgba(16,32,24,.55);
-      stroke-width:2;
-      fill:none;
-      marker-end:url(#arrowhead);
-    }
-    .arrowSoft{
-      stroke: rgba(33,95,67,.55);
-      stroke-width:2;
-      fill:none;
-      marker-end:url(#arrowheadGreen);
-    }
-    .dash{
-      stroke-dasharray: 6 6;
-    }
-    .kbd{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      background: rgba(16,32,24,.06);
-      border: 1px solid rgba(16,32,24,.10);
-      padding: 2px 6px;
-      border-radius: 8px;
-      color: var(--text);
-    }
-/* ===== Readability helpers (SAFE: does not touch SVG classes) ===== */
-.card, .panel, .node {
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Commonshub — Turn comments into community</title>
+<link rel="canonical" href="https://thecommonshub.com/" />
+
+<!-- Primary SEO description -->
+<meta name="description" content="Turn comments into community. A single, ongoing conversation for your audience — on your domain — with built-in funding and no extra content to produce.">
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="Commonshub">
+<meta property="og:title" content="Turn comments into community.">
+<meta property="og:description" content="A single, ongoing conversation for your audience — on your domain — with built-in funding and no extra content to produce.">
+<meta property="og:url" content="https://thecommonshub.com/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://thecommonshub.com/og/og-preview.jpg?v=2">
+<meta property="og:image:alt" content="Commonshub — Turn comments into community">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Turn comments into community.">
+<meta name="twitter:description" content="Your audience. Your domain. Your rules. No ads. No algorithms.">
+<meta name="twitter:image" content="https://thecommonshub.com/og/og-preview.jpg?v=2">
+<meta name="twitter:image:alt" content="Commonshub — Turn comments into community">
+
+<!-- Theme color -->
+<meta name="theme-color" content="#1f6f4a">
+
+<!-- Favicon -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<style>
+:root{
+  --bg:#f4f7f5;
+  --card:#ffffff;
+  --text:#102018;
+  --muted:#50665a;
+  --line:#d8e1db;
+
+  --btn:#1f6f4a;
+  --btnText:#ffffff;
+
+  --band:#eef3ef;
+  --shadow: 0 10px 30px rgba(16,32,24,.06);
 }
 
-.card *, .panel *, .node * {
-  white-space: normal !important;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-  hyphens: auto;
-  line-height: 1.35;
+*{ box-sizing:border-box; }
+
+body{
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  margin:0;
+  line-height:1.5;
+  background:var(--bg);
+  color:var(--text);
 }
 
-.muted, .meta, .subcopy, .caption {
-  font-size: 13px;
-  line-height: 1.35;
+/* ===== HERO LAYOUT ===== */
+
+.hero{
+  padding:80px 18px 70px;
+  display:flex;
+  justify-content:center;
 }
 
-.card h3, .panel h3, .node h3 {
-  line-height: 1.2;
-  margin-bottom: 6px;
+.heroInner{
+  width:100%;
+  max-width:960px;
+  margin:0 auto;
+  padding:0 56px;
 }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="stage">
-      <div class="topbar">
-        <div class="title">
-          <b>Commonshub onboarding model — AI Blueprint → Provision → Launch</b>
-          <span>One-page diagram for infra/plumbing alignment (V) + product iteration. Includes the feedback loop (transcript → evaluator → new rules).</span>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;">
-  <a href="instances.html" style="
-    text-decoration:none;
-    background:#1f6f4a;
-    color:white;
-    padding:8px 14px;
-    border-radius:10px;
-    font-weight:600;
+
+@media (max-width:640px){
+  .hero{ padding:64px 16px 56px; }
+  .heroInner{ padding:0 22px; }
+}
+
+/* ===== TYPE ===== */
+
+.hero h1{
+  font-size:clamp(36px,5vw,54px);
+  line-height:1.03;
+  letter-spacing:-0.03em;
+  font-weight:900;
+  margin:0;
+  text-wrap: balance; /* ok if ignored */
+  opacity:0;
+  animation: riseFade 520ms ease-out forwards;
+}
+
+.hero .sub{
+  margin-top:14px;
+  font-size:18px;
+  color:var(--muted);
+  max-width:780px;
+  opacity:0;
+  animation: riseFade 520ms ease-out forwards;
+  animation-delay:90ms;
+}
+
+@media (max-width:640px){
+  .hero .sub{ font-size:16px; }
+}
+
+.hero .sub b{ color:var(--text); }
+
+/* ===== BEFORE / AFTER PANEL ===== */
+
+.beforeAfterSection{
+  margin:36px auto 0;   /* centers it */
+  margin-top:34px;
+  padding:26px 26px;
+  background:var(--band);
+  border:1px solid var(--line);
+  border-radius:28px;
+  box-shadow: var(--shadow);
+
+  /* ↓ THIS is the key change */
+  width:88%;                     /* creates visible side margins */
+  max-width:820px;              /* keeps it elegant on large screens */
+
+  opacity:0;
+  animation: riseFade 560ms ease-out forwards;
+  animation-delay:170ms;
+}
+
+.beforeAfterGrid{
+  display:grid;
+  gap:18px;
+  grid-template-columns: 1fr auto 1fr;
+  align-items:center;              /* ensures visual centering */
+}
+
+.beforeAfterLabel{
+  font-size:12px;
+  letter-spacing:0.14em;
+  font-weight:900;
+  color:rgba(16,32,24,.65);
+  margin:0 0 10px;
+}
+
+.beforeBox{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  font-size:13px;
+  color:rgba(16,32,24,.78);
+  margin-bottom:10px;
+}
+
+.beforeBox:last-child{ margin-bottom:0; }
+
+.arrowWrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.arrow{
+  width:42px;
+  height:42px;
+  border-radius:999px;
+  background:rgba(31,111,74,.08);
+  border:1px solid rgba(31,111,74,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:900;
+  color:var(--btn);
+}
+
+/* MOBILE: stack + full width */
+@media (max-width:760px){
+
+  .beforeAfterSection{
+    width:100%;
+    max-width:none;
+    margin:32px 0 0;      /* remove auto-centering gap */
+    padding:24px 18px;
+  }
+
+  /* MOBILE: stack BEFORE/AFTER */
+  .beforeAfterGrid{
+    grid-template-columns:1fr;
+    gap:0; 
+  }
+
+  /* BEFORE / AFTER: add a visual break when stacked */
+  .beforeAfterGrid > div:first-child{
+    padding-bottom:14px;
+    margin-bottom:14px;
+    border-bottom:1px solid rgba(16,32,24,.12);
+  }
+
+  .beforeAfterGrid > div:last-child{
+    padding-top:4px;
+  }
+
+  .beforeAfterExplain strong{
+    display:block;
+  }
+
+  .beforeAfterExplain strong:first-child{
+    margin-bottom:2px; /* tiny breathing room after "Before:" line */
+  }
+
+
+  /* Engines: slightly smaller copy on mobile */
+  #how .benefitGrid .benefit p{
     font-size:13px;
-  ">
-    Open test servers →
-  </a>
+    line-height:1.35;
+  }
 
-          <a href="ideation-00.html">Try the guided setup →</a>
+  /* Optional: slightly smaller engine titles on mobile */
+  #how .benefit h3.engineTitle{
+    font-size:1.05rem !important;
+  }
 
-  <div class="chip">MVP-oriented · calm · creator-first</div>
-</div>
-      </div>
+  .arrowWrap{
+    display:none;
+  }
 
-      <div class="content">
-        <div class="card">
-          <!-- FLOW DIAGRAM (SVG) -->
-          <svg viewBox="0 0 1100 690" role="img" aria-label="Flow diagram: landing to AI ideation to blueprint JSON to provisioning to dashboard launch sequence, plus feedback loop transcript to evaluator to rules to ideator.">
-            <defs>
-              <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
-                <path d="M0,0 L10,4 L0,8 Z" fill="rgba(16,32,24,.55)"></path>
-              </marker>
-              <marker id="arrowheadGreen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
-                <path d="M0,0 L10,4 L0,8 Z" fill="rgba(33,95,67,.70)"></path>
-              </marker>
-              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="rgba(16,32,24,.12)"/>
-              </filter>
-            </defs>
+  /* keep your existing mobile override */
+  .afterCard{
+    transform:none;
+  }
+}
+  
+@media (max-width:760px){
+  .afterCard{ transform:none; }
+}
 
-            <!-- Columns headers -->
-            <rect x="24"  y="18" width="328" height="42" rx="14" class="pill"></rect>
-            <text x="188" y="44" text-anchor="middle" class="svgLabel" font-size="14" font-weight="800">Creator-facing journey</text>
+.feedItem{
+  display:flex;
+  gap:10px;
+  padding:10px 8px;
+  border-radius:14px;
 
-            <rect x="386" y="18" width="330" height="42" rx="14" class="pill"></rect>
-            <text x="551" y="44" text-anchor="middle" class="svgLabel" font-size="14" font-weight="800">System outputs & automation</text>
+  opacity:0;
+  animation: riseFade 520ms ease-out forwards;
+}
 
-            <rect x="750" y="18" width="326" height="42" rx="14" class="pill"></rect>
-            <text x="913" y="44" text-anchor="middle" class="svgLabel" font-size="14" font-weight="800">Feedback loop (model tuning)</text>
+.feedItem + .feedItem{
+  border-top:1px solid rgba(216,225,219,.7);
+}
 
-            <!-- Left column boxes -->
-            <rect x="40" y="88" width="296" height="84" rx="16" class="box" filter="url(#softShadow)"></rect>
-            <text x="60" y="118" class="svgLabel" font-size="14" font-weight="800">1) Landing page</text>
-            <text x="60" y="142" class="svgMuted" font-size="12">“Try a recommended setup”</text>
-            <text x="60" y="160" class="svgMuted" font-size="12">Low-friction entry</text>
+.feedItem:nth-of-type(1){ animation-delay:220ms; }
+.feedItem:nth-of-type(2){ animation-delay:300ms; }
+.feedItem:nth-of-type(3){ animation-delay:380ms; }
 
-            <rect x="40" y="198" width="296" height="108" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
-            <text x="60" y="228" class="svgLabel" font-size="14" font-weight="800">2) AI Ideation Flow (creator prompts)</text>
-            <text x="60" y="252" class="svgMuted" font-size="12">Guided questions → defaults → approvals</text>
-            <text x="60" y="270" class="svgMuted" font-size="12">Produces plan + copy + configuration choices</text>
-            <text x="60" y="288" class="svgMuted" font-size="12">Also captures full transcript</text>
+.avatar{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:#cfd7d1;
+  flex-shrink:0;
+  margin-top:2px;
+}
 
-            <rect x="40" y="332" width="296" height="92" rx="16" class="box" filter="url(#softShadow)"></rect>
-            <text x="60" y="362" class="svgLabel" font-size="14" font-weight="800">3) Blueprint Preview</text>
-            <text x="60" y="386" class="svgMuted" font-size="12">Human-readable summary</text>
-            <text x="60" y="404" class="svgMuted" font-size="12">Button: “Commit & create my community”</text>
+.feedName{
+  font-size:13px;
+  font-weight:800;
+  margin:0;
+}
 
-            <rect x="40" y="450" width="296" height="92" rx="16" class="box" filter="url(#softShadow)"></rect>
-            <text x="60" y="480" class="svgLabel" font-size="14" font-weight="800">4) Provisioning status (short)</text>
-            <text x="60" y="504" class="svgMuted" font-size="12">Creating instance → DNS/SSL → Live</text>
-            <text x="60" y="522" class="svgMuted" font-size="12">Then: “Go to dashboard”</text>
+.feedText{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:2px;
+  line-height:1.35;
+}
 
-            <rect x="40" y="568" width="296" height="104" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
-            <text x="60" y="598" class="svgLabel" font-size="14" font-weight="800">5) Dashboard Launch Checklist</text>
-            <text x="60" y="622" class="svgMuted" font-size="12">Deep links + copy tools into Mastodon</text>
-            <text x="60" y="640" class="svgMuted" font-size="12">Invite link + collaborator messaging drafts</text>
-            <text x="60" y="658" class="svgMuted" font-size="12">Funding stays optional / later</text>
+.beforeAfterExplain{
+  margin-top:14px;                 /* was 16px */
+  font-size:14px;
+  text-align:center;
+  color:var(--muted);
+}
 
-            <!-- Middle column boxes -->
-            <rect x="402" y="98" width="298" height="96" rx="16" class="box" filter="url(#softShadow)"></rect>
-            <text x="422" y="128" class="svgLabel" font-size="14" font-weight="800">A) Persist outputs</text>
-            <text x="422" y="152" class="svgMuted" font-size="12">Blueprint JSON (authoritative inputs)</text>
-            <text x="422" y="170" class="svgMuted" font-size="12">Transcript (full interaction log)</text>
+.beforeAfterTagline{
+  margin-top:6px;                  /* NEW: pulls it up a touch */
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align:center;
+  color:var(--btn);
+}
+/* ===== BENEFITS ===== */
 
-            <rect x="402" y="224" width="298" height="118" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
-            <text x="422" y="254" class="svgLabel" font-size="14" font-weight="800">B) Provisioning Orchestrator (V)</text>
-            <text x="422" y="278" class="svgMuted" font-size="12">Consumes Blueprint JSON → spins up instance</text>
-            <text x="422" y="296" class="svgMuted" font-size="12">Seeds defaults at provision time when possible</text>
-            <text x="422" y="314" class="svgMuted" font-size="12">Returns: instance domain + admin owner account</text>
-            <text x="422" y="332" class="svgMuted" font-size="12">Emits: status updates (Provisioning → Live)</text>
+.benefitGrid{
+  margin-top: 2.4rem;
+  display:grid;
+  gap:18px;
+  grid-template-columns: 1fr;
+  opacity:0;
+  animation: riseFade 560ms ease-out forwards;
+  animation-delay:250ms;
+}
 
-            <rect x="402" y="372" width="298" height="148" rx="16" class="box" filter="url(#softShadow)"></rect>
-            <text x="422" y="402" class="svgLabel" font-size="14" font-weight="800">C) Dashboard state + checklist generation</text>
-            <text x="422" y="426" class="svgMuted" font-size="12">Launch checklist is derived from Blueprint</text>
-            <text x="422" y="444" class="svgMuted" font-size="12">Each item = (deep link) + (copy) + (status)</text>
-            <text x="422" y="462" class="svgMuted" font-size="12">Mastodon links: sign-in, admin, edit about/rules</text>
-            <text x="422" y="480" class="svgMuted" font-size="12">Invite + announcement + pinned post drafts</text>
+@media (min-width:760px){
+  .benefitGrid{ grid-template-columns: repeat(3, 1fr); }
+}
 
-            <rect x="402" y="532" width="298" height="140" rx="16" class="box" filter="url(#softShadow)"></rect>
-            <text x="422" y="562" class="svgLabel" font-size="14" font-weight="800">D) Optional funding module (later)</text>
-            <text x="422" y="586" class="svgMuted" font-size="12">Stripe connect → enable funding</text>
-            <text x="422" y="604" class="svgMuted" font-size="12">Surfaces: funding page + announcement/pinned drafts</text>
-            <text x="422" y="622" class="svgMuted" font-size="12">No paywalls in MVP; participation always free</text>
-            <text x="422" y="640" class="svgMuted" font-size="12">If creator changes options → regenerate drafts</text>
-            <text x="422" y="658" class="svgMuted" font-size="12">(future) automation if safe</text>
+.benefit{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding: 1.2rem 1.25rem 1.25rem;  /* reduce top padding */
+  height: 100%;
+}
 
-            <!-- Right column boxes (feedback loop) -->
-            <rect x="766" y="118" width="294" height="104" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
-            <text x="786" y="148" class="svgLabel" font-size="14" font-weight="800">Feedback Store</text>
-            <text x="786" y="172" class="svgMuted" font-size="12">Keep: transcript + blueprint + outcomes</text>
-            <text x="786" y="190" class="svgMuted" font-size="12">Tag: “worked / didn’t / edits made”</text>
-            <text x="786" y="208" class="svgMuted" font-size="12">(later) event logs + retention signals</text>
+.benefit h3{
+  font-size: 1.38rem;
+  line-height: 1.25;
+  font-weight: 650; /* or 600 if you prefer */
+  letter-spacing: -0.01em;
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+}
 
-            <rect x="766" y="258" width="294" height="120" rx="16" class="box" filter="url(#softShadow)"></rect>
-            <text x="786" y="288" class="svgLabel" font-size="14" font-weight="800">Evaluator / Trainer Model</text>
-            <text x="786" y="312" class="svgMuted" font-size="12">Reads transcript + final choices</text>
-            <text x="786" y="330" class="svgMuted" font-size="12">Finds: confusion, drift, missing questions</text>
-            <text x="786" y="348" class="svgMuted" font-size="12">Outputs: new heuristics + guardrails</text>
-            <text x="786" y="366" class="svgMuted" font-size="12">Produces “rule diffs” for ideator</text>
+.benefit p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+}
+.benefit.isPrimary{
+  background: #f3efe2;
+  border: 1.8px solid rgba(185, 151, 72, 0.45); /* gold outline */
+  box-shadow: 0 14px 38px rgba(16,32,24,.10);
+}
+  .benefit.isPrimary h3{
+  font-size: 1.42rem;
+}
+  .benefit.newCommunity{
+  background: linear-gradient(
+    180deg,
+    rgba(31,111,74,0.10),
+    rgba(31,111,74,0.04)
+  );
+  border: 1.8px solid rgba(31,111,74,.32);
+}
 
-            <rect x="766" y="416" width="294" height="140" rx="16" class="boxStrong" filter="url(#softShadow)"></rect>
-            <text x="786" y="446" class="svgLabel" font-size="14" font-weight="800">Ideator Behavior Ruleset</text>
-            <text x="786" y="470" class="svgMuted" font-size="12">Versioned prompts / policy / defaults</text>
-            <text x="786" y="488" class="svgMuted" font-size="12">“Ask less, decide more” tuning</text>
-            <text x="786" y="506" class="svgMuted" font-size="12">Keeps Commonshub principles consistent</text>
-            <text x="786" y="524" class="svgMuted" font-size="12">Rules are versioned + auditable</text>
-            <text x="786" y="542" class="svgMuted" font-size="12">Feeds next creator session</text>
+/* ===== PROMISE + CTA ===== */
 
-            <rect x="766" y="574" width="294" height="100" rx="16" class="box" filter="url(#softShadow)"></rect>
-            <text x="786" y="604" class="svgLabel" font-size="14" font-weight="800">Outcome Signals (optional)</text>
-            <text x="786" y="628" class="svgMuted" font-size="12">Did they launch? Invite? Enable funding later?</text>
-            <text x="786" y="646" class="svgMuted" font-size="12">Used only to improve defaults (non-extractive)</text>
+.heroPromise{
+  font-weight:900;
+  color:var(--btn);
+  text-align:center;
+  /* margin:26px auto 18px; */
+  margin-top: 1.6rem;
+  font-size:18px;
+}
 
-            <!-- Arrows: left column -->
-            <path class="arrow" d="M188 172 L188 198"></path>
-            <path class="arrow" d="M188 306 L188 332"></path>
-            <path class="arrow" d="M188 424 L188 450"></path>
-            <path class="arrow" d="M188 542 L188 568"></path>
+@media (max-width:640px){
+  .heroPromise{ font-size:16px; }
+}
 
-            <!-- Arrows: across to middle -->
-            <path class="arrowSoft" d="M336 240 L402 146"></path>
-            <text x="360" y="182" class="svgMuted" font-size="11">save JSON + transcript</text>
+.heroBottomCta{
+  display:flex;
+  justify-content:center;
+  opacity:0;
+  animation: riseFade 520ms ease-out forwards;
+  animation-delay:320ms;
+}
 
-            <path class="arrowSoft" d="M336 378 L402 282"></path>
-            <text x="360" y="300" class="svgMuted" font-size="11">commit triggers provisioning</text>
+.cta{
+  display:inline-block;
+  padding:14px 22px;
+  background:var(--btn);
+  color:var(--btnText);
+  border-radius:16px;
+  font-weight:900;
+  text-decoration:none;
+  will-change: transform;
+  animation: ctaBreathe 2.8s ease-in-out 1.2s infinite;
+}
 
-            <path class="arrowSoft" d="M336 496 L402 282"></path>
-            <text x="360" y="452" class="svgMuted" font-size="11">status updates</text>
+@media (hover:hover){
+  .cta:hover{ transform: translateY(-1px); }
+}
 
-            <path class="arrowSoft" d="M336 620 L402 436"></path>
-            <text x="360" y="560" class="svgMuted" font-size="11">checklist from blueprint</text>
+/* ===== ANIMATIONS ===== */
 
-            <!-- Arrows: middle to right (feedback loop) -->
-            <path class="arrowSoft dash" d="M700 146 L766 170"></path>
-            <text x="708" y="160" class="svgMuted" font-size="11">store both</text>
+@keyframes riseFade{
+  from { opacity:0; transform:translateY(10px); filter: blur(1px); }
+  to   { opacity:1; transform:translateY(0);    filter: blur(0); }
+}
 
-            <path class="arrowSoft dash" d="M913 222 L913 258"></path>
-            <path class="arrowSoft dash" d="M913 378 L913 416"></path>
-            <path class="arrowSoft dash" d="M913 536 L913 198"></path>
-            <text x="930" y="248" class="svgMuted" font-size="11">batch evaluate</text>
-            <text x="930" y="410" class="svgMuted" font-size="11">emit rule diffs</text>
-            <text x="930" y="548" class="svgMuted" font-size="11">outcomes feed back</text>
+@keyframes ctaBreathe{
+  0%,100% { transform: translateY(0);   box-shadow: 0 6px 18px rgba(16,32,24,.10); }
+  50%     { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(16,32,24,.14); }
+}
 
-            <!-- Arrow: middle funding → feedback store (optional) -->
-            <path class="arrowSoft dash" d="M700 606 L766 606"></path>
-            <text x="708" y="596" class="svgMuted" font-size="11">changes → regenerate drafts</text>
+  .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
 
-          
-          </svg>
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-          <div class="legend">
-            <span><span class="dot"></span><b>Key idea:</b> Blueprint JSON is the <i>authoritative input</i>, transcript is the <i>training signal</i>.</span>
-            <span>Infra (V): focuses on <span class="kbd">Provisioning Orchestrator</span> consuming JSON + emitting status.</span>
-          </div>
+.reveal--slow {
+  transition-duration: 750ms;
+}
 
-          <div class="note">
-            <b>Feedback loop intent (MVP-safe):</b> Save <i>the full ideation transcript</i> alongside the Blueprint JSON. Periodically run an evaluator/trainer that produces
-            versioned “rule diffs” (prompts/defaults/guardrails) to improve the ideator’s next runs — without adding friction to the creator flow.
+.reveal--delay-1 { transition-delay: 90ms; }
+.reveal--delay-2 { transition-delay: 180ms; }
+.reveal--delay-3 { transition-delay: 270ms; }
+.reveal--delay-4 { transition-delay: 360ms; }
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .hero h1,
+  .hero .sub,
+  .beforeAfterSection,
+  .benefitGrid,
+  .heroBottomCta,
+  .feedItem,
+  .cta{
+    animation:none !important;
+    opacity:1 !important;
+    transform:none !important;
+    filter:none !important;
+  }
+}
+.sectionCta{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:28px;
+}
+
+.secondaryCta{
+  padding:12px 18px;
+  font-size:14px;
+  border-radius:14px;
+  background:transparent;
+  color:var(--btn);
+  border:1px solid rgba(31,111,74,.35);
+  animation:none;           /* no breathing on secondary */
+}
+
+@media (hover:hover){
+  .secondaryCta:hover{
+    background:rgba(31,111,74,.06);
+    transform:translateY(-1px);
+  }
+}
+
+@media (max-width:640px){
+  .sectionCta{
+    justify-content:center;
+  }
+} 
+  .heroBottomCtaRow{
+  gap:14px;
+  align-items:center;
+}
+
+.secondaryCta{
+  background:transparent;
+  color:var(--btn);
+  border:1px solid rgba(31,111,74,.35);
+  animation:none;
+}
+
+@media (max-width:640px){
+  .heroBottomCtaRow{
+    flex-direction:column;
+  }
+  .heroBottomCtaRow .cta{
+    width:100%;
+    text-align:center;
+  }
+}
+/* Respect the creator’s existing content layer */
+.contentLayer{
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+.contentLayer strong,
+.contentLayer .layerTitle{
+  color: var(--text);
+  font-weight: 800;
+}
+
+.contentLayer .layerMeta{
+  color: rgba(16,32,24,.72); /* soft, but not “diminished” */
+  font-weight: 600;
+}
+
+.contentLayer .layerNote{
+  color: var(--muted);
+  font-size: 13px;
+}
+  /* SECTION HEADLINE — prevent awkward last-word wrap */
+#how h2{
+  max-width: 18ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-wrap: balance;
+}
+
+/* YOUR CONTENT BOX — stronger, not bigger than NEW */
+.yourContent strong{
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.yourContent .muted{
+  font-size: 14px;
+}
+
+/* NEW COMMUNITY — make it the internal hero */
+.newCommunity .title{
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+/* ENGINE TITLES — reduce visual weight */
+.engineTitle{
+  font-size: 17px;
+  font-weight: 800;
+}
+
+/* COMMONSHUB TITLE — keep authoritative */
+.commonshubTitle{
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+/* --- Engine titles: override the existing .benefit h3 rule --- */
+.benefit h3.engineTitle{
+  font-size: 1.15rem !important;
+  line-height: 1.2 !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.01em !important;
+  margin-bottom: 0.45rem !important;
+}
+
+/* --- Your content: make it feel deliberate (not wimpy) --- */
+.benefit.yourContent strong{
+  font-size: 1.05rem;
+  font-weight: 850;
+}
+
+/* --- New community: make the internal title the hero --- */
+.newCommunity .title{
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+  /* utility */
+.muted{ color: var(--muted); }
+
+/* center the HOW section headline reliably */
+#how h2{
+  max-width: 28ch;
+  margin: 0 auto 14px;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* center the content layer so it doesn't feel "wimpy" */
+.benefit.yourContent{
+  text-align: center;
+}
+.benefit.yourContent strong{
+  display:block;
+  font-size: 1.05rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.benefit.yourContent .muted{
+  display:block;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+.benefit.yourContent .note{
+  font-size: 0.95rem;
+}
+
+/* reduce engine body copy size a hair */
+.engineCopy{
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.engineCopy b{ color: var(--text); }
+
+/* commonshub copy: tighter and balanced */
+.commonCopy{
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0.35rem 0 0;
+}
+@media (max-width:760px){
+  #how p.engineCopy{
+    font-size:12px !important;
+    line-height:1.32 !important;
+  }
+  #how h3.engineTitle{
+    font-size:1.05rem !important;
+  }
+}
+  .powerLine{
+ margin: 36px auto 18px;
+  max-width: 720px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+@media (max-width:640px){
+  .powerLine{
+    font-size:16px;
+    padding: 0 10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+  <div class="heroInner">
+
+    <h1>Turn comments into community.</h1>
+ <p class="sub">
+      A <b>single</b>, ongoing conversation for the people who care about your work —
+not comments that reset every time you <b>publish</b>.
+    </p>
+    <p class="sub">
+      A <b>chronological feed</b> for your audience —
+      with <b>built-in community funding</b> —
+      and <b>no extra content</b> to produce.
+    </p>
+
+    <!-- BEFORE / AFTER VISUAL -->
+    <div class="beforeAfterSection">
+
+      <div class="beforeAfterGrid">
+
+        <!-- BEFORE -->
+        <div>
+          <div class="beforeAfterLabel">BEFORE</div>
+
+          <div class="beforeBox">YouTube Comments</div>
+          <div class="beforeBox">Substack Replies</div>
+          <div class="beforeBox">Twitter Threads</div>
+        </div>
+
+        <!-- ARROW -->
+        <div class="arrowWrap">
+          <div class="arrow">→</div>
+        </div>
+
+        <!-- AFTER -->
+        <div>
+          <div class="beforeAfterLabel">AFTER</div>
+
+          <div class="afterCard">
+
+            <div class="feedItem">
+              <div class="avatar"></div>
+              <div>
+                <div class="feedName">Alex</div>
+                <div class="feedText">
+                  This episode hit hard. Especially the part about sustainable communities.
+                </div>
+              </div>
+            </div>
+
+            <div class="feedItem">
+              <div class="avatar"></div>
+              <div>
+                <div class="feedName">Jordan</div>
+                <div class="feedText">
+                  Same here. I love having one place to continue the conversation.
+                </div>
+              </div>
+            </div>
+
+            <div class="feedItem">
+              <div class="avatar"></div>
+              <div>
+                <div class="feedName">You</div>
+                <div class="feedText">
+                  Appreciate that. This is exactly why we built this space.
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
+
       </div>
+
+      <div class="beforeAfterExplain">
+        <strong>Before:</strong> comments that reset with every post.
+        <strong>After:</strong> a shared conversation that compounds over time.
+      </div>
+
+      <div class="beforeAfterTagline">
+        From scattered threads to shared community.
+      </div>
+
+    </div>
+
+  <!-- BENEFITS -->
+<div class="benefitGrid">
+
+  <div class="benefit reveal reveal--delay-1">
+    <h3>Real conversations</h3>
+    <p>
+      One shared feed. No algorithmic distortion. No reset.
+      Your audience talks with you — and each other — openly.
+    </p>
+  </div>
+
+  <div class="benefit reveal reveal--delay-2">
+    <h3>No extra work</h3>
+    <p>
+      Keep publishing on YouTube or Substack.
+      Just share your link. Conversations happen here.
+    </p>
+  </div>
+
+  <div class="benefit reveal reveal--delay-3">
+    <h3>Sustainable by design</h3>
+    <p>
+      Built-in community funding keeps it healthy —
+      without ads, algorithms, or platform extraction.
+    </p>
+  </div>
+
+</div>
+
+<p class="powerLine reveal reveal--slow reveal--delay-2">
+  One place for your audience, collaborators, and sources — <b>under your control</b> —
+  that cannot be throttled, shadow-banned, or shut down.
+</p>
+
+<p class="heroPromise reveal reveal--delay-3">
+  No ads • No algorithms • Community funded
+</p>
+
+<div class="heroBottomCta heroBottomCtaRow reveal reveal--delay-4">
+  <a class="cta" href="start.html?reset=1">Start Your Community</a>
+  <a class="cta secondaryCta" href="#how">See how it works</a>
+</div>
+  </div>
+</section>
+<section id="how" class="hero" style="padding-top:40px; padding-bottom:20px;">
+  <div class="heroInner">
+
+    <div class="beforeAfterSection" style="max-width:820px; margin-top:0;">
+
+      <h2 style="
+        font-size:clamp(26px,3.2vw,34px);
+        line-height:1.15;
+        letter-spacing:-0.02em;
+        margin:0 0 14px;
+        text-align:center;
+      ">
+        Built on proven infrastructure — not another platform
+      </h2>
+
+      <p class="sub" style="text-align:center; margin:0 auto 26px; max-width:640px;">
+        Commonshub connects a <b>chronological social layer</b> with a
+        <b>native funding engine</b> — and we handle the hosting,
+        setup, and integration.
+      </p>
+
+<!-- STACKED ARCHITECTURE (THE "SANDWICH") -->
+<div style="
+  margin-top:4px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;              /* <-- this is the sandwich tightness */
+">
+
+  <!-- EXISTING CONTENT (EXTERNAL / SUBORDINATE) -->
+<div class="benefit yourContent">
+  <strong>Your content (already exists)</strong>
+  <span class="muted">YouTube • Substack • Podcast</span>
+  <div class="note muted">Keep publishing exactly as you do today. <b style="color:var(--text);">Nothing changes.</b></div>
+</div>
+<div style="
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:2px 0;
+">
+  <div style="
+    height:1px;
+    width:100%;
+    background:rgba(16,32,24,.12);
+  "></div>
+
+  <div style="
+    padding:0 10px;
+    font-weight:900;
+    font-size:14px;
+    color:rgba(16,32,24,.55);
+  ">+</div>
+
+  <div style="
+    height:1px;
+    width:100%;
+    background:rgba(16,32,24,.12);
+  "></div>
+</div>
+  <!-- WHAT'S NEW (THE PRODUCT) -->
+  <div class="benefit newCommunity" style="
+    text-align:center;
+    margin:0;            /* critical */
+    padding:12px 14px;
+    box-shadow: 0 10px 26px rgba(16,32,24,.06);
+  ">
+    <div style="display:inline-flex; align-items:center; gap:10px; margin-bottom:6px;">
+      <span style="
+        display:inline-flex;
+        align-items:center;
+        padding:4px 10px;
+        border-radius:999px;
+        background:rgba(31,111,74,.10);
+        border:1px solid rgba(31,111,74,.18);
+        color:var(--btn);
+        font-weight:900;
+        font-size:12px;
+        letter-spacing:.06em;
+        text-transform:uppercase;
+      ">NEW · YOU OWN THIS</span>
+
+      <span class="title">Your independent community</span>
+    </div>
+
+    <div style="color:var(--muted); font-size:14px; line-height:1.35;">
+      A shared, ongoing conversation on your own domain — with <b style="color:var(--text);">funding built in</b>.
+    </div>
+
+    <div style="margin-top:8px; color:rgba(16,32,24,.68); font-size:13px;">
+      Your domain • Your audience • Your rules • No ads • No algorithms
     </div>
   </div>
+
+  <!-- ENGINES (2-UP) -->
+ <div class="benefitGrid" style="
+  margin-top:0;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+">
+
+  <div class="benefit" style="text-align:center;">
+    <h3 class="engineTitle">Social media engine</h3>
+    <p class="engineCopy">
+      Mastodon — a proven, open network used by millions.
+      <b>No</b> ads or algorithm.
+    </p>
+  </div>
+
+  <div class="benefit" style="text-align:center;">
+    <h3 class="engineTitle">Funding &amp; payments engine</h3>
+    <p class="engineCopy">
+      Stripe — memberships, tips, and donations.<br>
+      Money goes <b>directly</b> to you.
+    </p>
+  </div>
+
+</div>
+
+<div class="benefit isPrimary" style="
+  margin-top:0;
+  text-align:center;
+  padding:1.1rem 1.25rem 1.2rem;
+">
+  <h3 class="commonshubTitle">Commonshub — managed infrastructure</h3>
+  <p class="commonCopy">
+    We handle setup, hosting, updates, and Stripe integration.
+  </p>
+  <p class="commonCopy">
+    Runs on your domain. Under <b>your control</b>.
+  </p>
+</div>
+</div>
+</div>
+</section>
+
 </body>
+  <script>
+  (function () {
+    const els = document.querySelectorAll(".reveal");
+    if (!els.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    els.forEach((el) => observer.observe(el));
+  })();
+</script>
 </html>
