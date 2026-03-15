@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Commonshub — Guided onboarding</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    :root{
+      --console-bg:#f7faf8;
+      --console-tint:rgba(31,111,74,.06);
+      --console-tint-2:rgba(31,111,74,.1);
+      --console-border:rgba(31,111,74,.14);
+    }
+
+    .consoleShell{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-height:680px;
+    }
+
+    .consoleHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:4px 2px 0;
+      flex-wrap:wrap;
+    }
+
+    .consoleHeader .title{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .consoleHeader .title b{
+      color:var(--text);
+      font-weight:900;
+    }
+
+    .consoleStream{
+      flex:1;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:linear-gradient(to bottom, rgba(16,32,24,.02), rgba(16,32,24,.005));
+      padding:16px;
+      overflow:auto;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+      min-height:460px;
+    }
+
+    .msg{
+      border:1px solid var(--console-border);
+      background:#fff;
+      border-radius:18px;
+      padding:14px 15px;
+      margin-bottom:12px;
+    }
+
+    .msg.system{
+      background:var(--console-bg);
+      border-color:var(--console-tint-2);
+    }
+
+    .msg.choice{
+      background:rgba(31,111,74,.035);
+      border-color:rgba(31,111,74,.12);
+    }
+
+    .msg.locked{
+      background:rgba(13,20,17,.02);
+      border-color:rgba(13,20,17,.08);
+    }
+
+    .metaLine{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .metaLine b{
+      color:var(--text);
+      font-weight:900;
+    }
+
+    .msg p{
+      margin:0;
+      font-size:14px;
+      line-height:1.45;
+      color:var(--text);
+    }
+
+    .msg p + p{margin-top:9px;}
+
+    .optionGrid{
+      display:grid;
+      grid-template-columns:repeat(5, minmax(0,1fr));
+      gap:10px;
+    }
+
+    .optBtn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 12px;
+      font:inherit;
+      font-weight:800;
+      font-size:14px;
+      text-align:center;
+      cursor:pointer;
+      transition:.18s ease;
+      box-shadow:0 1px 0 rgba(255,255,255,.6) inset;
+    }
+
+    .optBtn:hover{border-color:rgba(31,111,74,.26); background:rgba(31,111,74,.04);}
+    .optBtn.active{background:#1f6f4a; color:#fff; border-color:#1f6f4a;}
+
+    .inputBar{
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:#fff;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .inputField{
+      width:100%;
+      min-height:88px;
+      resize:none;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px 15px;
+      font:inherit;
+      color:var(--text);
+      background:#fcfdfc;
+      outline:none;
+    }
+
+    .inputField:focus{border-color:rgba(31,111,74,.28); box-shadow:0 0 0 3px rgba(31,111,74,.08);}
+
+    .continueBtn{
+      appearance:none;
+      border:none;
+      border-radius:18px;
+      background:#1f6f4a;
+      color:#fff;
+      font:inherit;
+      font-weight:900;
+      font-size:17px;
+      padding:16px 18px;
+      cursor:pointer;
+      box-shadow:0 10px 18px rgba(31,111,74,.16);
+      width:100%;
+    }
+
+    .subtleRow{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:12px;
+      padding:0 2px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--muted);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .blueprintMini{
+      border:1px dashed rgba(31,111,74,.2);
+      background:rgba(31,111,74,.03);
+      border-radius:18px;
+      padding:14px;
+      margin-top:4px;
+    }
+
+    .blueprintMini b{display:block; margin-bottom:8px;}
+    .blueprintMini ul{margin:0; padding-left:18px; color:var(--text); font-size:13px; line-height:1.5;}
+
+    .flowRail{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .flowRail .node{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:12px;
+      min-height:74px;
+    }
+
+    .flowRail .node b{display:block; font-size:13px; margin-bottom:4px;}
+    .flowRail .node span{font-size:12px; color:var(--muted); line-height:1.4; display:block;}
+    .flowRail .node.current{background:rgba(31,111,74,.06); border-color:rgba(31,111,74,.18);}
+
+    @media (max-width: 1100px){
+      .optionGrid{grid-template-columns:repeat(3, minmax(0,1fr));}
+      .flowRail{grid-template-columns:repeat(2, minmax(0,1fr));}
+    }
+
+    @media (max-width: 720px){
+      .optionGrid{grid-template-columns:repeat(2, minmax(0,1fr));}
+      .flowRail{grid-template-columns:1fr;}
+      .consoleShell{min-height:auto;}
+    }
+  </style>
+</head>
+<body class="flow">
+  <div class="flowRoot">
+    <div class="wrap">
+      <main class="stage">
+        <div class="topbar">
+          <div class="left">
+            <div class="logoMark"></div>
+            <div class="meta">
+              <b>Guided onboarding</b>
+              <span>Blueprint generation → approval → provisioning token → launch setup</span>
+            </div>
+          </div>
+          <div class="chip">Updated flow</div>
+        </div>
+
+        <div class="content">
+          <div class="center">
+            <div class="flowBanner">
+              <div>
+                <b>Commonshub guided onboarding</b>
+                <div class="muted" style="margin-top:6px;">Latest ruleset flow from first landing through provisioning handoff and dashboard setup.</div>
+              </div>
+              <div class="stepChip">Console mockup</div>
+            </div>
+
+            <div class="progress">
+              <span>Phase: Approval + provisioning handoff</span>
+              <div class="bar"><div style="width:88%"></div></div>
+              <span>~8–12 min to Blueprint</span>
+            </div>
+
+            <div class="flowRail">
+              <div class="node"><b>1. Landing</b><span>Start with admin email, focus, and public links.</span></div>
+              <div class="node"><b>2. Guided decisions</b><span>Positioning, name, address, header line, and owner identity.</span></div>
+              <div class="node current"><b>3. Approval + token</b><span>Blueprint locked, provisioning token issued, final URL confirmed.</span></div>
+              <div class="node"><b>4. Launch setup</b><span>Open guided dashboard renderer for platform-specific setup steps.</span></div>
+            </div>
+
+            <div class="card" style="margin-top:14px;">
+              <div class="consoleShell">
+                <div class="consoleHeader">
+                  <div class="title"><b>Console</b> · latest Jason-style onboarding path</div>
+                  <div class="pill">Mastodon 4.5.7 setup target</div>
+                </div>
+
+                <div class="consoleStream">
+                  <div class="msg system">
+                    <div class="metaLine"><span><b>Commonshub</b> · Session start</span><span>Step 0</span></div>
+                    <p><b>Hi — ready to design your community?</b></p>
+                    <p>First, what email should own the server? This is where we’ll send your login link when it’s live.</p>
+                    <p><b>Admin email:</b> jason@jaysonjaysmart.com</p>
+                  </div>
+
+                  <div class="msg">
+                    <div class="metaLine"><span><b>Commonshub</b> · Intake</span><span>Focus</span></div>
+                    <p><b>Core focus:</b> STRATEGY, NATIONAL SECURITY, &amp; REPUTATIONAL POLITICS.</p>
+                    <p><b>Links:</b> jasonjaysmart.com · YouTube · Substack · Kyiv Post</p>
+                  </div>
+
+                  <div class="msg choice">
+                    <div class="metaLine"><span><b>Step 1</b> · Community Positioning</span><span>Approved</span></div>
+                    <p><b>Selected:</b> A working room for researchers, journalists, and operators analyzing power, propaganda, and geopolitical strategy.</p>
+                    <p><b>Short description:</b> A working room for researchers, journalists, and operators tracking geopolitical power, propaganda, and strategic conflict in real time.</p>
+                  </div>
+
+                  <div class="msg choice">
+                    <div class="metaLine"><span><b>Step 2</b> · Community Name</span><span>Custom final</span></div>
+                    <p><b>Locked:</b> The Security Brief</p>
+                    <p><b>Instance slug:</b> securitybrief</p>
+                  </div>
+
+                  <div class="msg choice">
+                    <div class="metaLine"><span><b>Step 3</b> · Community Address</span><span>Approved</span></div>
+                    <p><b>Locked:</b> securitybrief.jasonjaysmart.com</p>
+                    <p><b>Domain type:</b> External subdomain — brand continuity</p>
+                  </div>
+
+                  <div class="msg choice">
+                    <div class="metaLine"><span><b>Step 4</b> · Header Line</span><span>Approved</span></div>
+                    <p><b>Locked:</b> Real-Time Security Briefings</p>
+                  </div>
+
+                  <div class="msg choice">
+                    <div class="metaLine"><span><b>Step 5</b> · Owner Profile</span><span>Approved</span></div>
+                    <p><b>Locked:</b> jasonjaysmart</p>
+                    <p><b>Owner handle:</b> @jasonjaysmart@securitybrief.jasonjaysmart.com</p>
+                  </div>
+
+                  <div class="msg locked">
+                    <div class="metaLine"><span><b>Blueprint</b> · Complete</span><span>Saved</span></div>
+                    <div class="blueprintMini">
+                      <b>Community Blueprint</b>
+                      <ul>
+                        <li>Community name: The Security Brief</li>
+                        <li>Slug: securitybrief</li>
+                        <li>Domain candidate: securitybrief.jasonjaysmart.com</li>
+                        <li>Header line: Real-Time Security Briefings</li>
+                        <li>Owner handle: @jasonjaysmart@securitybrief.jasonjaysmart.com</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="msg system">
+                    <div class="metaLine"><span><b>Provisioning handoff</b> · Resume-safe</span><span>New</span></div>
+                    <p>Your Blueprint is saved. A private provisioning token is generated so the owner can return later, confirm the final URL, and continue into provisioning without rerunning onboarding.</p>
+                    <p><b>Provisioning token:</b> cs_live_demo_8X4K2Q_securitybrief</p>
+                  </div>
+
+                  <div class="msg">
+                    <div class="metaLine"><span><b>Final confirmation</b> · URL check</span><span>Required before provisioning</span></div>
+                    <p>Before provisioning begins, confirm the final URL choice. If the preferred URL is unavailable, the system suggests alternatives and preserves the original candidate in the Blueprint.</p>
+                  </div>
+                </div>
+
+                <div class="optionGrid">
+                  <button class="optBtn">Approve</button>
+                  <button class="optBtn active">Use current URL</button>
+                  <button class="optBtn">See alternatives</button>
+                  <button class="optBtn">Edit subdomain</button>
+                  <button class="optBtn">Resume later</button>
+                </div>
+
+                <div class="inputBar">
+                  <textarea class="inputField" placeholder="Type a final confirmation or adjustment. Example: Use securitybrief.jasonjaysmart.com"></textarea>
+                  <button class="continueBtn" type="button" onclick="window.location.href='launch-setup.html'">Generate provisioning token → open launch setup dashboard</button>
+                </div>
+
+                <div class="subtleRow">
+                  <span>Next screen: platform-aware launch setup dashboard</span>
+                  <span>Missing flows by design: plan purchase and Stripe account setup</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:16px;">
+              <div class="sectionHead">
+                <h3>What this mockup now reflects</h3>
+              </div>
+              <div class="grid cols-3">
+                <div class="miniCard">
+                  <b>Latest onboarding ruleset</b>
+                  <p>Email → focus → links → 5 identity steps → Blueprint → proceed gate.</p>
+                </div>
+                <div class="miniCard">
+                  <b>Provisioning token handoff</b>
+                  <p>Return-safe token generation with final URL confirmation before provisioning begins.</p>
+                </div>
+                <div class="miniCard">
+                  <b>Dashboard renderer path</b>
+                  <p>After confirmation, the owner lands in guided setup tied to platform defaults and Blueprint content.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
