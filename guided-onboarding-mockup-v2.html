@@ -103,25 +103,6 @@
       gap:10px;
     }
 
-    .optBtn{
-      appearance:none;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--text);
-      border-radius:999px;
-      padding:10px 12px;
-      font:inherit;
-      font-weight:800;
-      font-size:14px;
-      text-align:center;
-      cursor:pointer;
-      transition:.18s ease;
-      box-shadow:0 1px 0 rgba(255,255,255,.6) inset;
-    }
-
-    .optBtn:hover{border-color:rgba(31,111,74,.26); background:rgba(31,111,74,.04);}
-    .optBtn.active{background:#1f6f4a; color:#fff; border-color:#1f6f4a;}
-
     .inputBar{
       border:1px solid var(--line);
       border-radius:22px;
@@ -319,15 +300,15 @@
 
     .choiceTop{
       display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:4px;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
     }
 
     .choiceBadge{
       display:inline-flex;
       align-items:center;
+      justify-content:center;
       border:1px solid rgba(31,111,74,.22);
       background:#fff;
       color:#1f6f4a;
@@ -335,13 +316,14 @@
       padding:4px 8px;
       font-size:11px;
       font-weight:800;
+      white-space:nowrap;
       flex-shrink:0;
     }
 
     .choiceItem.recommended.active .choiceBadge{
-      background:rgba(255,255,255,.12);
+      background:rgba(255,255,255,.14);
       color:#fff;
-      border-color:rgba(255,255,255,.25);
+      border-color:rgba(255,255,255,.3);
     }
 
     .choiceValue{
@@ -349,6 +331,7 @@
       font-weight:900;
       line-height:1.3;
       word-break:break-word;
+      flex:1;
     }
 
     .choiceMeta{
@@ -385,6 +368,10 @@
     }
 
     @media (max-width:720px){
+      .choiceTop{
+        flex-direction:column;
+        align-items:flex-start;
+      }
       .choiceItem{
         padding:13px 14px;
       }
@@ -525,81 +512,74 @@
                     <span><b>Step 3</b> · Community Address</span>
                     <span>Choose final URL</span>
                   </div>
-
                   <p><b>Why this matters</b><br>
                   This becomes part of every handle and is hard to change later.</p>
 
-                  <div class="recommendation">
-                    <span class="recBadge">Recommended</span>
-                    <p><b>securitybrief.jasonjaysmart.com</b> — preserves trust from your existing domain</p>
+                  <div class="choiceList">
+                    <button class="choiceItem recommended active">
+                      <div class="choiceTop">
+                        <span class="choiceValue">securitybrief.jasonjaysmart.com</span>
+                        <span class="choiceBadge">Recommended</span>
+                      </div>
+                      <div class="choiceMeta">Preserves trust from your existing domain</div>
+                    </button>
+
+                    <button class="choiceItem">
+                      <div class="choiceValue">securitybrief.commonshub.social</div>
+                      <div class="choiceMeta">Fastest launch, no external DNS setup</div>
+                    </button>
+
+                    <button class="choiceItem">
+                      <div class="choiceValue">securitybrief.com</div>
+                      <div class="choiceMeta">Standalone identity if available</div>
+                    </button>
                   </div>
+                  <div class="subtleActions">
+                    <button class="subtleBtn">More options</button>
+                    <button class="subtleBtn">Edit manually</button>
+                    <button class="subtleBtn">Resume later</button>
+                  </div>
+
+                  <div class="fieldLabel">Final URL or custom instruction</div>
+                  <textarea class="inputField">securitybrief.jasonjaysmart.com</textarea>
+                  <button class="continueBtn" type="button" onclick="window.location.href='dashboard.html'">Continue →</button>
                 </div>
-
-                <div class="choiceList">
-                  <button class="choiceItem recommended active">
-                    <div class="choiceTop">
-                      <span class="choiceBadge">Recommended</span>
-                      <span class="choiceValue">securitybrief.jasonjaysmart.com</span>
-                    </div>
-                    <div class="choiceMeta">Preserves trust from your existing domain</div>
-                  </button>
-
-                  <button class="choiceItem">
-                    <div class="choiceValue">securitybrief.commonshub.social</div>
-                    <div class="choiceMeta">Fastest launch, no external DNS setup</div>
-                  </button>
-
-                  <button class="choiceItem">
-                    <div class="choiceValue">securitybrief.com</div>
-                    <div class="choiceMeta">Standalone identity if available</div>
-                  </button>
+                <div class="msg locked">
+                  <div class="metaLine"><span><b>Locked</b></span></div>
+                  <p><b>securitybrief.jasonjaysmart.com</b></p>
                 </div>
-                <div class="subtleActions">
-                  <button class="subtleBtn">More options</button>
-                  <button class="subtleBtn">Edit manually</button>
-                  <button class="subtleBtn">Resume later</button>
+                <div class="subtleRow">
+                  <span>Next screen: platform-aware launch setup dashboard</span>
+                  <span>Missing flows by design: plan purchase and Stripe account setup</span>
                 </div>
-
-                <div class="fieldLabel">Final URL or custom instruction</div>
-                <textarea class="inputField">securitybrief.jasonjaysmart.com</textarea>
-                <button class="continueBtn" type="button" onclick="window.location.href='dashboard.html'">Continue →</button>
-              </div>
-              <div class="msg locked">
-                <div class="metaLine"><span><b>Locked</b></span></div>
-                <p><b>securitybrief.jasonjaysmart.com</b></p>
-              </div>
-              <div class="subtleRow">
-                <span>Next screen: platform-aware launch setup dashboard</span>
-                <span>Missing flows by design: plan purchase and Stripe account setup</span>
               </div>
             </div>
+
+            <div class="card" style="margin-top:16px;">
+              <div class="sectionHead">
+                <h3>What this mockup now reflects</h3>
+              </div>
+              <div class="grid cols-3">
+                <div class="miniCard">
+                  <b>Latest onboarding ruleset</b>
+                  <p>Email → focus → links → 5 identity steps → Blueprint → proceed gate.</p>
+                </div>
+                <div class="miniCard">
+                  <b>Provisioning token handoff</b>
+                  <p>Return-safe token generation with final URL confirmation before provisioning begins.</p>
+                </div>
+                <div class="miniCard">
+                  <b>Dashboard renderer path</b>
+                  <p>After confirmation, the owner lands in guided setup tied to platform defaults and Blueprint content.</p>
+                </div>
+              </div>
+            </div>
+
           </div>
-
-          <div class="card" style="margin-top:16px;">
-            <div class="sectionHead">
-              <h3>What this mockup now reflects</h3>
-            </div>
-            <div class="grid cols-3">
-              <div class="miniCard">
-                <b>Latest onboarding ruleset</b>
-                <p>Email → focus → links → 5 identity steps → Blueprint → proceed gate.</p>
-              </div>
-              <div class="miniCard">
-                <b>Provisioning token handoff</b>
-                <p>Return-safe token generation with final URL confirmation before provisioning begins.</p>
-              </div>
-              <div class="miniCard">
-                <b>Dashboard renderer path</b>
-                <p>After confirmation, the owner lands in guided setup tied to platform defaults and Blueprint content.</p>
-              </div>
-            </div>
-          </div>
-
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   </div>
-</div>
 </body>
 <script>
   const choiceItems = document.querySelectorAll('.choiceItem');
