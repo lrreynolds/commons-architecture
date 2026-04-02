@@ -226,6 +226,32 @@
       .flowRail{grid-template-columns:1fr;}
       .consoleShell{min-height:auto;}
     }
+
+    .optBtn.recommended{
+      border-color:#1f6f4a;
+      box-shadow:0 0 0 2px rgba(31,111,74,.15);
+    }
+
+    .optBtn.recommended::before{
+      content:"★ ";
+      font-weight:900;
+    }
+
+    .subtleActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+
+    .subtleBtn{
+      background:none;
+      border:none;
+      color:var(--muted);
+      font-weight:700;
+      cursor:pointer;
+    }
+
   </style>
 </head>
 <body class="flow">
@@ -342,50 +368,85 @@
                   </div>
                 </div>
 
+                <div class="msg system currentStep">
+                  <div class="metaLine">
+                    <span><b>Step 3</b> · Community Address</span>
+                    <span>Choose final URL</span>
+                  </div>
+
+                  <p><b>Why this matters</b><br>
+                  This becomes part of every handle and is hard to change later.</p>
+
+                  <div class="recommendation">
+                    <span class="recBadge">Recommended</span>
+                    <p><b>securitybrief.jasonjaysmart.com</b> — preserves trust from your existing domain</p>
+                  </div>
+                </div>
+
                 <div class="optionGrid">
-                  <button class="optBtn">Approve</button>
-                  <button class="optBtn active">Use current URL</button>
-                  <button class="optBtn">See alternatives</button>
-                  <button class="optBtn">Edit subdomain</button>
-                  <button class="optBtn">Resume later</button>
+                  <button class="optBtn recommended active">securitybrief.jasonjaysmart.com</button>
+                  <button class="optBtn">securitybrief.commonshub.social</button>
+                  <button class="optBtn">securitybrief.com</button>
+                </div>
+                <div class="subtleActions">
+                  <button class="subtleBtn">More options</button>
+                  <button class="subtleBtn">Edit manually</button>
+                  <button class="subtleBtn">Resume later</button>
                 </div>
 
                 <div class="inputBar">
-                  <textarea class="inputField" placeholder="Type a final confirmation or adjustment. Example: Use securitybrief.jasonjaysmart.com"></textarea>
-                  <button class="continueBtn" type="button" onclick="window.location.href='dashboard.html'">Generate provisioning token → open launch setup dashboard</button>
-                </div>
-
-                <div class="subtleRow">
-                  <span>Next screen: platform-aware launch setup dashboard</span>
-                  <span>Missing flows by design: plan purchase and Stripe account setup</span>
-                </div>
+                  <textarea class="inputField"
+                  placeholder="Type a choice or custom instruction (e.g. use securitybrief.com)">
+                </textarea>
+                <button class="continueBtn" type="button" onclick="window.location.href='dashboard.html'">Continue →</button>
+              </div>
+              <div class="msg locked">
+                <div class="metaLine"><span><b>Locked</b></span></div>
+                <p><b>securitybrief.jasonjaysmart.com</b></p>
+              </div>
+              <div class="subtleRow">
+                <span>Next screen: platform-aware launch setup dashboard</span>
+                <span>Missing flows by design: plan purchase and Stripe account setup</span>
               </div>
             </div>
-
-            <div class="card" style="margin-top:16px;">
-              <div class="sectionHead">
-                <h3>What this mockup now reflects</h3>
-              </div>
-              <div class="grid cols-3">
-                <div class="miniCard">
-                  <b>Latest onboarding ruleset</b>
-                  <p>Email → focus → links → 5 identity steps → Blueprint → proceed gate.</p>
-                </div>
-                <div class="miniCard">
-                  <b>Provisioning token handoff</b>
-                  <p>Return-safe token generation with final URL confirmation before provisioning begins.</p>
-                </div>
-                <div class="miniCard">
-                  <b>Dashboard renderer path</b>
-                  <p>After confirmation, the owner lands in guided setup tied to platform defaults and Blueprint content.</p>
-                </div>
-              </div>
-            </div>
-
           </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="sectionHead">
+              <h3>What this mockup now reflects</h3>
+            </div>
+            <div class="grid cols-3">
+              <div class="miniCard">
+                <b>Latest onboarding ruleset</b>
+                <p>Email → focus → links → 5 identity steps → Blueprint → proceed gate.</p>
+              </div>
+              <div class="miniCard">
+                <b>Provisioning token handoff</b>
+                <p>Return-safe token generation with final URL confirmation before provisioning begins.</p>
+              </div>
+              <div class="miniCard">
+                <b>Dashboard renderer path</b>
+                <p>After confirmation, the owner lands in guided setup tied to platform defaults and Blueprint content.</p>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   </div>
+</div>
 </body>
+<script>
+  document.querySelectorAll('.optBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.optBtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const input = document.querySelector('.inputField');
+      input.value = btn.innerText.trim();
+      input.focus();
+    });
+  });
+</script>
 </html>
