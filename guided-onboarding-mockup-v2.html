@@ -289,10 +289,9 @@
       box-shadow:0 0 0 3px rgba(31,111,74,.08);
     }
 
-
     .choiceItem.recommended.active{
-      background:#1f6f4a;
-      color:#fff;
+      background:rgba(31,111,74,.04);
+      color:var(--text);
       border-color:#1f6f4a;
     }
 
@@ -319,9 +318,9 @@
     }
 
     .choiceItem.recommended.active .choiceBadge{
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      border-color:rgba(255,255,255,.3);
+      background:#fff;
+      color:#1f6f4a;
+      border-color:rgba(31,111,74,.22);
     }
 
     .choiceValue{
@@ -339,8 +338,8 @@
     }
 
     .choiceItem.active .choiceMeta{
-      color:inherit;
-      opacity:.92;
+      color:var(--muted);
+      opacity:1;
     }
 
     .subtleActions{
@@ -543,7 +542,7 @@
                   <textarea class="inputField">securitybrief.jasonjaysmart.com</textarea>
                   <button class="continueBtn" type="button" onclick="window.location.href='dashboard.html'">Continue →</button>
                 </div>
-              
+                
                 <div class="subtleRow">
                   <span>Next screen: platform-aware launch setup dashboard</span>
                   <span>Missing flows by design: plan purchase and Stripe account setup</span>
