@@ -134,7 +134,7 @@
 
     .inputField{
       width:100%;
-      min-height:88px;
+      min-height:64px;
       resize:none;
       border:1px solid var(--line);
       border-radius:16px;
@@ -250,6 +250,158 @@
       color:var(--muted);
       font-weight:700;
       cursor:pointer;
+    }
+    .currentStep{
+      margin-bottom:2px;
+    }
+
+    .recommendation{
+      margin-top:12px;
+      padding:12px 14px;
+      border:1px solid rgba(31,111,74,.14);
+      background:rgba(31,111,74,.04);
+      border-radius:14px;
+    }
+
+    .recBadge{
+      display:inline-flex;
+      align-items:center;
+      border:1px solid rgba(31,111,74,.22);
+      background:#fff;
+      color:#1f6f4a;
+      border-radius:999px;
+      padding:4px 9px;
+      font-size:11px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .recommendation p{
+      margin:0;
+    }
+
+    .choiceList{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .choiceItem{
+      appearance:none;
+      width:100%;
+      text-align:left;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:16px;
+      padding:14px 15px;
+      cursor:pointer;
+      transition:.18s ease;
+      box-shadow:0 1px 0 rgba(255,255,255,.6) inset;
+    }
+
+    .choiceItem:hover{
+      border-color:rgba(31,111,74,.26);
+      background:rgba(31,111,74,.03);
+    }
+
+    .choiceItem.active{
+      border-color:#1f6f4a;
+      background:rgba(31,111,74,.08);
+      box-shadow:0 0 0 2px rgba(31,111,74,.12);
+    }
+
+    .choiceItem.recommended.active{
+      background:#1f6f4a;
+      color:#fff;
+      border-color:#1f6f4a;
+    }
+
+    .choiceTop{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:4px;
+    }
+
+    .choiceBadge{
+      display:inline-flex;
+      align-items:center;
+      border:1px solid rgba(31,111,74,.22);
+      background:#fff;
+      color:#1f6f4a;
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:11px;
+      font-weight:800;
+      flex-shrink:0;
+    }
+
+    .choiceItem.recommended.active .choiceBadge{
+      background:rgba(255,255,255,.12);
+      color:#fff;
+      border-color:rgba(255,255,255,.25);
+    }
+
+    .choiceValue{
+      font-size:15px;
+      font-weight:900;
+      line-height:1.3;
+      word-break:break-word;
+    }
+
+    .choiceMeta{
+      font-size:13px;
+      line-height:1.4;
+      color:var(--muted);
+    }
+
+    .choiceItem.active .choiceMeta{
+      color:inherit;
+      opacity:.92;
+    }
+
+    .subtleActions{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-top:2px;
+      margin-bottom:2px;
+    }
+
+    .subtleBtn{
+      background:none;
+      border:none;
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+      cursor:pointer;
+      padding:0;
+    }
+
+    .subtleBtn:hover{
+      color:var(--text);
+    }
+
+    @media (max-width:720px){
+      .choiceItem{
+        padding:13px 14px;
+      }
+
+      .choiceValue{
+        font-size:14px;
+      }
+
+      .choiceMeta{
+        font-size:12px;
+      }
+    }
+    .fieldLabel{
+      font-size:13px;
+      font-weight:800;
+      color:var(--text);
+      margin-bottom:2px;
     }
 
   </style>
@@ -408,11 +560,11 @@
                   <button class="subtleBtn">Resume later</button>
                 </div>
 
-                <div class="inputBar">
-                 <textarea class="inputField">securitybrief.jasonjaysmart.com</textarea>
-                 <button class="continueBtn" type="button" onclick="window.location.href='dashboard.html'">Continue →</button>
-               </div>
-               <div class="msg locked">
+                <div class="fieldLabel">Final URL or custom instruction</div>
+                <textarea class="inputField">securitybrief.jasonjaysmart.com</textarea>
+                <button class="continueBtn" type="button" onclick="window.location.href='dashboard.html'">Continue →</button>
+              </div>
+              <div class="msg locked">
                 <div class="metaLine"><span><b>Locked</b></span></div>
                 <p><b>securitybrief.jasonjaysmart.com</b></p>
               </div>
@@ -450,15 +602,17 @@
 </div>
 </body>
 <script>
-  document.querySelectorAll('.optBtn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.optBtn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  const choiceItems = document.querySelectorAll('.choiceItem');
+  const input = document.querySelector('.inputField');
 
-      const input = document.querySelector('.inputField');
-      input.value = btn.innerText.trim();
+  choiceItems.forEach(item => {
+    item.addEventListener('click', () => {
+      choiceItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+
+      const value = item.querySelector('.choiceValue')?.innerText.trim() || '';
+      input.value = value;
       input.focus();
     });
   });
-</script>
-</html>
+</script></html>
